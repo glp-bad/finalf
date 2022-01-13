@@ -76,7 +76,7 @@
         methods: {
 	        logOn: function (){
 		        // this.$emit(this.EMIT);
-
+                console.log("this.URI: ", this.URI);
 		        this.axios.post(this.URI, this.post).then((response) => {
 				        if(response.data.succes){
 					        this.login = true;
