@@ -1,0 +1,84 @@
+.ff-dropdown-simple {
+    border: 1px solid lighten( $ff-base, 30% );
+    padding: 2px;
+    border-radius: 4px;
+    background: lighten( $ff-base, 50% );
+
+    select {
+		background-color: map-get($ff-dropdown, "background-color");
+		width: null;
+        border: none;
+		option{
+            margin: 40px;
+			background: $ff-background-color-wokbench;
+		}
+	}
+}
+
+
+
+$zIndex-ff-dropdown-search: 100;
+
+.ff-dropdown-search {
+	position: relative;
+	width: 300px;
+	height: 20px;
+	// background: $ff-background-color-control;
+	// background: desaturate( $ff-base, 60% );
+	background: lighten( $ff-base, 50% );
+	display: flex;
+	flex-direction: row;
+	justify-content: right;
+
+	border: 1px solid lighten( $ff-base, 30% );
+	// margin-bottom: 10px;
+	padding: 2px;
+	// padding-right: 5px;
+
+	border-radius: 4px;
+
+	input{
+		width: 100%;
+		border: none;
+		background: $ff-background-color-control;
+		padding-right: 5px;
+		position: relative;
+		margin-right: 5px;
+        z-index: $zIndex-ff-dropdown-search;
+	}
+
+	.icon {
+		position: relative;
+		align-self: center;
+		width: auto;
+		height: auto;
+
+		//background: desaturate( $ff-base, 20% );
+		//background: $ff-background-color-control;
+		//background-image: url(iconImagePath($appName, "images/search-solid.svg"));
+		//background-repeat: no-repeat;
+
+		//background-position: 1 1;
+		//padding-left: 19px;
+		//border: 1px solid #999999;
+		//border-top-color: #CCCCCC;
+		//border-left-color: #CCCCCC;
+		//background-position: right;
+		//background-size: auto;
+
+		cursor: pointer;
+	}
+
+	.rezult{
+		position: absolute;
+		top: 23px;
+		left: 10px;
+		width:	auto;
+		height: auto;
+		display: none;
+		border-radius: 2px;
+		box-shadow: 2px 2px 10px $ff-box_shadow;
+        z-index: ($zIndex-ff-dropdown-search + 10);
+	}
+
+}

@@ -1,0 +1,109 @@
+
+$ff-caption-height: 20px;
+
+.ff-form {
+	// margin: 0 auto;
+	// margin: 200px auto;
+	// position: absolute;  // for draggale
+	position: relative;  // for draggale inside to other element
+
+	z-index: 10000;
+	border: 1px solid darken(map-get($ff-modal-window, "caption-color"), 10%);
+	box-shadow: 2px 2px 10px #8e8e8e;
+	height: auto;
+	display: none;
+    background-color:	map-get($ff-modal-window, "background-color");
+
+	.form-header {
+		background-color: darken(map-get($ff-modal-window, "caption-color"), 10%);
+		height: $ff-caption-height;
+		cursor: move;
+
+		.caption {
+			float: left;
+			color: map-get($ff-modal-window, "caption-color-font");
+            display: inline-block;
+            padding-left: 10px;
+
+            // vertical center height
+            line-height: $ff-caption-height; vertical-align: middle;
+        }
+
+		.closeButton {
+			float: right;
+			color: map-get($ff-modal-window, "caption-color-font");
+            padding-right: 8px;
+			cursor:pointer;
+
+            // vertical center height
+            line-height: $ff-caption-height; vertical-align: middle;
+		}
+	}
+
+	.form-content{
+        padding: 5px;
+	}
+
+	.form-button{
+        width: 100%;
+        display: inline-block;
+        .buttons{
+            float: right;
+            padding: 10px;
+        }
+	}
+
+	.form-bottom-line {
+		background-color: darken(map-get($ff-modal-window, "caption-color"), 10%);
+		height: 6px;
+        float: bottom;
+	}
+
+}
+
+.ff-form-modal {
+	position: absolute;
+	z-index: 9998;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(179, 179, 179, 0.5);
+	// display: table;
+	display: none;
+    // display: inline-block;
+	transition: opacity 0.3s ease;
+}
+
+
+// tabela pentru aranjarea controalelor in formular
+.ff-form-table{
+	//border: 1px solid orangered;
+	border-collapse: collapse;
+
+	.label-right{
+		// border: 1px solid blue;
+		text-align: right;
+        padding-right: 5px;
+        color: $ff-font-label-formular;
+
+
+	}
+
+    .label-left{
+        // border: 1px solid blue;
+        text-align: left;
+        color: $ff-font-label-formular;
+        padding-right: 5px;
+
+    }
+
+    .bold{
+        font-weight: bold;
+    }
+
+	.control{
+		//border: 1px solid blue;
+	}
+
+}

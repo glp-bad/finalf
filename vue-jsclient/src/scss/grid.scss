@@ -1,0 +1,281 @@
+$ff-caption-text-height: 22px;
+
+
+.ff-grid-all{
+    display: inline-block;
+    overflow: hidden;
+    position: relative;
+    // background: #f6993f;        // for debug
+}
+
+.ff-grid-container {
+	display: inline-grid;
+	position: relative;
+
+	.ff-grid-loading-modal {
+		display: inline-block;
+		position: absolute;
+		// z-index: 100;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(179, 179, 179, 0.5);
+		transition: opacity 0.3s ease;
+		text-align: center;
+		div{
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+		}
+	}
+
+	.ff-grid {
+		background: $ff-background-color-wokbench;
+		// width: 100%;
+		display: inline-block;
+
+		overflow-y: auto;
+		overflow-x: auto;
+		//height: 200px;
+
+		.selected {
+			background: lighten($ff-hover-color, 55%) !important;
+		}
+
+		.ff-table {
+			border-collapse: collapse;
+			table-layout: fixed;
+
+			.ff-thead {
+				background: $ff-base;
+				position: sticky;
+				top: 0;
+
+				.th {
+					border: 1px solid darken($ff-base, 20%);
+					font-size: map-get($ff-grid, "header-font-size");
+					font-weight: bold;
+					color: #FFFFFF;
+					// border-left: 1px solid darken($ff-base,70%);
+					// &:first-child {border-left: none;}
+					padding: 5px;
+
+					&--left-align {
+						@extend th !optional;
+						text-align: left;
+					}
+
+					&--center-align {
+						@extend th !optional;
+						text-align: center;
+					}
+
+					.divHeader {
+						display: flex;                  /* establish flex container */
+						flex-direction: row;            /* default value; can be omitted */
+						flex-wrap: nowrap;              /* default value; can be omitted */
+						justify-content: space-between; /* switched from default (flex-start, see below) */
+
+						.divCaptionFilter {
+							display: flex;                  /* establish flex container */
+
+							.divFilter{
+								padding-left: 5px;
+								padding-right: 5px;
+								cursor: pointer;
+							}
+
+							.divCaption {
+								// background: blueviolet;
+								white-space: nowrap;
+								overflow: hidden;
+								text-overflow: ellipsis;
+								margin-left: 5px;
+
+							}
+
+                            .divDataFilter{
+                                position: absolute;
+                                display: none;
+	                            //z-index: 101;
+                                box-shadow: 2px 2px 4px -4px darken($ff-base,35%);
+                                border-radius: 4px;
+                                width: auto;
+                                //hight: 30px;
+                                top: 85%;
+                                margin-left: 10px;
+
+                                background: $ff-background-color-wokbench;
+                                border: 1px solid lighten($ff-base,15%);
+
+                            }
+
+							.divDataFilterDisplayOn{
+								display: block;
+							}
+						}
+
+						.divOrder {
+							cursor: pointer;
+							//background: black;
+						}
+
+					}
+
+				}
+
+			}
+			.ff-tbody {
+				tr {
+					&:hover {
+						background: lighten($ff-hover-color, 55%);
+						// cursor: pointer;
+						cursor: default;
+					}
+
+					td {
+						border-left: 1px dotted darken($ff-base, 5%);
+						// border-bottom: 1px dotted darken($ff-base, 5%);
+						.div {
+							padding: 3px;
+							white-space: nowrap;
+							overflow: hidden;
+							text-overflow: ellipsis;
+
+							&--left-align {
+								@extend .div;
+								text-align: left;
+							}
+
+							&--center-align {
+								@extend .div;
+								text-align: center;
+							}
+
+							&--center-align-action-group {
+								// @extend .div;
+								text-align: center;
+							}
+
+							&--action-group {
+								@extend .div;
+								display: inline-flex;
+								width: 100%;
+
+								div {
+									margin-left: 1%;
+								}
+							}
+						}
+					}
+
+				}
+
+			}
+
+			tr {
+				&:nth-child(even) {
+					background: lighten($ff-base, 50%);
+				}
+			}
+
+		}
+	}
+
+	.toolbar {
+		//top right bottom left
+		padding: 5px 10px 2px 5px;
+		justify-content: flex-start;
+		border-top: 1px solid lighten($ff-base,45%);
+
+		background: $ff-background-color-wokbench;
+
+		.toolbarButton {
+			display: inline-flex;
+			.divButton {
+				margin-left: 4px;
+			}
+		}
+
+		.dataSelected {
+			padding-left: 25px;
+			width: 100%;
+
+			// center flex type
+			//display: flex;
+			//justify-content: center;
+			//align-content: center;
+			//flex-direction: column;
+
+			// background: #4dc0b5;
+
+			line-height: $ff-caption-text-height;
+			vertical-align: middle;
+
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+
+		}
+
+	}
+    .paginate{
+	    border-radius: 4px;
+        padding: 4px 7px 4px 2px;
+        display: inline-flex;
+        justify-content: center;
+	    background: $ff-background-color-wokbench;
+	    width: auto;
+	    border: 1px solid lighten($ff-base,45%);
+
+        .divButton {
+            margin-top: 1px;
+            margin-left: 4px;
+            //line-height: 30px; vertical-align: middle;
+        }
+
+        .divButtonDinamic {
+	        margin-top: 1px;
+	        margin-left: 4px;
+	        //line-height: 30px; vertical-align: middle;
+
+	        .divSapacer{
+		        width: 35px;
+		        height: 22px;
+		        border-radius: 4px;
+		        background: $ff-background-color-wokbench;
+		        // border: 1px solid darken($ff-base, 20%);
+	        }
+        }
+
+        .divButtonGoTo {
+	        //background: red;
+            margin-top: 1px;
+	        margin-left: 20px;
+	        margin-right: 5px;
+        }
+
+        .divInputGoto {
+	        //background: #005cc5;
+        }
+
+        .divLabelInfo {
+	        display: inline-block;
+	        //background: #9561e2;
+	        width: 70px;
+	        //text-align: right;
+	        label{
+		        position: relative;
+		        display: block;
+		        top: 22%;
+		        text-align: right;
+	        }
+        }
+
+    }
+
+
+
+}

@@ -1,0 +1,14 @@
+.ff-input-text {
+	background: lighten( $ff-base, 50% );
+	border: 1px solid lighten( $ff-base, 30% );
+	//width: auto;
+	//height: 18px;
+	border-radius: 4px;
+	padding: 3px;
+	display: inline-block;
+
+	input{
+		border: none;
+		box-sizing: border-box;
+	}
+}

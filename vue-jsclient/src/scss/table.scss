@@ -1,0 +1,62 @@
+
+$ff_table_list_height: '12px';
+
+.ff-table-list {
+	background: $ff-background-color-wokbench;
+	border-radius: 2px;
+    height: 100%;
+    width: 310px;
+
+	.selected{
+		background: lighten($ff-hover-color, 35%);
+	}
+	.tableDiv {
+        margin-left: 2px;
+        margin-right: 2px;
+        height: 100%;
+        overflow-y: null;
+		table {
+			border-collapse: collapse;
+			width: 100%;
+            height: 100%;
+			thead {
+				tr {th{}}
+			}
+			tbody {
+
+				tr {
+                    height: $ff_table_list_height;
+					&:hover {
+						background: lighten($ff-hover-color, 35%);
+						cursor: pointer;
+					}
+
+				}
+			}
+
+			tr {
+				&:nth-child(even) {
+					background: lighten($ff-base, 50%);
+				}
+			}
+
+		}
+	}
+
+    .infoList{
+        background: $ff-base;
+        border-radius: 2px;
+        display: none;
+	    margin-top: 2px;
+	    margin-bottom: 2px;
+	    div {
+		    padding-top: 3px;
+		    padding-bottom: 3px;
+		    span {
+			    margin-left: 10px;
+		    }
+	    }
+
+    }
+}
+
