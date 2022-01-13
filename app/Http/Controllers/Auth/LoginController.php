@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\helpers\response\MessageResponse;
+use App\allClass\helpers\response\MessageResponse;
 use App\Http\Controllers\Controller;
 use App\MyAppConstants;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
