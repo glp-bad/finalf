@@ -9,7 +9,7 @@ import cssList      from "../cssList";
 const appHelper = {
 	install: (app, options) => {
         app.config.globalProperties.$url = {
-            environment:  process.env.VUE_APP_ENV,
+            vueEnv:  process.env.VUE_APP_ENV,
             urlAppHost: process.env.VUE_APP_URL_HOST,
             urlAppLocal: process.env.VUE_APP_URL_LOCAL,
 	        urlClientVue: "http://localhost:8080",
@@ -25,10 +25,12 @@ const appHelper = {
             },
             getBaseUrl: function () {
                 let url = this.urlAppLocal;
-                if(this.environment == 'host'){
+                if(this.vueEnv == 'host'){
                     url = this.urlAppHost;
+                }else if(this.vueEnv == 'local'){
+	                url = this.urlAppLocal;
                 }else{
-	                url = this.urlClientVue;
+                    url = this.urlClientVue;
                 }
                 return url;
             }
