@@ -1,0 +1,38 @@
+{
+  "name": "vue-jsclient",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "buildAndCopyFile": "vue-cli-service build && copyfiles -u 1 ./dist/js/*.js ../public && copyfiles -u 1 ./dist/css/*.css ../public && copyfiles -u 2 ./src/assets/*.* ../public/img && copyfiles -u 3 ./src/assets/icons/*.* ../public/img",
+    "copyCompileFile": "copyfiles -u 1 ./dist/js/*.js ../public && copyfiles -u 1 ./dist/css/*.css ../public && copyfiles -u 2 ./src/assets/*.* ../public/img",
+    "copyIconOnly": "copyfiles -u 3 ./src/assets/icons/*.* ../public/img"
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-brands-svg-icons": "^5.15.4",
+    "@fortawesome/free-regular-svg-icons": "^5.15.4",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/vue-fontawesome": "^3.0.0-1",
+    "axios": "^0.24.0",
+    "core-js": "^3.6.5",
+    "date-fns": "^2.26.0",
+    "maska": "^1.5.0",
+    "vue": "^3.0.0",
+    "vue-axios": "^3.4.0",
+    "vue-router": "^4.0.0-0",
+    "vue-uuid": "^2.0.2",
+    "vuex": "^4.0.0-0"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-router": "~4.5.0",
+    "@vue/cli-plugin-vuex": "~4.5.0",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0",
+    "copyfiles": "^2.4.1",
+    "node-sass": "^4.12.0",
+    "sass-loader": "^8.0.2"
+  }
+}
