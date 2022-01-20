@@ -30,7 +30,8 @@ const appHelper = {
                 }else if(this.vueEnv == 'local'){
 	                url = this.urlAppLocal;
                 }else{
-                    url = this.urlClientVue;
+                    // url = this.urlClientVue;
+	                url = this.urlAppLocal;
                 }
                 return url;
             }
