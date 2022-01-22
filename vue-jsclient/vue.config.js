@@ -8,18 +8,8 @@ module.exports = {
   filenameHashing: false,
   // indexPath: 'xxx.welcome.blade.php',
   devServer: {
-	 //changeOrigin: true,
-     // host: 'finalf.badmintonclub.ro.mydev',
-	 proxy:
-
-	      // https://cli.vuejs.org/config/#devserver-proxy
-	 {
-	 	    target: 'https://finalf.badmintonclub.ro.mydev',
-		    //changeOrigin: true
-	 }
-	  //proxy: 'http://localhost:8080'
-
-
+      proxy: 'https://finalf.badmintonclub.ro.mydev'
   },
-  configureWebpack: {}
+   configureWebpack: {
+   }
 }
