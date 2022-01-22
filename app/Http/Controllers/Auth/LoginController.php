@@ -101,9 +101,7 @@ class LoginController extends Controller
 	    $credentials = $request->except(['_token']);
         $message = null;
 
-        if(!$this->userAllReadyLogin($credentials)){
-            //check login on database
-        }
+        // if(!$this->userAllReadyLogin($credentials)){        //check login on database    }
 
         // dd(Auth::user());
         // $password = Hash::make('LOIJNSU&^%$A7a67s');
