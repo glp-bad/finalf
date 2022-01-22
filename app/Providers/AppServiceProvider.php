@@ -3,6 +3,9 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\allClass\helpers\VueCliSession;
+use App;
+use App\MyAppConstants;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +16,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        App::singleton(MyAppConstants::MY_SESSION, function()
+        {
+            return new VueCliSession();
+        });
+
     }
 
     /**

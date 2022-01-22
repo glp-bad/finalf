@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\allClass\helpers\response\MessageResponse;
 use App\Http\Controllers\Controller;
 use App\MyAppConstants;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -10,7 +9,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use \Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+// use Illuminate\Support\Facades\Hash;
+
 
 class LoginController extends Controller
 {
@@ -41,8 +41,9 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        // $this->middleware('auth')->except('login');
     }
+
 
     public function login(Request $request){
 
@@ -62,16 +63,19 @@ class LoginController extends Controller
 	    ]);
 
 	    $credentials = $request->except(['_token']);
+        $message = null;
+
+
+
 
 	    if (auth()->attempt($credentials)) {
-		    $message = new MessageResponse(true,["log on"]);
-
+		    $message = $this->getMessageResponse(true,["log on"]);
 	    }else{
-		    $message = new MessageResponse(false,["autentificare esuata"]);
-
+		    $message = $this->getMessageResponse(false,["autentificare esuata"]);
 	    }
 
-	    // dd(Hash::make('LOIJNSU&^%$A7a67s'));
+        //dd(Auth::check());
+	    //dd(Hash::make('LOIJNSU&^%$A7a67s'));
 	    //dd($credentials);
         //dd(auth());
         //dd(Auth::user());
@@ -81,14 +85,28 @@ class LoginController extends Controller
         //dd($areSesiune);
         //dd(Auth::user());
         //$idUser = DB::table('t_s_useri')->where('cmail', $email)->value('id_user');
-        // Session::put(MyAppConstants::ID_USER, $idUser);
-	    // $message = new MessageResponse(true,["log on"]);
-	    return json_encode($message);
+
+	    $this->getSession()->put(MyAppConstants::ID_USER, 123456);
+
+        // dd($mySession);
+
+         // $message = new MessageResponse(true,["log on"]);
+	    return $message->toJson();
     }
 
+
 	public function logout(Request $request){
-		Auth::logout();
-		return json_encode(new MessageResponse(true,["log off"]));
+        // dd(Auth::check(), Auth::user(), dd($this->guard()));
+        // dd(Session::get(MyAppConstants::ID_USER, -1));
+
+        // $mySession = $this->getSession();
+        // dd($this->getSession()->get(MyAppConstants::ID_USER));
+
+        $this->getSession()->flush();
+        $this->getSession()->logout();
+
+		$messageResponse = $this->getMessageResponse(true,["log off"]);
+		return $messageResponse->toJson();
 	}
 
     function redirectTo(){
@@ -100,6 +118,7 @@ class LoginController extends Controller
         Session::put(MyAppConstants::ID_USER, $idUser);
     }
 
+    /*
     protected function sendLoginResponse(Request $request){
         $message = new MessageResponse(true,["log on"]);
         return json_encode($message);
@@ -109,6 +128,6 @@ class LoginController extends Controller
         $message = new MessageResponse(false,["autentificare esuata"]);
         return json_encode($message);
     }
-
+    */
 
 }

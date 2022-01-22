@@ -13,4 +13,8 @@ class MessageResponse
         $this->succes = $succes;
         $this->messages = $messages;
     }
+
+    function toJson(){
+        return json_encode($this);
+    }
 }

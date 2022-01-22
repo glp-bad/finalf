@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\MyAppConstants;
+use Closure;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
 class Authenticate extends Middleware
@@ -17,5 +19,16 @@ class Authenticate extends Middleware
         if (! $request->expectsJson()) {
             return route('login');
         }
+    }
+
+    public function handle($request, Closure $next, ...$guards)
+    {
+
+        if(env('VUE_APP_ENV') != MyAppConstants::VUE_APP_ENV){
+            $this->authenticate($request, $guards);
+        }
+
+        return $next($request);
+
     }
 }
