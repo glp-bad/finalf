@@ -1,0 +1,2 @@
+Pentru D:\bin\xampp8\htdocs\finalf\app\Console\Kernel.php
+    for dev: php artisan schedule:work

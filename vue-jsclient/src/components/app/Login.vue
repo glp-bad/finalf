@@ -24,15 +24,17 @@
                                 <input id="password" type="password" size="30" name="password" required autocomplete="current-password" v-model="post.password">
                             </td>
                         </tr>
-                        <tr >
-                            <td colspan="2">
-                                <br>
-                                <input  type="checkbox" name="remember" id="remember" v-model="post.remember">
-                                <label  for="remember" class="label-left bold">
-                                    Remember Me
-                                </label>
-                            </td>
-                        </tr>
+                        <!--
+                            <tr >
+                                <td colspan="2">
+                                    <br>
+                                    <input  type="checkbox" name="remember" id="remember" v-model="post.remember">
+                                    <label  for="remember" class="label-left bold">
+                                        Remember Me
+                                    </label>
+                                </td>
+                            </tr>
+                        -->
                     </table>
 
                     <br>

@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use \Illuminate\Http\Request;
-// use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Hash;
 
 
 class LoginController extends Controller
@@ -27,6 +27,8 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
+    private $loginsSession = array();
+
     /**
      * Where to redirect users after login.
      *
@@ -42,21 +44,55 @@ class LoginController extends Controller
     public function __construct()
     {
         // $this->middleware('auth')->except('login');
+        // $this->readSessionFile();
     }
 
+
+    /**
+     *not used
+     */
+    private function readSessionFile(){
+            //$file = 'D:\bin\xampp8\htdocs\finalf\storage\framework\sessions\vPLqQjz8JCfARxYl4FlzVjFbhBKUb1s6APy9aUgC';
+            $file = 'D:\bin\xampp8\htdocs\finalf\storage\framework\sessions';
+
+            $this->loginsSession = array();
+
+            $files = scandir($file);
+            foreach($files as $f){
+                if($f[0] != '.'){
+                    $fileName = $file . '\\' . $f;
+                    $contents = file_get_contents($fileName);
+                    $this->loginsSession = unserialize($contents);
+                }
+            }
+
+    }
+
+    /**
+     * same browser and token dont expire
+     * @param $credentials
+     * @return bool
+     */
+    private function userAllReadyLogin($credentials){
+        $returnValue = false;
+        $autUser = Auth::user();
+
+        if($autUser != null &&  Hash::check( $credentials['password'], $autUser->password ) &&  $credentials['email'] == $autUser->email ){
+            $returnValue = true;
+        }
+
+        return $returnValue;
+    }
 
     public function login(Request $request){
 
         // $email = Auth::user()->email;
-
         /*
         if ($request->hasSession()) {
             $request->session()->put('auth.password_confirmed_at', time());
         }
         */
-
         //dd(auth());
-
 	    $request->validate([
 		    'email' => 'required',
 		    'password' => 'required'
@@ -65,14 +101,30 @@ class LoginController extends Controller
 	    $credentials = $request->except(['_token']);
         $message = null;
 
+        if(!$this->userAllReadyLogin($credentials)){
+            //check login on database
+        }
 
-
+        // dd(Auth::user());
+        // $password = Hash::make('LOIJNSU&^%$A7a67s');
 
 	    if (auth()->attempt($credentials)) {
 		    $message = $this->getMessageResponse(true,["log on"]);
+
+            if ($request->hasSession()) {
+                $request->session()->put('auth.password_confirmed_at', now()->toDateTimeString());
+                $request->session()->put('auth.isLogon', $this->getSession()->authCheck());
+            }
+
+            // dd($this->getSession()->get(MyAppConstants::ID_USER));
+            // dd($this->getSession());
+            // dd(Session::getHandler());
+
 	    }else{
 		    $message = $this->getMessageResponse(false,["autentificare esuata"]);
 	    }
+
+        $this->readSessionFile();
 
         //dd(Auth::check());
 	    //dd(Hash::make('LOIJNSU&^%$A7a67s'));
@@ -86,7 +138,9 @@ class LoginController extends Controller
         //dd(Auth::user());
         //$idUser = DB::table('t_s_useri')->where('cmail', $email)->value('id_user');
 
-	    $this->getSession()->put(MyAppConstants::ID_USER, 123456);
+	    $this->getSession()->put(MyAppConstants::ID_USER, 99);
+
+        // dd(Session::getId());
 
         // dd($mySession);
 
@@ -102,8 +156,12 @@ class LoginController extends Controller
         // $mySession = $this->getSession();
         // dd($this->getSession()->get(MyAppConstants::ID_USER));
 
-        $this->getSession()->flush();
+        // dd(Session::all());
+
+        // $this->getSession()->flush();        // delete token
         $this->getSession()->logout();
+
+        // dd($this->loginsSession);
 
 		$messageResponse = $this->getMessageResponse(true,["log off"]);
 		return $messageResponse->toJson();
@@ -113,9 +171,9 @@ class LoginController extends Controller
         //$user = Auth::user()->getAuthIdentifier();
         //dd($user->getAuthIdentifier());
         //Session::put(MyAppConstants::ID_AVOCAT, $user->getAuthIdentifier());
-        $email = Auth::user()->email;
-        $idUser = DB::table('t_s_useri')->where('cmail', $email)->value('id_user');
-        Session::put(MyAppConstants::ID_USER, $idUser);
+        //$email = Auth::user()->email;
+        //$idUser = DB::table('t_s_useri')->where('cmail', $email)->value('id_user');
+        //Session::put(MyAppConstants::ID_USER, $idUser);
     }
 
     /*
