@@ -16,7 +16,7 @@ use App\Http\Controllers\Auth\LoginController;
 
 Route::get('/', function () { return view('welcome'); });
 
-Auth::routes();
+// Auth::routes();
 Route::post('app/login', [LoginController::class, 'login']);
 Route::post('app/logout',[LoginController::class, 'logout'])->middleware('auth');
 // Route::post('app/logout',[LoginController::class, 'logout']);

@@ -101,7 +101,8 @@ class LoginController extends Controller
 	    $credentials = $request->except(['_token']);
         $message = null;
 
-        // if(!$this->userAllReadyLogin($credentials)){        //check login on database    }
+        if(!$this->userAllReadyLogin($credentials)){        //check login on database
+        }
 
         // dd(Auth::user());
         // $password = Hash::make('LOIJNSU&^%$A7a67s');
@@ -122,7 +123,7 @@ class LoginController extends Controller
 		    $message = $this->getMessageResponse(false,["autentificare esuata"]);
 	    }
 
-        $this->readSessionFile();
+        // $this->readSessionFile();
 
         //dd(Auth::check());
 	    //dd(Hash::make('LOIJNSU&^%$A7a67s'));
