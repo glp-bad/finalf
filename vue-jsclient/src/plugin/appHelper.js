@@ -3,8 +3,7 @@ import endOfMonth   from '../../node_modules/date-fns/endOfMonth'
 import format       from '../../node_modules/date-fns/format'
 import urlList      from "../urlList";
 import cssList      from "../cssList";
-
-
+import {v4 as uuidv4} from '../../node_modules/uuid'
 
 const appHelper = {
 	install: (app, options) => {
@@ -80,11 +79,11 @@ const appHelper = {
 		            let topChild = (boundingParent.height/2) - (boundingChild.height/2) ;
 		            let leftChild = (boundingParent.width/2) - (boundingChild.width/2) ;
 
-		            //console.log('boundingParent = ', boundingParent);
-		            //console.log('boundingChild = ', boundingChild );
-		            //console.log('divChild = ', divChild );
-		            //console.log('topChild = ', topChild );
-		            //console.log('leftChild = ', leftChild, boundingParent.widht/2,  boundingChild.width/2 );
+		            console.log('boundingParent = ', boundingParent);
+		            console.log('boundingChild = ', boundingChild );
+		            console.log('divChild = ', divChild );
+		            console.log('topChild = ', topChild );
+		            console.log('leftChild = ', leftChild, boundingParent.widht/2,  boundingChild.width/2 );
 
 		            divChild.style.top =  topChild  + 'px';
 		            divChild.style.left = leftChild  + 'px';
@@ -283,6 +282,11 @@ const appHelper = {
         }
 
         app.config.globalProperties.$app = {
+
+            getUuid () {
+                return uuidv4();
+            },
+
             getObjectReturnComponent (data) {
                 return JSON.parse(JSON.stringify(data));
             },

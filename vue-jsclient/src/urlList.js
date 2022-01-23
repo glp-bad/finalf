@@ -1,5 +1,6 @@
 export default [
     {name: "login",             url: "public/app/login"},
+    {name: "loginCheck",        url: "public/app/loginCheck"},
 	{name: "logout",            url: "public/app/logout"},
 	{name: "test",              url: "public/app/testResponse"},
 	{name: "invoicesList",      url: "public/app/invoicesList"},
@@ -13,5 +14,7 @@ export default [
     {name: "searchTableTest",   url: "public/app/searchOnTable"},
 	{name: "gridDataTest",      url: "public/app/gridDataTest"},
 	{name: "gridDataTestUpdate", url: "public/app/gridDataTestUpdate"},
+
+
 
 ]

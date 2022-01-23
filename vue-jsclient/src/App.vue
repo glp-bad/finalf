@@ -13,6 +13,10 @@
 			'menu-main': MenuMain,
 			'my-login': Login
 		},
+        created() {
+          this.URI  = this.$url.getUrl("loginCheck");
+          this.checkLog();
+        },
 		methods: {
 			emitLogin: function () {
 				this.engine.keyRender ++;
@@ -24,7 +28,19 @@
 					this.engine.keyRender ++;
 					this.login = false;
 				}
-			}
+			},
+            checkLog: function (){
+                this.axios.post(this.URI, this.post).then((response) => {
+                        if(response.data.succes){
+                            this.login = true;
+                        }else{
+                            this.login = false;
+                        }
+                }
+                ).catch( (error) => {
+                    this.login = false;
+                })
+            },
 		},
 		data() {
 			return {

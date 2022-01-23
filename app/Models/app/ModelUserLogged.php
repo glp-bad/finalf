@@ -1,8 +1,8 @@
 <?php
 
-
 namespace App\Models\app;
 use App\allClass\helpers\MyModel;
+use App\allClass\helpers\MyHelp;
 use App\MyAppConstants;
 use Illuminate\Support\Facades\DB;
 
@@ -22,21 +22,45 @@ class ModelUserLogged extends MyModel {
         $this->getUserFromDataBase();
 
         if($this->idUserLogin == null){
-            $this->actionType = MyAppConstants::CLIENT_SQL_INSERT;
-            // $this->insert();
+            $this->insert();
         }else{
-            $this->actionType = MyAppConstants::CLIENT_SQL_UPDATE;
+
         }
-
-
-
     }
 
     public function update(){
-
     }
 
-    public function delete(){
+    public function getIdUserLogged(){
+        return $this->idUserLogin;
+    }
+
+    public function isAllreadyLogin(){
+        $return = false;
+        if($this->logged == 1){
+            $return = true;
+        }
+        return $return;
+    }
+
+    public static function logInOut($idUserLogin, $onOff){
+        $result = DB::update( 'update users_login set logged = ?, last_action = ? where id = ?', [$onOff , MyHelp::getCarbonDateNow(),  $idUserLogin]);
+    }
+
+    public function delete(){}
+    public function select(){}
+
+    public function expireLogIn(){
+        $lastAction = MyHelp::getCarbonDate('Y-m-d H:i:s', $this->lastAction);
+
+        $limitTime = $lastAction->diffInMinutes(MyHelp::getCarbonDateNow());
+
+        // dd($limitTime);
+
+        if($limitTime > env('SESSION_LIFETIME')){
+                self::logInOut($this->idUserLogin, MyAppConstants::USER_LOGOFF);
+                $this->logged = MyAppConstants::USER_LOGOFF;
+        }
     }
 
     public function insert(){
@@ -47,11 +71,20 @@ class ModelUserLogged extends MyModel {
         $this->actionType - MyAppConstants::CLIENT_SQL_UPDATE;
     }
 
-    public function select(){
+    static public function getParamUserRequest($credentials, $actionType){
+        return (object) [
+            'actionType' => $actionType,
+            'credentials' => $credentials
+        ];
     }
 
+
     private function getUserFromDataBase(){
-        $result = DB::select( 'select users.id, users_login.id as users_login_id, users_login.last_action, users_login.logged from users left join users_login on users.id = users_login.id_user where email = ?', [$this->email]);
+        $result = DB::select( 'select users.id, users_login.id as users_login_id, users_login.last_action, users_login.logged 
+                                        from users 
+                                        left join users_login on users.id = users_login.id_user 
+                                       where users.email = ?', [$this->email]
+        );
 
         $this->idUser = $result[0]->id;
         $this->idUserLogin = $result[0]->users_login_id;

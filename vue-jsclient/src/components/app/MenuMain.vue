@@ -1,11 +1,7 @@
 <template>
     <div class="ff-navbar">
         <ul>
-            <!--
-            <li><router-link to="/testInvoicesList">Lista test</router-link></li>
-            <li><router-link to="/testTab">Tab test</router-link></li>
-            <li><router-link to="/badmintonCourt">Badminton court</router-link></li>
-            -->
+            <li><router-link to="/viewAvocat">Avocatul</router-link></li>
             <li><router-link to="/viewGridul">Gridul</router-link></li>
             <li><router-link to="/testControale">Test controale</router-link></li>
             <li class="li-right" v-on:click="mLogout"> <a href="javascript:void(null);">Logout</a> </li>
@@ -33,7 +29,10 @@
                         }
 		                this.$emit(this.EMIT);
                     }
-                );
+                ).catch( (error) => {
+                    this.logout = true;
+                    this.$emit(this.EMIT);
+                })
             },
             isLogout: function () {
                 return this.logout;

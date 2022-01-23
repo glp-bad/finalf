@@ -10,8 +10,23 @@ namespace App\allClass\helpers;
 
 use App\allClass\helpers\response\MessageResponse;
 use DateTime;
+use Illuminate\Support\Carbon;
 
 class MyHelp {
+
+    /**
+     * https://ralphjsmit.com/carbon-laravel-manage-datetime/
+     * @param $format
+     * @param $strindDateFormat
+     * @return \Carbon\Carbon|false
+     */
+    public static function getCarbonDate($format, $strindDateFormat){
+        return Carbon::createFromFormat($format,  $strindDateFormat);;
+    }
+
+    public static function getCarbonDateNow(){
+        return now();
+    }
 
 	/**
 	 * @param $invoiceData              "yyyy-mm-dd"

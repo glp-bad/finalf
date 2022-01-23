@@ -68,7 +68,7 @@
         props: {},
         created() {
 	        this.EMIT = 'loginWindows',
-		    this.URI  = this.$url.getUrl("login")
+		    this.URI  = this.$url.getUrl("login");
 
         },
         mounted() {
@@ -84,7 +84,7 @@
 					        this.login = true;
 					        this.requestLoginFail = false;
 				        }else{
-					        this.privateSetLoginFail('Incorrect credentials. Try again.');
+                            this.privateSetLoginFail(response.data.messages[0]);
 				        }
 
 			            this.$emit(this.EMIT);

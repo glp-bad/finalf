@@ -67,6 +67,8 @@ class VueCliSession
         if($this->env == MyAppConstants::VUE_APP_ENV){
             $this->sessionVariable[MyAppConstants::ID_USER] = 7779;
             $this->sessionVariable[MyAppConstants::IS_LOGIN] = true;
+            $this->sessionVariable[MyAppConstants::USER_ID_LOGEED] = -1;
+
         }
     }
 

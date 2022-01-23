@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\app\ModelUserLogged;
+use App\Models\app\User;
 use App\MyAppConstants;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
+//use Illuminate\Support\Facades\Auth;
+//use Illuminate\Support\Facades\DB;
+//use Illuminate\Support\Facades\Session;
 use \Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+//use Illuminate\Support\Facades\Hash;
 
 
 class LoginController extends Controller
@@ -69,23 +70,21 @@ class LoginController extends Controller
 
     }
 
-    /**
-     * same browser and token dont expire
-     * @param $credentials
-     * @return bool
+     /**
+     * @param Request $request befor login
      */
-    private function userAllReadyLogin($credentials){
-        $returnValue = false;
-        $autUser = Auth::user();
+    public function loginCheck() {
 
-        if($autUser != null &&  Hash::check( $credentials['password'], $autUser->password ) &&  $credentials['email'] == $autUser->email ){
-            $returnValue = true;
+        if($this->getSession()->authCheck()){
+            $message = $this->getMessageResponse(true,["you are already logged in"]);
+        }else{
+            $message = $this->getMessageResponse(false, ["you are not logged in"]);
         }
 
-        return $returnValue;
+        return $message->toJson();
     }
 
-    public function login(Request $request){
+    public function login(Request $request) {
 
         // $email = Auth::user()->email;
         /*
@@ -103,35 +102,42 @@ class LoginController extends Controller
 	    $credentials = $request->except(['_token']);
         $message = null;
 
-        if(!$this->userAllReadyLogin($credentials)){        //check login on database
-            $userRequest = (object) [
-                'actionType' => MyAppConstants::CLIENT_SQL_INSERT,
-                'credentials' => $credentials
-            ];
-
-            $userLogged = new ModelUserLogged($userRequest);
-        }
+        $userRequest = ModelUserLogged::getParamUserRequest($credentials, MyAppConstants::CLIENT_SQL_INSERT);
+        $userLogged = new ModelUserLogged($userRequest);
 
         // dd(Auth::user());
         // $password = Hash::make('LOIJNSU&^%$A7a67s');
+        $userLogged->expireLogIn();
 
-        dd($userLogged->action());
+       if($userLogged->isAllreadyLogin()){
+            // $user->tokens()->where('id', $tokenId)->delete();
+            $this->readSessionFile();
 
-        if (auth()->attempt($credentials)) {
-		    $message = $this->getMessageResponse(true,["log on"]);
+            // dd($this->loginsSession);
+            $message = $this->getMessageResponse(false, ["You are already logged in to another browser. Please logout."]);
 
-            if ($request->hasSession()) {
-                $request->session()->put('auth.password_confirmed_at', now()->toDateTimeString());
-                $request->session()->put('auth.isLogon', $this->getSession()->authCheck());
+        }else {
+            if (auth()->attempt($credentials)) {
+
+                ModelUserLogged::logInOut($userLogged->getIdUserLogged(), MyAppConstants::USER_LOGON);
+
+                $message = $this->getMessageResponse(true, ["log on"]);
+
+                if ($request->hasSession()) {
+                    $request->session()->put('auth.password_confirmed_at', now()->toDateTimeString());
+                    $request->session()->put('auth.email', $credentials['email']);
+                    $request->session()->put(MyAppConstants::USER_ID_LOGEED, $userLogged->getIdUserLogged());
+                }
+                // dd($this->getSession()->get(MyAppConstants::ID_USER));
+                // dd($this->getSession());
+                // dd(Session::getHandler());
+
+                $this->getSession()->put(MyAppConstants::ID_USER, 99);
+
+            } else {
+                $message = $this->getMessageResponse(false, ["Incorrect credentials. Try again."]);
             }
-
-            // dd($this->getSession()->get(MyAppConstants::ID_USER));
-            // dd($this->getSession());
-            // dd(Session::getHandler());
-
-	    }else{
-		    $message = $this->getMessageResponse(false,["autentificare esuata"]);
-	    }
+        }
 
         // $this->readSessionFile();
         //dd(Auth::check());
@@ -145,9 +151,6 @@ class LoginController extends Controller
         //dd($areSesiune);
         //dd(Auth::user());
         //$idUser = DB::table('t_s_useri')->where('cmail', $email)->value('id_user');
-
-	    $this->getSession()->put(MyAppConstants::ID_USER, 99);
-
         // dd(Session::getId());
         // dd($mySession);
         // $message = new MessageResponse(true,["log on"]);
@@ -162,12 +165,11 @@ class LoginController extends Controller
 
         // $mySession = $this->getSession();
         // dd($this->getSession()->get(MyAppConstants::ID_USER));
-
         // dd(Session::all());
+        ModelUserLogged::logInOut($this->getSession()->get(MyAppConstants::USER_ID_LOGEED), MyAppConstants::USER_LOGOFF);
 
-        // $this->getSession()->flush();        // delete token
+        // $this->getSession()->flush();
         $this->getSession()->logout();
-
         // dd($this->loginsSession);
 
 		$messageResponse = $this->getMessageResponse(true,["log off"]);

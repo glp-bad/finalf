@@ -1,0 +1,76 @@
+.ff-tab {
+    padding-top: 3px;
+    .headers {
+        display: flex;
+        ul {
+            display: inline-block;
+            position: relative;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+
+            .header-li {
+                float: left;    // horizontal align
+                margin-right: 2px;
+                border-top-left-radius: 4px;
+                border-top-right-radius: 4px;
+
+                list-style-position:inside;
+                border-top: 1px solid darken(map-get($ff-tab,"background-color"),10%);
+                border-left: 1px solid darken(map-get($ff-tab,"background-color"),10%);
+                border-right: 1px solid darken(map-get($ff-tab,"background-color"),10%);
+
+                background-color: map_get($ff-tab, 'background-color');
+
+                .selectedOn {
+                    background-color: $ff-background-color-wokbench;
+                }
+
+                .header-div {
+                    padding: 2px 2px 0px 2px;
+                    border-top-left-radius: 4px;
+                    border-top-right-radius: 4px;
+
+                    &:hover {
+                        &:not(.active) {
+                            background-color: map-get($ff-tab,"hover-color");
+                        }
+                    }
+
+                    a {
+                        display: block;
+                        color: white;
+                        text-align: center;
+                        padding: 5px 7px;
+                        text-decoration: none;
+                        &:hover {
+                            &:not(.active) {
+                                background-color: map-get($ff-tab,"hover-color");
+                            }
+                        }
+                    }
+
+                    //&:hover{                        background-color: $ff-hover-color;                    }
+
+
+                }
+            }
+        }
+    }
+
+    .tabs{
+        background-color: $ff-background-color-wokbench;
+        display: flex;
+        position: relative;
+        .tab{
+            display: none;
+            // width: 100px;
+            height: $wokbenchHeight;
+        }
+
+    }
+}
+
+
+

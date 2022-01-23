@@ -17,6 +17,7 @@ class MyAppConstants {
 	const IS_LOGIN  = 'IS_LOGIN';     // use with VUECLI only
     const USER_LOGON = 1;
     const USER_LOGOFF = 0;
+    const USER_ID_LOGEED = 'USER_ID_LOGEED';    // session store id from users_login
 
 	const CLIENT_SQL_UPDATE = 'update';
 	const CLIENT_SQL_INSERT = 'insert';

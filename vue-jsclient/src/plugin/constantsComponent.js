@@ -5,6 +5,24 @@ const constantsComponent = {
 
 
 		},
+        app.config.globalProperties.$constTab = {
+		    EMIT_TAB_ACTION: 'emitClickTab',
+            showTab: function (id, tabs){
+                for (let i = 0; i < tabs.children.length; i++) {
+                    if(tabs.children[i].id == id){
+                        tabs.children[i].style.display='block';
+                    }else{
+                        tabs.children[i].style.display='none';
+                    }
+                }
+            },
+            getIdTab: function (id) {
+		        return 'tab' + id;
+            },
+            getHeader: function (id, caption) {
+                return {id: id, caption: caption};
+            }
+        },
         app.config.globalProperties.$constGrid = {
             ID_NAME: 'idPk',
             ICON_CLASS: 'fas',
