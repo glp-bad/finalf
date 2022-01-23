@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\app\ModelUserLogged;
 use App\MyAppConstants;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Facades\Auth;
@@ -93,6 +94,7 @@ class LoginController extends Controller
         }
         */
         //dd(auth());
+
 	    $request->validate([
 		    'email' => 'required',
 		    'password' => 'required'
@@ -102,12 +104,20 @@ class LoginController extends Controller
         $message = null;
 
         if(!$this->userAllReadyLogin($credentials)){        //check login on database
+            $userRequest = (object) [
+                'actionType' => MyAppConstants::CLIENT_SQL_INSERT,
+                'credentials' => $credentials
+            ];
+
+            $userLogged = new ModelUserLogged($userRequest);
         }
 
         // dd(Auth::user());
         // $password = Hash::make('LOIJNSU&^%$A7a67s');
 
-	    if (auth()->attempt($credentials)) {
+        dd($userLogged->action());
+
+        if (auth()->attempt($credentials)) {
 		    $message = $this->getMessageResponse(true,["log on"]);
 
             if ($request->hasSession()) {
@@ -124,7 +134,6 @@ class LoginController extends Controller
 	    }
 
         // $this->readSessionFile();
-
         //dd(Auth::check());
 	    //dd(Hash::make('LOIJNSU&^%$A7a67s'));
 	    //dd($credentials);
@@ -140,10 +149,9 @@ class LoginController extends Controller
 	    $this->getSession()->put(MyAppConstants::ID_USER, 99);
 
         // dd(Session::getId());
-
         // dd($mySession);
+        // $message = new MessageResponse(true,["log on"]);
 
-         // $message = new MessageResponse(true,["log on"]);
 	    return $message->toJson();
     }
 
