@@ -10,6 +10,8 @@ namespace App;
 
 class MyAppConstants {
 
+    const VERSION_APP = '0.1';
+
     const MY_SESSION = 'my-session';
 
     const ID_USER =   'ID_USER';
