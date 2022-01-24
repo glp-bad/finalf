@@ -63,7 +63,7 @@ class ModelUserLogged extends MyModel {
 
     public function insert(){
         $this->lastAction = now()->toDateTimeString();
-        $this->logged = MyAppConstants::USER_LOGON;
+        $this->logged = MyAppConstants::USER_LOGOFF;
         $result = DB::insert( 'insert into users_login (id_user, last_action, logged) values (?,?,?) ', [$this->idUser, $this->lastAction, $this->logged]);
         $this->idUserLogin = DB::getPdo()->lastInsertId();
     }
