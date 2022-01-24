@@ -102,8 +102,7 @@ class LoginController extends Controller
 	    $credentials = $request->except(['_token']);
         $message = null;
 
-        $userRequest = ModelUserLogged::getParamUserRequest($credentials, MyAppConstants::CLIENT_SQL_INSERT);
-        $userLogged = new ModelUserLogged($userRequest);
+        $userLogged = new ModelUserLogged($credentials['email']);
 
         // dd(Auth::user());
         // $password = Hash::make('LOIJNSU&^%$A7a67s');

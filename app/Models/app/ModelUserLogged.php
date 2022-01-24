@@ -14,11 +14,11 @@ class ModelUserLogged extends MyModel {
     private $logged;
     private $email;
 
-    public function __construct($request)
+    public function __construct($email)
     {
-        parent::__construct($request);
         $this->tableName = 'users_login';
-        $this->email = $request->credentials['email'];
+        $this->email = $email;
+
         $this->getUserFromDataBase();
 
         if($this->idUserLogin == null){
@@ -55,8 +55,6 @@ class ModelUserLogged extends MyModel {
 
         $limitTime = $lastAction->diffInMinutes(MyHelp::getCarbonDateNow());
 
-        // dd($limitTime);
-
         if($limitTime > env('SESSION_LIFETIME')){
                 self::logInOut($this->idUserLogin, MyAppConstants::USER_LOGOFF);
                 $this->logged = MyAppConstants::USER_LOGOFF;
@@ -68,14 +66,6 @@ class ModelUserLogged extends MyModel {
         $this->logged = MyAppConstants::USER_LOGON;
         $result = DB::insert( 'insert into users_login (id_user, last_action, logged) values (?,?,?) ', [$this->idUser, $this->lastAction, $this->logged]);
         $this->idUserLogin = DB::getPdo()->lastInsertId();
-        $this->actionType - MyAppConstants::CLIENT_SQL_UPDATE;
-    }
-
-    static public function getParamUserRequest($credentials, $actionType){
-        return (object) [
-            'actionType' => $actionType,
-            'credentials' => $credentials
-        ];
     }
 
 
