@@ -7,15 +7,6 @@ const constantsComponent = {
 		},
         app.config.globalProperties.$constTab = {
 		    EMIT_TAB_ACTION: 'emitClickTab',
-            showTab: function (id, tabs){
-                for (let i = 0; i < tabs.children.length; i++) {
-                    if(tabs.children[i].id == id){
-                        tabs.children[i].style.display='block';
-                    }else{
-                        tabs.children[i].style.display='none';
-                    }
-                }
-            },
             getIdTab: function (id) {
 		        return 'tab' + id;
             },
@@ -46,7 +37,7 @@ const constantsComponent = {
                 CAPTION_TYPE_FIELD: 'field'  ,
                 CAPTION_TYPE_ACTION: 'action',
                 TABLE_FIELD_NAME: 'tableFieldName',
-                getHeader: function (id, caption, width, tableFieldName, type, orderBy, defaultOrder, filterBy) {
+                getHeader: function (id, caption, width, tableFieldName, type, orderBy, defaultOrder, filterBy, fieldFilterName) {
 
                 	if(type == this.CAPTION_TYPE_ACTION){
 		                orderBy = false;
@@ -58,7 +49,11 @@ const constantsComponent = {
                 	    defaultOrder = false;
                     }
 
-                    return {id: id, caption: caption,   width: width,  tableFieldName: tableFieldName,  type: type, orderBy: {order: orderBy, defaultOrder: defaultOrder}, filterBy: filterBy};
+                	if(!fieldFilterName){
+                        fieldFilterName = tableFieldName;
+                    }
+
+                    return {id: id, caption: caption,   width: width,  tableFieldName: tableFieldName,  type: type, orderBy: {order: orderBy, defaultOrder: defaultOrder}, filterBy: filterBy, fieldFilterName: fieldFilterName};
                 }
             },
             BODY:{

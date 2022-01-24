@@ -79,11 +79,11 @@ const appHelper = {
 		            let topChild = (boundingParent.height/2) - (boundingChild.height/2) ;
 		            let leftChild = (boundingParent.width/2) - (boundingChild.width/2) ;
 
-		            console.log('boundingParent = ', boundingParent);
-		            console.log('boundingChild = ', boundingChild );
-		            console.log('divChild = ', divChild );
-		            console.log('topChild = ', topChild );
-		            console.log('leftChild = ', leftChild, boundingParent.widht/2,  boundingChild.width/2 );
+		            //console.log('boundingParent = ', boundingParent);
+		            //console.log('boundingChild = ', boundingChild );
+		            //console.log('divChild = ', divChild );
+		            //console.log('topChild = ', topChild );
+		            //console.log('leftChild = ', leftChild, boundingParent.widht/2,  boundingChild.width/2 );
 
 		            divChild.style.top =  topChild  + 'px';
 		            divChild.style.left = leftChild  + 'px';

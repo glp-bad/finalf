@@ -60,7 +60,7 @@
                 <tbody class="ff-tbody" :ref=REF_TABLE_BODY>
                     <tr v-for="(tr, index) in this.paginate.pag.data" :idPk="tr.id" v-on:keydown.prevent="cfgKeyNavigate($event)" v-on:click.prevent="cfgMouseNavigate($event)" v-bind:key="index">
                         <template v-for="(td, index) in tr" v-bind:key="index">
-                            <td :tabindex=this.cfgGetTabIndex() >
+                            <td v-if="checkFieldHeader(index)" :tabindex=this.cfgGetTabIndex() >
                                 <div class="div--left-align " :style="cgfTDStyle(index)" :title="td" :fieldName="index">{{td}}</div>
                             </td>
                         </template>
@@ -268,7 +268,7 @@
 	            // for filter by
 	            if(this.pConfig.header[i].filterBy){
                 	// type inca nu este folosit
-                	this.filterBy.header.push(this.$constGrid.getFilterByReactive(this.pConfig.header[i].id, this.pConfig.header[i].tableFieldName, null, false, null, this.cfgIconColor('white')));
+                	this.filterBy.header.push(this.$constGrid.getFilterByReactive(this.pConfig.header[i].id, this.pConfig.header[i].fieldFilterName, null, false, null, this.cfgIconColor('white')));
 
                 }
 
@@ -291,6 +291,12 @@
         },
         methods: {
 	        getDataFromServer: function (fromID) {
+
+
+	            if(this.$check.isUndef(this.pConfig.cfg.urlData)){
+                    this.showModalLoadingDiv = false;
+	                return;
+                }
 
 		            this.showModalLoadingDiv = true;
 
@@ -319,6 +325,17 @@
 				            });
 
 		    },
+            checkFieldHeader: function(fieldName){
+	            // console.log(field);
+                ///console.log(this.pConfig.header);
+                let find = this.$vanilla.getAtributeValueFromArrayObject(this.pConfig.header,'tableFieldName', fieldName, 'tableFieldName');
+
+                if(this.$check.isUndef(find)){
+                    return false;
+                }
+
+	            return true;
+            },
             refreshGrid: function (recordType, externalFiltering) {
 	        	let jumpNrPage = '1';
 
@@ -794,8 +811,8 @@
 	        },
             cfgGrid: function () {
                 let divTable = this.$refs[this.REF_DIV_TABLE];
-
                 let headerCells = this.$refs[this.REF_THEAD].rows[0].cells;
+
                 this.cfgGridHeader(headerCells);
 
                 let widthPixel = this.pConfig.cfg.width;

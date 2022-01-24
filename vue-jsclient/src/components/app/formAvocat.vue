@@ -29,17 +29,12 @@
     ></validate-window>
 
 
-    <div class="ff-form-modal" ref="modalRef">
 
-        <div :class=formClass.container :ref=CONTAINER_REF :id=cfgForm.id >
-            <div :class=formClass.header ref="headerRef" >
-                <span class="caption" ref="captionRef"></span>
-                <div class="closeButton" @click="closeForm"><font-awesome-icon :icon="cfgForm.closeIcon" /></div>
 
-            </div>
-
+        <div class="ff-form-tab" :ref=CONTAINER_REF :id=cfgForm.id >
             <div :class=formClass.content ref="contentRef">
                 <form>
+                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                     <table class="ff-form-table">
                     </table>
                 </form>
@@ -57,11 +52,9 @@
                 -->
             </div>
 
-            <div :class=formClass.bottomLine ></div>
 
         </div>
 
-    </div>
 
 </template>
 
@@ -86,22 +79,6 @@
         },
         emits: ['emitUpdateGrid'],
         methods: {
-            closeForm: function () {
-                // this.$refs[this.CONTAINER_REF].remove();
-                this.$refs[this.CONTAINER_REF].style.display = "none";
-                this.$refs.modalRef.style.display = "none";
-            },
-
-            showForm: function (parentDiv) {
-                this.$refs.modalRef.style.display = "inline-block";
-                this.$refs[this.CONTAINER_REF].style.display = "table";
-                if(!this.$check.isUndef(parentDiv)){
-                    this.$vanilla.centerDiv(parentDiv, this.$refs[this.CONTAINER_REF]);
-                }
-
-                // this.setPostData(dataGridSource, null);
-
-            },
             setPostData: function (dataValue, actionType) {
 
                 if(this.$check.isUndef(dataValue)){
@@ -155,8 +132,8 @@
                 // this.$refs.containerRef.style.height = '120px';
                 // this.$refs.contentRef.style.width = '300px';
                 // this.$refs.contentRef.style.height = '300px';
-                this.$refs.captionRef.innerHTML="Introducere date de test";
-                this.$vanilla.dragDiv(this.$refs.containerRef, this.$refs.headerRef);
+                // this.$refs.captionRef.innerHTML="Introducere date de test";
+                // this.$vanilla.dragDiv(this.$refs.containerRef, this.$refs.headerRef);
 
 
                 //console.log(document.body.firstElementChild);

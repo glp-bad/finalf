@@ -111,7 +111,7 @@ class LoginController extends Controller
 
        if($userLogged->isAllreadyLogin()){
             // $user->tokens()->where('id', $tokenId)->delete();
-            $this->readSessionFile();
+            // $this->readSessionFile();
 
             // dd($this->loginsSession);
             $message = $this->getMessageResponse(false, ["You are already logged in to another browser. Please logout."]);
@@ -127,6 +127,9 @@ class LoginController extends Controller
                     $request->session()->put('auth.password_confirmed_at', now()->toDateTimeString());
                     $request->session()->put('auth.email', $credentials['email']);
                     $request->session()->put(MyAppConstants::USER_ID_LOGEED, $userLogged->getIdUserLogged());
+
+                    // hardcore
+                    $request->session()->put(MyAppConstants::ID_AVOCAT, 6);
                 }
                 // dd($this->getSession()->get(MyAppConstants::ID_USER));
                 // dd($this->getSession());

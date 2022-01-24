@@ -2,8 +2,11 @@
     <div class="ff-navbar">
         <ul>
             <li><router-link to="/viewAvocat">Avocatul</router-link></li>
+            <li><router-link to="/viewParteneri">Parteneri</router-link></li>
+            <!--
             <li><router-link to="/viewGridul">Gridul</router-link></li>
             <li><router-link to="/testControale">Test controale</router-link></li>
+            -->
             <li class="li-right" v-on:click="mLogout"> <a href="javascript:void(null);">Logout</a> </li>
             <li class="li-right"><a href="#about">About</a></li>
         </ul>

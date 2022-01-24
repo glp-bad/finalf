@@ -64,9 +64,17 @@
         display: flex;
         position: relative;
         .tab{
+
+            max-width: 100% !important;     // pentru ca apare cand folosesc componenta grid-ul, nu stiu de ce
+
+            .up-line {
+                background-color: map-get($ff-tab,"selected-color");
+                height: 5px;
+            }
+
             display: none;
             // width: 100px;
-            height: $wokbenchHeight;
+            //height: $wokbenchHeight;
         }
 
     }
