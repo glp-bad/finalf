@@ -12,7 +12,13 @@ const constantsComponent = {
             },
             getHeader: function (id, caption) {
                 return {id: id, caption: caption};
-            }
+            },
+            disableTab: function (element) {
+                element.classList.add('disable-tab');
+            },
+            enabledTab: function (element) {
+                element.classList.remove('disable-tab');
+            },
         },
         app.config.globalProperties.$constGrid = {
             ID_NAME: 'idPk',

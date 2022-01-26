@@ -81,4 +81,9 @@
 }
 
 
+.disable-tab {
+    background: map-get($ff-tab,"disable-tab-color") !important;
+    pointer-events: none;
+}
+
 

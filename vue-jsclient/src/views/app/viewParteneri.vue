@@ -75,13 +75,14 @@
                         ]
                     },
                     paginate: {
-                        nrButtonShow: 5,
+                        nrButtonShow: 10,
                         recordsPerPage: 21
                     }
                 }
 		},
         mounted () {
 		    this.$refs.refTab.goToTab(this.tabConfig.defaultTabId);
+            this.$refs.refTab.tabOnOff('2p','off');
         },
 		methods: {
 		    emitClickTab: function (idTab) {

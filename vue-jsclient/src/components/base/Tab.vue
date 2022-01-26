@@ -32,6 +32,15 @@
                 let id = event.target.getAttribute('idTab');
                 this.goToTab(id);
             },
+            tabOnOff: function (id, onoff){
+                let element = this.getTabDiv(id);
+                if(onoff == 'on'){
+                    this.$constTab.enabledTab(element);
+                }else{
+                    this.$constTab.disableTab(element);
+                }
+
+            },
             goToTab: function (id){
                 this.selectdTabId = id;
                 this.emitTabAction(id);
@@ -39,6 +48,18 @@
             },
             emitTabAction:function(idTab) {
                 this.$emit(this.$constTab.EMIT_TAB_ACTION, idTab);
+            },
+            getTabDiv: function (id){
+                let headers = this.$refs[this.REF_HEADER_LI];
+                let header = null;
+                for(let i=0;i < headers.length;i++) {
+                    if (headers[i].firstChild.getAttribute('idTab') == id) {
+                        header = headers[i];
+                        break;
+                    }
+                }
+
+                return header;
             },
             headerMarkSelected: function (id) {
                 let headers = this.$refs[this.REF_HEADER_LI];
@@ -55,8 +76,8 @@
                     }else{
                         headers[i].style.backgroundColor = null;
                     }
-                    // show tabs
 
+                    // show tabs
                     if(tabs[i].style.width.length == 0){
                         tabs[i].style.width = this.pConfig.tabsWidth;
                     }
@@ -66,7 +87,6 @@
                     }else{
                         tabs[i].style.display='none';
                     }
-
 
                 }
             }
