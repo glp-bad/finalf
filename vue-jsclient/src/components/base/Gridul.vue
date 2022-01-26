@@ -264,15 +264,12 @@
                     }
 
                 }
-
 	            // for filter by
 	            if(this.pConfig.header[i].filterBy){
                 	// type inca nu este folosit
                 	this.filterBy.header.push(this.$constGrid.getFilterByReactive(this.pConfig.header[i].id, this.pConfig.header[i].fieldFilterName, null, false, null, this.cfgIconColor('white')));
 
                 }
-
-
             }
         },
 		mounted() {
@@ -292,12 +289,10 @@
         methods: {
 	        getDataFromServer: function (fromID) {
 
-
 	            if(this.$check.isUndef(this.pConfig.cfg.urlData)){
                     this.showModalLoadingDiv = false;
 	                return;
                 }
-
 		            this.showModalLoadingDiv = true;
 
 	        	    // fromId for debug only
@@ -362,7 +357,7 @@
 	        },
             resetSelectionRow: function(){
 	        	this.selectdRow = {};
-	        	this.showSelectedData = '';
+	        	this.showSelectedData = '...';
 	        	this.enabledToolBar(false);
 	            this.privateRemoveSelectedRow();
 
