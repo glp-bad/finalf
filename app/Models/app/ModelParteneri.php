@@ -4,6 +4,7 @@ namespace App\Models\app;
 use App\allClass\helpers\GridPaginateOrderFilter;
 use App\allClass\helpers\MyModel;
 use App\allClass\helpers\response\PaginateResponse;
+use App\allClass\helpers\response\SqlMessageResponse;
 use Illuminate\Support\Facades\DB;
 
 class ModelParteneri extends MyModel {
@@ -17,6 +18,20 @@ class ModelParteneri extends MyModel {
     public function delete(){}
     public function insert(){}
     public function select(){}
+
+    public function selectForEdit($id){
+        $rezult = DB::select(
+            " select t_parteneri.cNume,
+                            t_parteneri.id_tip, 
+                            t_parteneri.regcom, 
+                            t_parteneri.ro_, 
+                            t_parteneri.cui 
+                        from t_parteneri
+	                    where t_parteneri.id_avocat = $this->idAvocat and t_parteneri.id = $id;"
+        );
+
+        return $rezult;
+    }
 
     public function selectForGrid(GridPaginateOrderFilter $gridSet){
         $paginate   = $gridSet->getPaginate();

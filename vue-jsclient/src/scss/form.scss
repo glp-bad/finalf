@@ -118,32 +118,6 @@ $ff-caption-height: 20px;
     display: block;
     background-color:	map-get($ff-modal-window, "background-color");
 
-    .form-header {
-        background-color: darken(map-get($ff-modal-window, "caption-color"), 10%);
-        height: $ff-caption-height;
-        cursor: move;
-
-        .caption {
-            float: left;
-            color: map-get($ff-modal-window, "caption-color-font");
-            display: inline-block;
-            padding-left: 10px;
-
-            // vertical center height
-            line-height: $ff-caption-height; vertical-align: middle;
-        }
-
-        .closeButton {
-            float: right;
-            color: map-get($ff-modal-window, "caption-color-font");
-            padding-right: 8px;
-            cursor:pointer;
-
-            // vertical center height
-            line-height: $ff-caption-height; vertical-align: middle;
-        }
-    }
-
     .form-content{
         padding: 5px;
     }

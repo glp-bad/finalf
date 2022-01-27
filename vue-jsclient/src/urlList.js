@@ -15,6 +15,8 @@ export default [
 	{name: "gridDataTest",          url: "public/app/gridDataTest"},
 	{name: "gridDataTestUpdate",    url: "public/app/gridDataTestUpdate"},
     {name: "gridListParteneri",     url: "public/app/gridListParteneri"},
+    {name: "partenerGetData",        url: "public/app/partenerGetData"},
+
 
 
 ]

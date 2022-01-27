@@ -35,7 +35,6 @@
             <div :class=formClass.header ref="headerRef" >
                 <span class="caption" ref="captionRef"></span>
                 <div class="closeButton" @click="closeForm"><font-awesome-icon :icon="cfgForm.closeIcon" /></div>
-
             </div>
 
             <div :class=formClass.content ref="contentRef">

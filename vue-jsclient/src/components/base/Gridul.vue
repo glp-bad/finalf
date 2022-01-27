@@ -360,6 +360,7 @@
 	        	this.showSelectedData = '...';
 	        	this.enabledToolBar(false);
 	            this.privateRemoveSelectedRow();
+                this.$emit(this.pConfig.emitSelectData, null);
 
             },
             enabledToolBar: function (enabled){
@@ -739,11 +740,10 @@
                         finalSelected[fieldName] = c.innerText;
                     }
                 }
-
                 this.selectdRow = finalSelected;
+                this.$emit(this.pConfig.emitSelectData, this.selectdRow);
 
                 this.enabledToolBar(true);
-
                 this.privateMakeShowDataSelected();
 
             },

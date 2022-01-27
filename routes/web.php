@@ -22,5 +22,6 @@ Route::post('app/login', [LoginController::class, 'login']);
 Route::post('app/logout',[LoginController::class, 'logout'])->middleware('auth');
 Route::post('app/loginCheck',[LoginController::class, 'loginCheck'])->middleware('auth');
 Route::post('app/gridListParteneri',[ParteneriController::class, 'gridListParteneri'])->middleware('auth');
+Route::post('app/partenerGetData',  [ParteneriController::class, 'partenerGetData'])->middleware('auth');
 
 // Route::post('app/logout',[LoginController::class, 'logout']);

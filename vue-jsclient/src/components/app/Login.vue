@@ -76,6 +76,11 @@
 	        this.$vanilla.dragDiv(this.$refs.windowRef, this.$refs.headerRef);
         },
         methods: {
+            submit: function (){
+                // do nothing
+                // doar pentru mesajul:  [Vue warn]: Property "submit" was accessed during render but is not defined on instance
+                // momentan nu am gasit alta solutie
+            },
 	        logOn: function (){
 		        // this.$emit(this.EMIT);
                 console.log("this.URI: ", this.URI);

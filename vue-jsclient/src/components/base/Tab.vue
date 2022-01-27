@@ -25,7 +25,11 @@
 		directives: {},
         created() {
             this.REF_HEADER_LI = 'refHeaderLi',
-            this.REF_TABS = 'refTabs'
+            this.REF_TABS = 'refTabs',
+            this.tabEngine = null;
+        },
+        mounted() {
+            this.tabEngine = this.pConfig.header;
         },
         methods: {
             headerClick: function (event) {

@@ -25,5 +25,6 @@ abstract class MyModel
     abstract public function update();
     abstract public function delete();
     abstract public function select();
+    abstract public function selectForEdit($idPk);
 
 }

@@ -70,11 +70,23 @@
             .up-line {
                 background-color: map-get($ff-tab,"selected-color");
                 height: 5px;
+                margin-bottom: 2px;
             }
-
             display: none;
             // width: 100px;
             //height: $wokbenchHeight;
+
+            .title-continut-tab {
+                display: inline-flex;
+                margin-left: 5px;
+                margin-bottom: 5px;
+                padding: 4px;
+                padding-right: 20px;
+                border: 1px solid lighten(map_get($ff-tab, 'background-color'), 30%);
+                box-shadow: 2px 2px 4px -4px darken($ff-base, 70%);
+                border-radius: 4px;
+                background-color: lighten(map_get($ff-tab, 'background-color'), 40%);
+            }
         }
 
     }
