@@ -1,4 +1,3 @@
-
 <template>
     <input type="checkbox"
            :id=this.id
@@ -10,8 +9,6 @@
 </template>
 
 <script>
-
-
 	export default {
 		name: "my-checkBox",
         props: {
@@ -30,6 +27,9 @@
 			getValue: function () {
                 return this.dataModel;
 			},
+            setValue: function (val) {
+                this.dataModel = val;
+            },
 	        resetValue: function () {
 		        this.dataModel = this.defaultValue;
 	        },
@@ -42,7 +42,6 @@
             }
 		}
 	}
-
 </script>
 
 <style scoped>

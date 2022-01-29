@@ -355,6 +355,7 @@ const appHelper = {
                     defaultValue: {id: 0, text: ''},
                     disabled: false,
                     width: 0,
+                    url: '#',
                     setIdAndRef: function (id) {
                         this.id = id;
                         this.ref = id+'Ref';

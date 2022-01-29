@@ -16,7 +16,5 @@ export default [
 	{name: "gridDataTestUpdate",    url: "public/app/gridDataTestUpdate"},
     {name: "gridListParteneri",     url: "public/app/gridListParteneri"},
     {name: "partenerGetData",        url: "public/app/partenerGetData"},
-
-
-
+    {name: "nomTipPartener",        url: "public/app/nomTipPartener"},
 ]

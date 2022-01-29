@@ -6,6 +6,7 @@ use App\allClass\helpers\GridPaginateOrderFilter;
 use App\allClass\helpers\response\SqlMessageResponse;
 use App\Http\Controllers\Controller;
 use App\Models\app\ModelParteneri;
+use App\Models\nomenclatoare\ModelNomTipPartener;
 use App\MyAppConstants;
 use \Illuminate\Http\Request;
 
@@ -34,5 +35,19 @@ class ParteneriController extends Controller
         return $partneriList->selectForGrid($gridPaginateOrderFilter);
     }
 
+
+    public function nomTipPartener(Request $request) {
+
+        $nom = new ModelNomTipPartener();
+
+        $succes = true;
+        $lastId = -1;
+        $messages = null;
+        $records  = $nom->selectForSimpleDropDown();
+
+        // sleep(10);
+
+        return json_encode(new SqlMessageResponse($succes, $lastId, $messages, $records));
+    }
 
 }

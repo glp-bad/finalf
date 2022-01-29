@@ -20,6 +20,14 @@ const constantsComponent = {
                 element.classList.remove('disable-tab');
             },
         },
+        app.config.globalProperties.$constSelect = {
+            getRecordSelect: function (id, text, selected) {
+                if(selected === undefined || selected == null){
+                    selected = false;
+                }
+                return {id: id, text: text, selected: selected}
+            },
+        },
         app.config.globalProperties.$constGrid = {
             ID_NAME: 'idPk',
             ICON_CLASS: 'fas',
