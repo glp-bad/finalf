@@ -31,6 +31,9 @@ class ModelUserLogged extends MyModel {
     public function update(){
     }
 
+    public function selectForEdit($idPk){
+    }
+
     public function getIdUserLogged(){
         return $this->idUserLogin;
     }
