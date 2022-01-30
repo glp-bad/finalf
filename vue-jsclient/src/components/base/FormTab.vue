@@ -1,5 +1,14 @@
 <template>
     <div class = 'ff-form-tab'>
+        <div class = "loading-modal" v-if="this.showModalLoadingDiv">
+            <div>
+                <font-awesome-icon :icon=this.$constComponent.ICON_SPINNER size="3x" spin/>
+            </div>
+        </div>
+
+        <div class = 'form-title'>
+            <slot name='slotTitle' ></slot>
+        </div>
         <div class = 'form-content'>
             <slot name='slotContent' ></slot>
         </div>
@@ -26,10 +35,13 @@
         mounted() {
         },
         methods: {
-
+            showModal: function (show) {
+                this.showModalLoadingDiv = show;
+            }
         },
 		data () {
 			return {
+                showModalLoadingDiv: false
             }
 		}
 	}

@@ -3,6 +3,7 @@ import endOfMonth   from '../../node_modules/date-fns/endOfMonth'
 import format       from '../../node_modules/date-fns/format'
 import urlList      from "../urlList";
 import cssList      from "../cssList";
+import factoryConfigControl   from "../configControlClass";
 import {v4 as uuidv4} from '../../node_modules/uuid'
 
 const appHelper = {
@@ -282,11 +283,9 @@ const appHelper = {
         }
 
         app.config.globalProperties.$app = {
-
             getUuid () {
                 return uuidv4();
             },
-
             getObjectReturnComponent (data) {
                 return JSON.parse(JSON.stringify(data));
             },
@@ -313,6 +312,11 @@ const appHelper = {
 
                 return msg;
 
+            },
+            cfgInputField(id, sizeField){
+                let cfg = factoryConfigControl.getConfig(factoryConfigControl.INPUT_FIELD);
+                cfg.setBaseConfig(id, sizeField);
+                return cfg;
             },
             cfgTextFIeld(){
                 return { id: "",
@@ -370,5 +374,6 @@ const appHelper = {
 
 
 }
+
 
 export default appHelper;

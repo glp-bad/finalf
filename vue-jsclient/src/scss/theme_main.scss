@@ -15,8 +15,6 @@ $ff-box_shadow: #8e8e8e;
 
 $ff-font-label-formular: black;
 
-
-
 $ff-navbar:(
 	hover-color:        $ff-hover-color,
 	background-color:   $ff-base,
@@ -28,7 +26,7 @@ $ff-tab:(
 	background-color:    $ff-base,
 	font-color-selected: #000000,
 	font-size-tab:       12px,
-    selected-color:     black,
+    selected-color:      darken($ff-base, 15%),
     disable-tab-color: lightgrey
 );
 

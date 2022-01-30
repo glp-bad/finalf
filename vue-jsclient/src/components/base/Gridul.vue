@@ -25,9 +25,9 @@
                                         </div>
 
                                         <div v-if="ph.filterBy" class="divDataFilter" v-bind:class="{ divDataFilterDisplayOn: this.privateReactiveShowFilterDiv(ph.id)}">
-                                            <my-input-field :size=20
-                                                           :pPlaceHolder="'...'" v-on:keyup="privateKeyPresFilter">
-                                            </my-input-field>
+                                            <input-field :pConfig= INPUT_FILTER_TEXT
+                                                            v-on:keyup="privateKeyPresFilter">
+                                            </input-field>
 
                                             <my-button @click="this.privateClearFilter($event)" :heightButton=22 :buttonType=1 title="clear filter" :style="cfgIconColor(this.$constGrid.ICON_DELETE.color)">
                                                 <font-awesome-icon :icon=this.cfgIconPictureAction(this.$constGrid.ICON_DELETE) size="1x"/>
@@ -163,11 +163,14 @@
                 </my-button>
             </div>
             <div class="divInputGoto">
-                <page-nr-field :ref=this.REF_INPUT_PAGE_NR
+                <input-field :ref= INPUT_PAGE_NR.ref
                                :size=1
-                               :pPlaceHolder="'nr. page'" v-on:keyup="privateEnterGotoPage">
+                               :pPlaceHolder="'nr. page'"
+                               v-on:keyup="privateEnterGotoPage"
+                               :pConfig = INPUT_PAGE_NR
+                                >
 
-                </page-nr-field>
+                </input-field>
             </div>
 
             <div class="divLabelInfo" :title="this.privatePaginateTitleRecords()">
@@ -183,17 +186,13 @@
 
 	import Button from '@/components/base/Button.vue';
 	import InputField from "@/components/base/InputField.vue";
-    import MyInputField from "./InputField";
-
 
 	export default {
 		name: "grid-ul",
 		components: {
-            MyInputField,
-			'my-button': Button,
-            'page-nr-field': InputField,
-            'text-filter': InputField
-		},
+            'input-field': InputField,
+			'my-button': Button
+        },
         props: {
             pConfig: {type: Object, required: true}
         },
@@ -203,7 +202,8 @@
             this.REF_TABLE      = 'refTable',
 			this.REF_THEAD      = 'refThead',
             this.REF_TABLE_BODY = 'refBody',
-	        this.REF_INPUT_PAGE_NR = 'refPageNumber',
+            this.INPUT_PAGE_NR = this.cfgPageNumber(),
+            this.INPUT_FILTER_TEXT = this.cfgInputFilterText(),
             this.REF_TOOLBAR = 'refToolbar',
             this.KEY_PRESS_CONTROL_BROWSER = ['Tab', 'Escape'],
             this.engine = {
@@ -287,6 +287,16 @@
         computed: {
         },
         methods: {
+            cfgInputFilterText: function(){
+                let cfg = this.$app.cfgInputField("inputFilterText", 20);
+                return cfg;
+            },
+            cfgPageNumber: function(){
+                let cfg = this.$app.cfgInputField("pageNumber", 1);
+                cfg.setPlaceHolder('nr. page');
+
+                return cfg;
+            },
 	        getDataFromServer: function (fromID) {
 
 	            if(this.$check.isUndef(this.pConfig.cfg.urlData)){
@@ -629,7 +639,7 @@
             },
 
 	        jumpPage: function () {
-                let input = this.$refs[this.REF_INPUT_PAGE_NR];
+                let input = this.$refs[this.INPUT_PAGE_NR.ref];
                 let pageNumber = parseInt(input.getValue());
 
                 if(input.getValue()>=1 && pageNumber<=this.paginate.pag.total_pages){

@@ -24,7 +24,19 @@
                      @emitYesNoButton = "emitYesNoButton"
     ></validate-window>
 
-    <form-tab>
+    <form-tab :ref = this.REF_FROM_PARTNER>
+        <template v-slot:slotTitle>
+            <div class="antet">
+                <div class="buttons-container">
+                    <div class="prime-button last-button">
+                        <my-button  :ref=this.REF_BUTTON_ADD_PARTENER @click="this.setFormNew" :heightButton=22 :buttonType=2 title="adauga partener nou" :style="this.ICON_ADD_PARTENER.colorStyle">
+                            <font-awesome-icon :icon=this.$constComponent.cfgIconPicture(this.ICON_ADD_PARTENER) size="1x" />
+                        </my-button>
+                    </div>
+                </div>
+                <div class="title">{{this.titleForm}}</div>
+            </div>
+        </template>
         <template v-slot:slotContent>
             <form>
                 <table class="ff-form-table">
@@ -33,12 +45,8 @@
                             <label :for=NUME.id>{{NUME.caption}}</label></td>
                         <td class="control">
                             <name-field
-                                :id = NUME.id
                                 :ref = NUME.ref
-                                maska=""
-                                :minlength = NUME.minLength
-                                :maxlength = NUME.maxLength
-                                :size = NUME.sizeField
+                                :pConfig = NUME
                             ></name-field></td>
                         <td class="control">
                             <type-partener
@@ -57,12 +65,8 @@
                             <label :for=CUI.id>{{CUI.caption}}</label></td>
                         <td class="control">
                             <name-field
-                                :id = CUI.id
-                                :ref = CUI.ref
-                                maska=""
-                                :minlength = CUI.minLength
-                                :maxlength = CUI.maxLength
-                                :size = CUI.sizeField
+                                :ref=CUI.ref
+                                :pConfig = CUI
                             ></name-field>
                             <label> cu RO</label>
                             <with-ro
@@ -74,12 +78,8 @@
                             &nbsp;&nbsp;
                             <label class="label-left bold">{{REGCOM.caption}}</label>
                             <name-field
-                                :id = REGCOM.id
                                 :ref = REGCOM.ref
-                                maska=""
-                                :minlength = REGCOM.minLength
-                                :maxlength = REGCOM.maxLength
-                                :size = REGCOM.sizeField
+                                :pConfig = REGCOM
                             ></name-field>
                         </td>
                     </tr>
@@ -95,6 +95,7 @@
     import InputField from "@/components/base/InputField.vue";
     import DropDownSimple from "@/components/base/DropDownSimple.vue";
     import CheckBox from "@/components/base/CheckBox.vue";
+    import Button from "@/components/base/Button";
 
     export default {
         components: {
@@ -102,31 +103,75 @@
             'validate-window': AlertWindow,
             'name-field': InputField,
             'type-partener': DropDownSimple,
-            'with-ro': CheckBox
+            'with-ro': CheckBox,
+            'my-button': Button
         },
         name: "form-partener",
         created() {
+            this.REF_FROM_PARTNER = 'refFormPartner';
+            this.REF_BUTTON_ADD_PARTENER = 'refButtonAddPartener';
             this.NUME = this.cfgNume();
             this.NOM_TIP_PARTENR = this.cfgTipPartener();
             this.CUI = this.cfgCui();
             this.RO = this.cfgRO();
             this.REGCOM = this.cfgRegCom();
+            this.MODE = this.$constFROM.MODE_EDIT;
+            this.ICON_ADD_PARTENER =  this.$constComponent.ICON_ADD_PERSON("blue");
+            this.URL_GETDATA_PARTENER = this.$url.getUrl('partenerGetData');
         },
         mounted () {
         },
         methods: {
-            fillForm: function (record) {
-                this.$refs[this.NUME.ref].setValue(record[0].cNume);
-                this.$refs[this.NOM_TIP_PARTENR.ref].setValue(record[0].id_tip);
-                this.$refs[this.CUI.ref].setValue(record[0].cui);
+            getDataPartener: function (idPk) {
+                this.post.idPk = idPk;
+
+                this.$refs[this.REF_FROM_PARTNER].showModal(true);
+                this.axios
+                    .post(this.URL_GETDATA_PARTENER, this.post)
+                    .then(response => {
+                        this.showModalLoadingDiv = true;
+                        this.dataPartener = response.data.records[0];
+                    })
+                    .catch(error => console.log(error))
+                    .finally(() => {
+
+                        this.fillForm();
+                        this.$refs[this.REF_FROM_PARTNER].showModal(false);
+                    });
+            },
+            setModeForm: function (mode){
+                this.MODE = mode;
+
+                if(this.MODE == this.$constFROM.MODE_EDIT){
+                    this.$refs[this.REF_BUTTON_ADD_PARTENER].disable(false);
+                    console.log('transform formul in modul EDIT !!!!');
+                }
+
+                if(this.MODE == this.$constFROM.MODE_NEW){
+                        console.log('transform formul in NEW !!!!');
+                }
+
+            },
+            setFormNew: function (){
+                this.$refs[this.REF_BUTTON_ADD_PARTENER].disable(true);
+                this.setModeForm(this.$constFROM.MODE_NEW);
+            },
+            addNewPartner: function (){
+            },
+            fillForm: function () {
+                this.titleForm = this.dataPartener.cNume;
+                this.$refs[this.NUME.ref].setValue(this.dataPartener.cNume);
+                this.$refs[this.NOM_TIP_PARTENR.ref].setValue(this.dataPartener.id_tip);
+                this.$refs[this.CUI.ref].setValue(this.dataPartener.cui);
 
                 let withRo = false;
-                if(record[0].ro_ == 'RO'){
+                if(this.dataPartener.ro_ === 'RO'){
                     withRo = true;
                 }
                 this.$refs[this.RO.ref].setValue(withRo);
-                this.$refs[this.REGCOM.ref].setValue(record[0].regcom);
+                this.$refs[this.REGCOM.ref].setValue(this.dataPartener.regcom);
 
+                this.setModeForm(this.$constFROM.MODE_EDIT);
             },
             emitYesNoButton: function () {
             },
@@ -141,42 +186,31 @@
                 return cfg;
             },
             cfgNume: function(){
-                let cfg = this.$app.cfgTextFIeld();
-                cfg.setIdAndRef("nume");
-                cfg.minLength   = 3;
-                cfg.maxLength   = 150;
-                cfg.validate    = this.validateNume;
-                cfg.maska       = "";
-                cfg.caption     = "Nume";
-                cfg.mandatory   = true;
-                cfg.sizeField  = 120;
-
+                let cfg = this.$app.cfgInputField("nume", 120);
+                cfg.setValidate(3,150);
+                cfg.setValidateFunction(this.validateNume);
+                cfg.setCaption("Nume");
+                cfg.setMandatory(true);
+                cfg.setMaska("");
                 return cfg;
             },
             cfgRegCom: function(){
-                let cfg = this.$app.cfgTextFIeld();
-                cfg.setIdAndRef("regcom");
-                cfg.minLength   = 3;
-                cfg.maxLength   = 150;
-                cfg.validate    = this.validateRegcom;
-                cfg.maska       = "";
-                cfg.caption     = "Cod registrul comertului";
-                cfg.mandatory   = false;
-                cfg.sizeField  = 20;
+                let cfg = this.$app.cfgInputField("regcom", 20);
+                cfg.setValidate(3,150);
+                cfg.setValidateFunction(this.validateRegcom);
+                cfg.setCaption("Cod registrul comertului");
+                cfg.setMandatory(false);
+                cfg.setMaska("");
 
                 return cfg;
             },
             cfgCui: function(){
-                let cfg = this.$app.cfgTextFIeld();
-                cfg.setIdAndRef("cui");
-                cfg.minLength   = 3;
-                cfg.maxLength   = 13;
-                cfg.validate    = this.validateCui;
-                cfg.maska       = "";
-                cfg.caption     = "CUI";
-                cfg.mandatory   = true;
-                cfg.sizeField  = 15;
-
+                let cfg = this.$app.cfgInputField("cui", 15);
+                cfg.setValidate(3,13);
+                cfg.setValidateFunction(this.validateCui);
+                cfg.setCaption("CUI");
+                cfg.setMandatory(true);
+                cfg.setMaska("");
                 return cfg;
             },
             cfgRO: function (){
@@ -198,6 +232,10 @@
         },
         data () {
             return {
+                dataPartener: null,
+                titleForm: '...',
+                post: { idPk: null}
+
             }
         }
     }

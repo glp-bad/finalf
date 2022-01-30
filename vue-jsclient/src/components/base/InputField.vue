@@ -1,14 +1,13 @@
 
 <template>
     <div class="ff-input-text">
-        <input :id = this.id
-               :name = this.id
-               :minlength = this.minlength
-               :maxlength = this.maxlength
+        <input :id = this.pConfig.id
+               :name = this.pConfig.name
+               ref = "refInput"
+               :size = this.pConfig.sizeField
+               :placeholder=this.pConfig.placeHolder
                v-model = "dataModel"
-               ref = "inputRef"
-               :size = this.size
-               :placeholder=this.pPlaceHolder>
+        >
     </div>
 </template>
 
@@ -19,18 +18,7 @@
 	export default {
 		name: "my-inputField",
         props: {
-            id: String,
-            maska: String,
-            validate: Function,
-            minlength: Number,
-	        maxlength: Number,
-	        size: Number,
-	        pPlaceHolder:  {
-			        type: String,
-			        default: 'input data ...',
-			        required: false
-		        }
-
+            pConfig: {type: Object, required: true}
         },
 		directives: { maska },
 		mounted() {
@@ -46,9 +34,12 @@
 		        this.dataModel = value;
 	        },
 	        keydownPress: function () {
-                if(event.target.id == this.id){
+			    /*
+                if(event.target.id == this.pConfig.id){
 	                console.log(this.getValue());
                 }
+                */
+
 	        }
         },
 		data () {

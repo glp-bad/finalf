@@ -76,9 +76,11 @@
                 let tabId = this.$constTab.getIdTab(id);
                 for(let i=0;i < headers.length;i++){
                     if(headers[i].firstChild.getAttribute('idTab') == id){
-                        headers[i].style.backgroundColor = 'black';
+                        // headers[i].style.backgroundColor = 'black';
+                        headers[i].classList.add('selected-tab');
                     }else{
-                        headers[i].style.backgroundColor = null;
+                        // headers[i].style.backgroundColor = null;
+                        headers[i].classList.remove('selected-tab');
                     }
 
                     // show tabs

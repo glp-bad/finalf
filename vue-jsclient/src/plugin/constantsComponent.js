@@ -1,9 +1,13 @@
 const constantsComponent = {
 	install: (app, options) => {
 		app.config.globalProperties.$constComponent = {
-			ICON_SPINNER: ['fas', 'spinner']
-
-
+			ICON_SPINNER: ['fas', 'spinner'],
+            ICON_ADD_PERSON: function (color){
+                return {fawIcon:'fas', icon: 'user-plus', color: color, colorStyle: {color: color }};
+            },
+            cfgIconPicture: function (ICON_ADD_PERSON) {
+                return [ICON_ADD_PERSON.fawIcon, ICON_ADD_PERSON.icon];
+            }
 		},
         app.config.globalProperties.$constTab = {
 		    EMIT_TAB_ACTION: 'emitClickTab',
@@ -27,6 +31,10 @@ const constantsComponent = {
                 }
                 return {id: id, text: text, selected: selected}
             },
+        },
+        app.config.globalProperties.$constFROM = {
+		    MODE_EDIT: 'edit',
+            MODE_NEW: 'new'
         },
         app.config.globalProperties.$constGrid = {
             ID_NAME: 'idPk',

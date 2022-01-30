@@ -14,8 +14,8 @@
                 </div>
                 <div class="tab" :id="this.$constTab.getIdTab('2p')">
                     <div class="up-line"></div>
-                    <div class="title-continut-tab">{{this.tabs.tab02.captionForm}}</div>
-                    <form-partener ref="refPartenerEdit"></form-partener>
+
+                    <form-partener :ref=this.REF_PARTENER_EDIT></form-partener>
                 </div>
             </template>
         </tab-parteneri>
@@ -27,17 +27,20 @@
     import Tab from "@/components/base/Tab";
     import Gridul from '@/components/base/Gridul';
     import formPartener from '@/components/app/form/formPartener';
+    import Button from "@/components/base/Button";
 
     export default {
 		components: {
             'tab-parteneri': Tab,
             'grid-parteneri': Gridul,
-            'form-partener': formPartener
+            'form-partener': formPartener,
+            'my-button': Button
         },
 		name: "view-parteneri",
 		created() {
 		    this.REF_PARTENER_EDIT = 'refPartenerEdit',
 		    this.TAB_EDIT = {id: '2p', urlGetDate: this.$url.getUrl('partenerGetData')},
+            this.ICON_ADD_PARTENER =  this.$constComponent.ICON_ADD_PERSON("blue");
             this.tabConfig = {
                 header: [
                     this.$constTab.getHeader('1p','Parteneri'),
@@ -93,7 +96,8 @@
 		methods: {
 		    emitClickTab: function (idTab) {
 		        if(idTab == this.TAB_EDIT.id){
-                    this.getDataFromServer(this.TAB_EDIT.urlGetDate, idTab);
+                    this.$refs[this.REF_PARTENER_EDIT].getDataPartener(this.post.idPk);
+
                 }
             },
             emitSelectDataOnGrid: function (selectData) {
@@ -108,36 +112,14 @@
                 }
                 this.$refs.refTab.tabOnOff('2p', onOff);
 		        // edit tab
-                this.tabs.tab02.captionForm = title;
-            },
-            getDataFromServer: function ($url, idTab) {
-                this.showModalLoadingDiv = true;
-                this.axios
-                    .post($url, this.post)
-                    .then(response => {
-                        this.showModalLoadingDiv = true;
-                        this.responseData = response.data;
-                    })
-                    .catch(error => console.log(error))
-                    .finally(() => {
-                        this.showModalLoadingDiv = false;
-
-                        if(idTab == this.TAB_EDIT.id) {
-                            this.$refs[this.REF_PARTENER_EDIT].fillForm(this.responseData.records);
-                        }
-
-                    });
-
-            },
+            }
 		},
 		data () {
 			return {
-			    responseData: null,
-                showModalLoadingDiv: true,
                 post: { idPk: null},
 			    tabs:{
 			        tab01: {},
-                    tab02: {captionForm: null, selectData: null}
+                    tab02: {}
                 }
             }
 		}
@@ -146,3 +128,4 @@
 </script>
 
 <style scoped></style>
+
