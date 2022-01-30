@@ -3,9 +3,11 @@ class ConfigControl {
     name = null;
     ref  = null;
     mandatory = false;
-    validate = null;     // function form call
+    validate = null;            // function form call
     caption= null;
-    sizeField= 0;               // lungimea controlului
+    sizeField= 0;               // lungimea controlului, width filed
+    defaultValue= null;
+    disabled= false;
 
     setBaseConfig(id, sizeField) {
         this.id = id;
@@ -22,9 +24,27 @@ class ConfigControl {
     setMandatory(madatory){
         this.mandatory = madatory;
     }
+    setDefaultValue(value){
+        this.defaultValue = value;
+    }
+    setDisable(disable){
+        this.disabled = disable;
+    }
 
 }
 
+
+
+class CheckBox extends ConfigControl{}
+
+class SelectSimple extends ConfigControl{
+    // defaultValue: {id: 0, text: ''},
+
+    url= '#';
+    setUrl(url){
+        this.url = url;
+    }
+}
 
 class InputField extends ConfigControl
 {
@@ -49,6 +69,8 @@ class InputField extends ConfigControl
 
 export default class factoryConfigControl {
     static INPUT_FIELD = 'inputField';
+    static CHECK_BOX   = 'checkBox';
+    static SELECT_SIMPLE   = 'selectSimple';
 
     static getConfig(control){
         switch (control)
@@ -56,8 +78,14 @@ export default class factoryConfigControl {
             case factoryConfigControl.INPUT_FIELD:
                 return new InputField();
                 break;
+            case factoryConfigControl.CHECK_BOX:
+                return new CheckBox();
+                break;
+            case factoryConfigControl.SELECT_SIMPLE:
+                return new SelectSimple();
+                break;
             default:
-                console.log ("nu exista configurare pentru controlul " + control);
+                console.error("!!! ATENTIE !!! nu exista configurare pentru controlul " + control);
        }
 
 

@@ -1,10 +1,8 @@
 <template>
     <input type="checkbox"
-           :id=this.id
-           :name=this.id
-           :size=this.size
+           :id=this.pConfig.id
+           :name=this.pConfig.id
            v-model="dataModel"
-           :disabled = this.disabled
     >
 </template>
 
@@ -12,12 +10,7 @@
 	export default {
 		name: "my-checkBox",
         props: {
-            id: String,
-            caption: String,
-            validate: Function,
-	        defaultValue: Boolean,
-            disabled: Boolean,
-	        size: Number
+            pConfig: {type: Object, required: true}
         },
 		directives:{},
 		mounted() {

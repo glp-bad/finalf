@@ -44,18 +44,14 @@
                         <td class="label-left bold">
                             <label :for=NUME.id>{{NUME.caption}}</label></td>
                         <td class="control">
-                            <name-field
+                            <input-field
                                 :ref = NUME.ref
                                 :pConfig = NUME
-                            ></name-field></td>
+                            ></input-field></td>
                         <td class="control">
                             <type-partener
+                                :pConfig = NOM_TIP_PARTENR
                                 :ref = NOM_TIP_PARTENR.ref
-                                :pId= NOM_TIP_PARTENR.id
-                                :pName= NOM_TIP_PARTENR.id
-                                pCaptionText= '...'
-                                :pWidth= NOM_TIP_PARTENR.width
-                                :pUrlData = NOM_TIP_PARTENR.url
                             ></type-partener></td>
 
                     </tr>
@@ -64,23 +60,21 @@
                         <td class="label-left bold">
                             <label :for=CUI.id>{{CUI.caption}}</label></td>
                         <td class="control">
-                            <name-field
+                            <input-field
                                 :ref=CUI.ref
                                 :pConfig = CUI
-                            ></name-field>
+                            ></input-field>
                             <label> cu RO</label>
-                            <with-ro
-                                    :id= RO.id
+                            <check-box
+                                    :pConfig = RO
                                     :ref= RO.ref
-                                    :disabled= RO.disabled
-
-                            ></with-ro>
+                            ></check-box>
                             &nbsp;&nbsp;
                             <label class="label-left bold">{{REGCOM.caption}}</label>
-                            <name-field
+                            <input-field
                                 :ref = REGCOM.ref
                                 :pConfig = REGCOM
-                            ></name-field>
+                            ></input-field>
                         </td>
                     </tr>
                 </table>
@@ -101,9 +95,9 @@
         components: {
             'form-tab': FormTab,
             'validate-window': AlertWindow,
-            'name-field': InputField,
+            'input-field': InputField,
             'type-partener': DropDownSimple,
-            'with-ro': CheckBox,
+            'check-box': CheckBox,
             'my-button': Button
         },
         name: "form-partener",
@@ -176,13 +170,9 @@
             emitYesNoButton: function () {
             },
             cfgTipPartener: function(){
-                let cfg = this.$app.cfgSelectSimple();
-                cfg.setIdAndRef("nomTipPartener");
-                cfg.mandatory= true;
-                cfg.caption= "Tip partener";
-                cfg.width= 220;
-                cfg.url = this.$url.getUrl('nomTipPartener');
-
+                let cfg = this.$app.cfgSelectSimple('nomTipPartener', this.$url.getUrl('nomTipPartener'), 220);
+                cfg.setCaption("Tip partener");
+                cfg.setMandatory(true);
                 return cfg;
             },
             cfgNume: function(){
@@ -214,13 +204,7 @@
                 return cfg;
             },
             cfgRO: function (){
-                let cfg = this.$app.cfgCheckBox();
-                cfg.setIdAndRef("ro");
-                cfg.validate= this.validateRO;
-                cfg.caption= "";
-                cfg.defaultValue= false;
-                cfg.disabled= false;
-
+                let cfg = this.$app.cfgCheckBox('ro', false);
                 return cfg;
             },
             validateNume: function () {

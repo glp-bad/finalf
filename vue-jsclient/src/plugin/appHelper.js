@@ -335,36 +335,19 @@ const appHelper = {
                 };
 
             },
-            cfgCheckBox() {
-                return {
-                    id: "",
-                    ref: "",
-                    validate: "",
-                    caption: "",
-                    defaultValue: false,
-                    disabled: false,
-                    setIdAndRef: function (id) {
-                        this.id = id;
-                        this.ref = id+'Ref';
-                    }
-                };
+            cfgCheckBox(id, defaultValue) {
+                let cfg = factoryConfigControl.getConfig(factoryConfigControl.CHECK_BOX);
+                cfg.setBaseConfig(id, null);
+                cfg.setDefaultValue(defaultValue);
+                return cfg;
             },
-            cfgSelectSimple() {
-                return {
-                    id: "",
-                    ref: "",
-                    validate: "",
-                    mandatory: false,
-                    caption: "",
-                    defaultValue: {id: 0, text: ''},
-                    disabled: false,
-                    width: 0,
-                    url: '#',
-                    setIdAndRef: function (id) {
-                        this.id = id;
-                        this.ref = id+'Ref';
-                    }
-                };
+            cfgSelectSimple(id, url, width) {
+                let cfg = factoryConfigControl.getConfig(factoryConfigControl.SELECT_SIMPLE);
+                cfg.setBaseConfig(id, width);
+                cfg.setUrl(url);
+                cfg.setDefaultValue({id: 0, text: ''});
+
+                return cfg;
             }
         }
 

@@ -6,7 +6,7 @@
             </div>
         </div>
 
-        <select :name=pName :id=pId :ref=SELECT_REF @change="changeValue" :disabled=this.isDisabled>
+        <select :name=pConfig.name :id=pConfig.id :ref=SELECT_REF @change="changeValue" :disabled=this.isDisabled>
             <option v-for="dval in dataList" :value=dval.id :selected="dval.selected">
                     {{dval.text}}
             </option>
@@ -18,14 +18,7 @@
 	export default {
 		name: "my-dropDown-simple",
 		props: {
-			pId: String,
-			pName: String,
-            pCaptionText: String,
-            pWidth: Number,
-			validate: Function,
-            pDataList: Array,
-            pUrlData: String
-
+            pConfig: {type: Object, required: true}
 		},
 		created() {
 			this.SELECT_REF = 'selectRef'
@@ -35,8 +28,7 @@
         },
         methods: {
             getDataFromServer: function () {
-
-                let $url = this.pUrlData;
+                let $url = this.pConfig.url;
                 this.isShowSelectedData = false;
 
                 this.showModalLoadingDiv = true;
@@ -91,8 +83,8 @@
                 }
             },
             config: function () {
-				if(this.pWidth > 0){
-					this.$refs[this.SELECT_REF].style.width = this.pWidth + 'px';
+				if(this.pConfig.sizeField > 0){
+					this.$refs[this.SELECT_REF].style.width = this.pConfig.sizeField + 'px';
                 }
 	            this.enabled(true);
 				this.getDataFromServer();
