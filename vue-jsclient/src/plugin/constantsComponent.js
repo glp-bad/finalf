@@ -1,7 +1,17 @@
 const constantsComponent = {
 	install: (app, options) => {
+
+        app.config.globalProperties.$constBussines = {
+            RO_CUI: 'RO_CUI',
+            RO_CNP: 'RO_CNP',
+            RO_IBAN: 'RO_IBAN',
+            PERSOANA_FIZICA: 'pf' // from data base
+        },
 		app.config.globalProperties.$constComponent = {
 			ICON_SPINNER: ['fas', 'spinner'],
+            SQL_UPDATE: 'update',
+            SQL_INSERT: 'insert',
+            SQL_DELETE: 'delete',
             ICON_ADD_PERSON: function (color){
                 return {fawIcon:'fas', icon: 'user-plus', color: color, colorStyle: {color: color }};
             },

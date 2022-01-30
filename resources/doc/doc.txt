@@ -1,4 +1,4 @@
-sursa icon: https://fontawesome.com/v5.15/icons?d=gallery&p=2&s=solid&c=alert&m=free
+
 
 Pentru D:\bin\xampp8\htdocs\finalf\app\Console\Kernel.php
     for dev: php artisan schedule:work
@@ -6,3 +6,9 @@ Pentru D:\bin\xampp8\htdocs\finalf\app\Console\Kernel.php
 Pentru cPanel:
     cronJob:
     /usr/local/bin/php /home2/badminto/finalf.badmintonclub.ro/artisan schedule:run
+
+
+
+online resource:
+icon: https://fontawesome.com/v5.15/icons?d=gallery&p=2&s=solid&c=alert&m=free
+https://date-fns.org/

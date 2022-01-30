@@ -21,4 +21,8 @@ class SqlMessageResponse
 	    $this->admin = $admin;
 	    $this->records = $records;
     }
+
+    function toJson(){
+        return json_encode($this);
+    }
 }

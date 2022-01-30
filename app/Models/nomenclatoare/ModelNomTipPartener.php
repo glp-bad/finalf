@@ -18,7 +18,7 @@ class ModelNomTipPartener extends MyModel {
 
     public function selectForSimpleDropDown(){
         $rezult = DB::select(
-            "select id, CONCAT(cTipAbrev, ' (', cTip, ')') as text, 'false' as selected from t_tip_organizare_juridica order by id;"
+            "select id, CONCAT(cTipAbrev, ' (', cTip, ')') as text, 'false' as selected, cTipAbrev from t_tip_organizare_juridica order by id;"
         );
 
         return $rezult;

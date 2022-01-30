@@ -36,7 +36,9 @@
                     .post($url, this.post)
                     .then(response => {
                         this.showModalLoadingDiv = true;
-                        this.dataList = response.data.records;
+
+                        let list = [this.$constSelect.getRecordSelect(0,'...select option')];
+                        this.dataList = list.concat(response.data.records);
                     })
                     .catch(error => console.log(error))
                     .finally(() => {
@@ -45,7 +47,6 @@
                             this.setValue(this.dataSelected.id);
                         }
                     });
-
             },
 			changeValue: function () {
 				let refSelect = this.$refs[this.SELECT_REF];
@@ -56,6 +57,7 @@
             clearSelected: function(){
                 this.dataSelected.id = -1;
                 this.dataSelected.text = null;
+                this.dataSelected.candidateKey = null;
                 for(let i = 0; i<this.dataList.length; i++ ){
                         this.dataList[i].selected = false;
                 }
@@ -65,6 +67,7 @@
 		        for(let i = 0; i<this.dataList.length; i++ ){
 		            if(this.dataList[i].id == id){
                         this.dataSelected.text = this.dataList[i].text;
+                        this.dataSelected.candidateKey = this.dataList[i].cTipAbrev;
                         this.dataList[i].selected = true;
                         this.isShowSelectedData = true;
                     }else{
@@ -95,8 +98,8 @@
 		data () {
 			return {
                 showModalLoadingDiv: true,
-				dataList: [this.$constSelect.getRecordSelect('0','...')],
-                dataSelected: {id: 0, text: null},
+				dataList: null,
+                dataSelected: {id: 0, text: null, candidateKey: null},
                 isShowSelectedData: false,
                 isDisabled: true,
                 post: null

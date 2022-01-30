@@ -24,6 +24,7 @@ Route::post('app/loginCheck',[LoginController::class, 'loginCheck'])->middleware
 Route::post('app/gridListParteneri',[ParteneriController::class, 'gridListParteneri'])->middleware('auth');
 Route::post('app/partenerGetData',  [ParteneriController::class, 'partenerGetData'])->middleware('auth');
 Route::post('app/nomTipPartener',  [ParteneriController::class, 'nomTipPartener'])->middleware('auth');
+Route::post('app/editPartener',  [ParteneriController::class, 'editPartener'])->middleware('auth');
 
 
 

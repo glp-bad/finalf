@@ -69,17 +69,32 @@
                                     :pConfig = RO
                                     :ref= RO.ref
                             ></check-box>
-                            &nbsp;&nbsp;
-                            <label class="label-left bold">{{REGCOM.caption}}</label>
+                            <label>&nbsp;&nbsp; fara verificare cod fiscal</label>
+                            <check-box
+                                :pConfig = SKIP_CHECK_COD
+                                :ref= SKIP_CHECK_COD.ref
+                            ></check-box>
+
+                            <label class="label-left bold">&nbsp;&nbsp;{{REGCOM.caption}}</label>
                             <input-field
                                 :ref = REGCOM.ref
                                 :pConfig = REGCOM
                             ></input-field>
+
                         </td>
                     </tr>
                 </table>
             </form>
         </template>
+
+
+        <template v-slot:slotButton>
+            <div class="buttons">
+                <my-button @click="this.editPartener" :heightButton=22 :buttonType=0 title="modific date partener">{{this.captionButton}}</my-button>
+            </div>
+        </template>
+
+
     </form-tab>
 </template>
 
@@ -108,10 +123,12 @@
             this.NOM_TIP_PARTENR = this.cfgTipPartener();
             this.CUI = this.cfgCui();
             this.RO = this.cfgRO();
+            this.SKIP_CHECK_COD = this.cfgSkipCheckCode();
             this.REGCOM = this.cfgRegCom();
             this.MODE = this.$constFROM.MODE_EDIT;
             this.ICON_ADD_PARTENER =  this.$constComponent.ICON_ADD_PERSON("blue");
             this.URL_GETDATA_PARTENER = this.$url.getUrl('partenerGetData');
+            this.URL_EDIT_PARTENER = this.$url.getUrl('editPartener');
         },
         mounted () {
         },
@@ -128,21 +145,78 @@
                     })
                     .catch(error => console.log(error))
                     .finally(() => {
-
-                        this.fillForm();
+                        this.setModeForm(this.$constFROM.MODE_EDIT);
                         this.$refs[this.REF_FROM_PARTNER].showModal(false);
+
                     });
+            },
+            editServerDatePartener: function (){
+
+                if(this.validateForm()){
+                    this.$refs.validateWindowRef.show();
+
+                    return false;
+                }
+
+                if(!this.toServer.senData){
+                    this.$refs.refYesNo.show();
+                }
+
+                if(this.toServer.senData){
+                    this.toServer.senData = false;
+                    this.axios
+                        .post(this.URL_EDIT_PARTENER, this.post)
+                        .then(response => {
+
+                            if (response.data.succes) {
+                                this.$refs.infoWindowRef.setCaption("Succes");
+                                this.$refs.infoWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+                                this.$refs.infoWindowRef.show();
+                            }
+                            else {
+                                this.$refs.validateWindowRef.setCaption("Datele nu pot fi inregistrate");
+                                this.$refs.validateWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+                                this.$refs.validateWindowRef.show();
+                            }
+
+                        })
+                        .catch(error => console.log(error))
+                        .finally(() => {
+                        });
+                }
+            },
+            validateForm: function () {
+                let returnMessage = false;
+
+                this.form.message = [];
+                this.$check.validateForm(this.$refs);
+
+                if( this.form.message.length>0 ){
+                    this.$refs.validateWindowRef.setCaption("Datele nu pot fi inregistrate");
+                    this.$refs.validateWindowRef.setMessage(this.$app.getHtmlFormatMessage(this.form.message));
+                    returnMessage = true;
+                }
+                return returnMessage;
             },
             setModeForm: function (mode){
                 this.MODE = mode;
-
                 if(this.MODE == this.$constFROM.MODE_EDIT){
                     this.$refs[this.REF_BUTTON_ADD_PARTENER].disable(false);
+                    this.captionButton = "Modific datele";
+                    // confirm windows
+                    this.$refs.refYesNo.setCaption("Editez");
+                    this.$refs.refYesNo.setMessage("Modific datele?");
+
+                    this.setPostAction(this.$constComponent.SQL_UPDATE);
+                    this.fillForm();
                     console.log('transform formul in modul EDIT !!!!');
                 }
 
                 if(this.MODE == this.$constFROM.MODE_NEW){
-                        console.log('transform formul in NEW !!!!');
+                    this.captionButton = "Adaug partener";
+                    this.setPostAction(this.$constComponent.SQL_INSERT);
+                    this.resetfillForm();
+                    console.log('transform formul in NEW !!!!');
                 }
 
             },
@@ -150,7 +224,17 @@
                 this.$refs[this.REF_BUTTON_ADD_PARTENER].disable(true);
                 this.setModeForm(this.$constFROM.MODE_NEW);
             },
-            addNewPartner: function (){
+            editPartener: function () {
+                this.editServerDatePartener();
+            },
+            resetfillForm: function () {
+                this.titleForm = "...";
+                this.$refs[this.NUME.ref].setValue("");
+                this.$refs[this.NOM_TIP_PARTENR.ref].setValue(0);
+                this.$refs[this.CUI.ref].setValue("");
+                this.$refs[this.RO.ref].setValue(false);
+                this.$refs[this.SKIP_CHECK_COD.ref].setValue(false);
+                this.$refs[this.REGCOM.ref].setValue("");
             },
             fillForm: function () {
                 this.titleForm = this.dataPartener.cNume;
@@ -163,14 +247,26 @@
                     withRo = true;
                 }
                 this.$refs[this.RO.ref].setValue(withRo);
+                this.$refs[this.SKIP_CHECK_COD.ref].setValue(false);
                 this.$refs[this.REGCOM.ref].setValue(this.dataPartener.regcom);
-
-                this.setModeForm(this.$constFROM.MODE_EDIT);
             },
-            emitYesNoButton: function () {
+            emitYesNoButton: function (yes) {
+                if(yes == 1){
+                    this.toServer.senData = true;
+                    this.editServerDatePartener();
+                }else{
+                    this.toServer.senData = false;
+                }
+            },
+            setPost: function (component, value){
+                this.post['field'][component.name] = value;
+            },
+            setPostAction: function (value){
+                this.post.sqlAction = value;
             },
             cfgTipPartener: function(){
                 let cfg = this.$app.cfgSelectSimple('nomTipPartener', this.$url.getUrl('nomTipPartener'), 220);
+                cfg.setValidateFunction(this.validateTipPartner);
                 cfg.setCaption("Tip partener");
                 cfg.setMandatory(true);
                 return cfg;
@@ -198,27 +294,82 @@
                 let cfg = this.$app.cfgInputField("cui", 15);
                 cfg.setValidate(3,13);
                 cfg.setValidateFunction(this.validateCui);
-                cfg.setCaption("CUI");
+                cfg.setCaption("CUI\\CNP");
                 cfg.setMandatory(true);
                 cfg.setMaska("");
                 return cfg;
             },
             cfgRO: function (){
                 let cfg = this.$app.cfgCheckBox('ro', false);
+                cfg.setValidateFunction(this.validateRO);
+                return cfg;
+            },
+            cfgSkipCheckCode: function (){
+                let cfg = this.$app.cfgCheckBox('skipCheckCode', false);
+                cfg.setValidateFunction(this.validateSkipCheckCode);
                 return cfg;
             },
             validateNume: function () {
-                if(!this.$check.lenghtMinMax(this.$refs[this.NUME.ref].getValue(), this.NUME.minLength, this.NUME.maxLength)){
-                    this.messageForm.push(this.$app.getFormMessageClass(this.NUME.id, this.NUME.caption,
+                let value = this.$refs[this.NUME.ref].getValue();
+                if(!this.$check.lenghtMinMax(value, this.NUME.minLength, this.NUME.maxLength)){
+                    this.form.message.push(this.$app.getFormMessageClass(this.NUME.id, this.NUME.caption,
                         'trebuie sa aiba minim ' + this.NUME.minLength + " si maxim " + this.NUME.maxLength + " caractere"));
                 }
+
+                this.setPost(this.NUME, value);
+            },
+            validateTipPartner: function () {
+                let value = this.$refs[this.NOM_TIP_PARTENR.ref].getValue();
+                if(value.id < 1){
+                    this.form.message.push(this.$app.getFormMessageClass(this.NOM_TIP_PARTENR.id, this.NOM_TIP_PARTENR.caption,
+                        'trebuie sa alegi organizarea juridica a partenerului'));
+                }
+                this.setPost(this.NOM_TIP_PARTENR, value.id);
+            },
+            validateCui: function () {
+                let value = this.$refs[this.CUI.ref].getValue();
+                let checkCode = false;
+                let msg = null;
+                let tipPartenerValue = this.$refs[this.NOM_TIP_PARTENR.ref].getValue();
+
+                if(tipPartenerValue.candidateKey == this.$constBussines.PERSOANA_FIZICA){
+                    msg = 'CNP invalid';
+                    checkCode = this.$check.checkCode( this.$constBussines.RO_CNP ,value);
+                }else{
+                    msg = 'Codul fiscal este invalid';
+                    checkCode = this.$check.checkCode( this.$constBussines.RO_CUI ,value);
+                }
+
+
+                let notCheckCode = this.$refs[this.SKIP_CHECK_COD.ref].getValue();
+
+                if(!checkCode && !notCheckCode){
+                    this.form.message.push(this.$app.getFormMessageClass(this.CUI.id, this.CUI.caption,msg));
+                }
+
+                this.setPost(this.CUI, value);
+            },
+            validateRO: function () {
+                let value = this.$refs[this.RO.ref].getValue();
+                this.setPost(this.RO, value);
+            },
+            validateSkipCheckCode: function (){
+                let value = this.$refs[this.SKIP_CHECK_COD.ref].getValue();
+                this.setPost(this.SKIP_CHECK_COD, value);
+            },
+            validateRegcom: function () {
+                let value = this.$refs[this.REGCOM.ref].getValue();
+                this.setPost(this.REGCOM, value);
             }
         },
         data () {
             return {
+                toServer: {senData: false},
+                form: {message: []},
+                captionButton: "Modific datele",
                 dataPartener: null,
                 titleForm: '...',
-                post: { idPk: null}
+                post: { idPk: null, field: {}, sqlAction: null}
 
             }
         }

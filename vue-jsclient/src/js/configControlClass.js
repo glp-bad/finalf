@@ -11,7 +11,7 @@ class ConfigControl {
 
     setBaseConfig(id, sizeField) {
         this.id = id;
-        this.name = id + '_name';
+        this.name = 'name_' + id;
         this.ref = 'ref_' + id;
         this.sizeField = sizeField;
     }

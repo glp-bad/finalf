@@ -3,7 +3,8 @@ import endOfMonth   from '../../node_modules/date-fns/endOfMonth'
 import format       from '../../node_modules/date-fns/format'
 import urlList      from "../urlList";
 import cssList      from "../cssList";
-import factoryConfigControl   from "../configControlClass";
+import factoryConfigControl   from "../js/configControlClass";
+import {CheckCuiRo, CheckCnpRo}   from "../js/myCheck";
 import {v4 as uuidv4} from '../../node_modules/uuid'
 
 const appHelper = {
@@ -253,10 +254,31 @@ const appHelper = {
             },
             validateForm(refs){
                 for (const item in refs) {
-                    if (typeof refs[item].validate === "function") {
-                        refs[item].validate();
+                    if (refs[item].pConfig != undefined && typeof refs[item].pConfig.validate === "function") {
+                        refs[item].pConfig.validate();
                     }
                 }
+            },
+            checkCode (tip, cod) {
+                let returnCheck = false;
+                let check = null;
+
+                if(tip == 'RO_CUI'){
+                    check = new CheckCuiRo(cod);
+                    returnCheck = check.check();
+
+                }else if(tip == 'RO_CNP'){
+                    check = new CheckCnpRo(cod);
+                    let succes = check.check();
+                    returnCheck = succes.succes;
+
+                }else if(tip == 'RO_IBAN'){
+                    returnCheck = false;
+                }else{
+                    console.error('tipul de verificare nu este definit ' + tip)
+                }
+
+                return returnCheck;
             }
 
         }
