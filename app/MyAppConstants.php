@@ -14,9 +14,10 @@ class MyAppConstants {
 
     const MY_SESSION = 'my-session';
 
-    const ID_USER =   'ID_USER';
-	const ID_AVOCAT = 'ID_AVOCAT';
-	const IS_LOGIN  = 'IS_LOGIN';     // use with VUECLI only
+    const ID_USER    =   'ID_USER';
+	const ID_AVOCAT  = 'ID_AVOCAT';
+	const IS_LOGIN   = 'IS_LOGIN';     // use with VUECLI only
+    const USER_EMAIL_LOGGED  = 'USER_EMAIL_LOGGED';
     const USER_LOGON = 1;
     const USER_LOGOFF = 0;
     const USER_ID_LOGEED = 'USER_ID_LOGEED';    // session store id from users_login
@@ -28,6 +29,12 @@ class MyAppConstants {
 
 	// ENV vue client
     const VUE_APP_ENV = 'vueClient';
+
+
+    // bussines
+    const BUSS_TIP_PARTENER_PERSOANA_FIZICA = 'pf';
+    const BUSS_STRING_CUI_WITHOUT_RO = '--';
+    const BUSS_STRING_CUI_RO = 'RO';
 
 
 

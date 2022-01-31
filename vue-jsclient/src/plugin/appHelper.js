@@ -291,7 +291,16 @@ const appHelper = {
              */
             getHtmlSqlFormatMessage (sqlMessageResponse) {
                 // succes, lastId, messages, errorMsg
-                let msg = sqlMessageResponse.messages;
+
+                let msg = '';
+
+                if(Array.isArray(sqlMessageResponse.messages)){
+                    for(let i=0; i < sqlMessageResponse.messages.length; i++){
+                        msg = msg + sqlMessageResponse.messages[i] + '<br>';
+                    }
+                }else{
+                    msg = sqlMessageResponse.messages;
+                }
 
                 if(sqlMessageResponse.admin && !sqlMessageResponse.succes){
                     msg = msg + "<br><br>"+

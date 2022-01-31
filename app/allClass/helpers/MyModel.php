@@ -8,23 +8,26 @@ use App\MyAppConstants;
 abstract class MyModel
 {
     protected $id;
+    protected $idUser;
     protected $idAvocat;
     protected $tableName;
+    protected $lastIdInsert;
 
-    public function __construct(){}
-
-    public function setIdAvocat($id){
-        $this->idAvocat = $id;
+    public function __construct($idAvocat, $idUser){
+        $this->idAvocat = $idAvocat;
+        $this->idUser = $idUser;
     }
 
     public function setId($id){
         $this->id = $id;
     }
 
-    abstract public function insert();
-    abstract public function update();
-    abstract public function delete();
-    abstract public function select();
-    abstract public function selectForEdit($idPk);
+    public function getLastIdInserted(){
+        return $this->lastIdInsert;
+    }
+
+    public function setLastIdInserted($id){
+        $this->lastIdInsert = $id;
+    }
 
 }

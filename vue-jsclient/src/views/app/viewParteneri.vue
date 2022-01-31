@@ -15,7 +15,9 @@
                 <div class="tab" :id="this.$constTab.getIdTab('2p')">
                     <div class="up-line"></div>
 
-                    <form-partener :ref=this.REF_PARTENER_EDIT></form-partener>
+                    <form-partener :ref=this.REF_PARTENER_EDIT
+                        @emitNewRecord = "emitNewRecord"
+                    ></form-partener>
                 </div>
             </template>
         </tab-parteneri>
@@ -39,7 +41,8 @@
 		name: "view-parteneri",
 		created() {
 		    this.REF_PARTENER_EDIT = 'refPartenerEdit',
-		    this.TAB_EDIT = {id: '2p', urlGetDate: this.$url.getUrl('partenerGetData')},
+            this.TAB_EDIT = {id: '2p', urlGetDate: this.$url.getUrl('partenerGetData')},
+		    this.TAB_PARTENERI = {id: '1p'},
             this.ICON_ADD_PARTENER =  this.$constComponent.ICON_ADD_PERSON("blue");
             this.tabConfig = {
                 header: [
@@ -94,10 +97,18 @@
             this.$refs.refTab.tabOnOff('2p','off');
         },
 		methods: {
+            emitNewRecord: function (newId){
+                this.post.idPk = newId;
+                this.changePartenerSelected = true; // resetez inregistrarea selectata
+            },
 		    emitClickTab: function (idTab) {
 		        if(idTab == this.TAB_EDIT.id){
                     this.$refs[this.REF_PARTENER_EDIT].getDataPartener(this.post.idPk);
-
+                }else if(idTab == this.TAB_PARTENERI.id){
+                    if(this.changePartenerSelected){
+                        this.changePartenerSelected = false;
+                        this.$refs.gridParteneri.resetSelectionRow();
+                    }
                 }
             },
             emitSelectDataOnGrid: function (selectData) {
@@ -117,6 +128,7 @@
 		data () {
 			return {
                 post: { idPk: null},
+                changePartenerSelected: false,
 			    tabs:{
 			        tab01: {},
                     tab02: {}

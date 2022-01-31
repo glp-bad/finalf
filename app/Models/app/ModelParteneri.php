@@ -2,21 +2,47 @@
 
 namespace App\Models\app;
 use App\allClass\helpers\GridPaginateOrderFilter;
+use App\allClass\helpers\MyHelp;
 use App\allClass\helpers\MyModel;
 use App\allClass\helpers\response\PaginateResponse;
-use App\allClass\helpers\response\SqlMessageResponse;
 use Illuminate\Support\Facades\DB;
 
 class ModelParteneri extends MyModel {
-    public function __construct()
+    public function __construct($idAvocat, $idUser)
     {
-        parent::__construct();
+        parent::__construct($idAvocat, $idUser);
         $this->tableName = 't_parteneri';
     }
 
-    public function update(){}
+    public function update($r){
+         $rezult = DB::update(
+                "update  t_parteneri set 
+                            cNume = :cNume,
+                            id_tip = :id_tip, 
+                            regcom = :regcom, 
+                            ro_ = :ro_, 
+                            cui = :cui,
+                            id_user= :id_user,
+                            last_update = :lastUpdate
+                            where t_parteneri.id_avocat = :idAvocat and t_parteneri.id =  :id;",
+                ['cNume' => $r['cnume'], 'id_tip' => $r['idTip'], 'regcom' => $r['regcom'], 'ro_' => $r['ro'], 'cui' => $r['cui'], 'lastUpdate' => MyHelp::getCarbonDateNow(), 'idAvocat' => $this->idAvocat, 'id' => $r['idPk'], 'id_user'=>$this->idUser]
+            );
+
+         return $rezult;
+    }
+
     public function delete(){}
-    public function insert(){}
+    public function insert($r){
+        $rezult = DB::insert(
+            "insert into t_parteneri (id_avocat, cNume, id_tip,regcom, ro_, cui, id_user) values (:id_avocat, :cNume, :id_tip,:regcom, :ro_, :cui, :id_user);",
+                ['cNume' => $r['cnume'], 'id_tip' => $r['idTip'], 'regcom' => $r['regcom'], 'ro_' => $r['ro'], 'cui' => $r['cui'], 'id_avocat' => $this->idAvocat, 'id_user'=>$this->idUser]
+        );
+
+        ;
+
+        return DB::getPdo()->lastInsertId();
+    }
+
     public function select(){}
 
     public function selectForEdit($id){
@@ -31,6 +57,19 @@ class ModelParteneri extends MyModel {
         );
 
         return $rezult;
+    }
+
+
+    public static function getObjectForUpdateInsert(){
+        $arrayReturn = [
+            'idPk'  => null,
+            'cnume' => null,
+            'idTip' => 0,
+            'regcom' => null,
+            'ro'=> null,
+            'cui'=>null
+        ];
+
     }
 
     public function selectForGrid(GridPaginateOrderFilter $gridSet){

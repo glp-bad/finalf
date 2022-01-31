@@ -102,7 +102,7 @@ class LoginController extends Controller
 	    $credentials = $request->except(['_token']);
         $message = null;
 
-        $userLogged = new ModelUserLogged($credentials['email']);
+        $userLogged = new ModelUserLogged($credentials['email'], null, null);
 
         // dd(Auth::user());
         // $password = Hash::make('LOIJNSU&^%$A7a67s');
@@ -124,7 +124,7 @@ class LoginController extends Controller
 
                 if ($request->hasSession()) {
                     $request->session()->put('auth.password_confirmed_at', now()->toDateTimeString());
-                    $request->session()->put('auth.email', $credentials['email']);
+                    $request->session()->put(MyAppConstants::USER_EMAIL_LOGGED, $credentials['email']);
                     $request->session()->put(MyAppConstants::USER_ID_LOGEED, $userLogged->getIdUserLogged());
 
                     // hardcore

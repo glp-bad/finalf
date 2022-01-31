@@ -14,8 +14,10 @@ class ModelUserLogged extends MyModel {
     private $logged;
     private $email;
 
-    public function __construct($email)
+    public function __construct($email, $idAvocat, $idUser)
     {
+        parent::__construct($idAvocat, $idUser);
+
         $this->tableName = 'users_login';
         $this->email = $email;
 

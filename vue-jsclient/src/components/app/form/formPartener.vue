@@ -129,7 +129,9 @@
             this.ICON_ADD_PARTENER =  this.$constComponent.ICON_ADD_PERSON("blue");
             this.URL_GETDATA_PARTENER = this.$url.getUrl('partenerGetData');
             this.URL_EDIT_PARTENER = this.$url.getUrl('editPartener');
+            this.EMIT_NEW_RECORD = 'emitNewRecord';
         },
+        emits: ['emitNewRecord'],
         mounted () {
         },
         methods: {
@@ -167,8 +169,13 @@
                     this.axios
                         .post(this.URL_EDIT_PARTENER, this.post)
                         .then(response => {
+                            if (response.data.succes){
+                                if(this.MODE == this.$constFROM.MODE_NEW){
+                                    this.post.idPk = response.data.lastId;
+                                    this.$emit(this.EMIT_NEW_RECORD, this.post.idPk);
+                                }
 
-                            if (response.data.succes) {
+                                this.getDataPartener(this.post.idPk);
                                 this.$refs.infoWindowRef.setCaption("Succes");
                                 this.$refs.infoWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
                                 this.$refs.infoWindowRef.show();

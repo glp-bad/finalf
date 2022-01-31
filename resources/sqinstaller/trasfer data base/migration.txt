@@ -1,0 +1,9 @@
+1. se migreaza avban pe local
+2. se transfera datele de pe avban pe finalf local (prin script individual poe fiecare tabela). 
+   Atentie la collation
+3. se transfera finalf pe hos
+
+
+-- ALTER DATABASE badminto_finalf CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+-- SHOW VARIABLES LIKE "%version%";
+-- show engines;
