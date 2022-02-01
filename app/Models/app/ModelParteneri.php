@@ -38,7 +38,7 @@ class ModelParteneri extends MyModel {
                 ['cNume' => $r['cnume'], 'id_tip' => $r['idTip'], 'regcom' => $r['regcom'], 'ro_' => $r['ro'], 'cui' => $r['cui'], 'id_avocat' => $this->idAvocat, 'id_user'=>$this->idUser]
         );
 
-        ;
+        unset($rezult);
 
         return DB::getPdo()->lastInsertId();
     }
