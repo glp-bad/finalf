@@ -99,6 +99,7 @@ class ParteneriController extends Controller
     }
 
 
+
     public function nomTipPartener() {
         $nom = new ModelNomTipPartener($this->getSession()->get(MyAppConstants::ID_AVOCAT), null);
         $succes = true;

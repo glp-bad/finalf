@@ -18,6 +18,6 @@ export default [
     {name: "partenerGetData",       url: "public/app/partenerGetData"},
     {name: "editPartener",          url: "public/app/editPartener"},
     {name: "nomTipPartener",        url: "public/app/nomTipPartener"},
-
+    {name: "invocesListPartener",   url: "public/app/invocesListPartener"},
 
 ]

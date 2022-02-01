@@ -61,7 +61,7 @@
                     <tr v-for="(tr, index) in this.paginate.pag.data" :idPk="tr.id" v-on:keydown.prevent="cfgKeyNavigate($event)" v-on:click.prevent="cfgMouseNavigate($event)" v-bind:key="index">
                         <template v-for="(td, index) in tr" v-bind:key="index">
                             <td v-if="checkFieldHeader(index)" :tabindex=this.cfgGetTabIndex() >
-                                <div class="div--left-align " :style="cgfTDStyle(index)" :title="td" :fieldName="index">{{td}}</div>
+                                <div :style="cgfTDStyle(index)" :class="{ divRightAlign, divLeftAlign, divCenterAlign }"  :title="td" :fieldName="index">{{td}}</div>
                             </td>
                         </template>
 
@@ -197,6 +197,9 @@
             pConfig: {type: Object, required: true}
         },
 		created() {
+            this.divRightAlign= false,              // class align
+            this.divLeftAlign= false,               // class align
+            this.divCenterAlign= false,             // class align
 			this.REF_DIV_CONTAINER = 'refDivContainer',
             this.REF_DIV_TABLE  = 'refDivTable',
             this.REF_TABLE      = 'refTable',
@@ -274,7 +277,9 @@
         },
 		mounted() {
 			this.cfgGrid();
-			this.goToPage( null, '1');
+			if(this.pConfig.cfg.loadOnCreate) {
+                this.goToPage(null, '1');
+            }
 			// this.getDataFromServer('mounted');
 
             // set dimension for parent div
@@ -371,7 +376,6 @@
 	        	this.enabledToolBar(false);
 	            this.privateRemoveSelectedRow();
                 this.$emit(this.pConfig.emitSelectData, null);
-
             },
             enabledToolBar: function (enabled){
                 if(this.pConfig.toolbar.show) {
@@ -677,7 +681,7 @@
 			        this.post.paginate.perPage = this.pConfig.paginate.recordsPerPage;
 
 				    this.getDataFromServer('goToPage');
-	                this.resetSelectionRow();
+	                //this.resetSelectionRow();
 	        },
             privateSetPaginatePag: function (pageNumber){
 	            let paginate = this.$vanilla.paginateArray(this.rezultData, pageNumber, this.pConfig.paginate.recordsPerPage, false, this.paginate.totalRecords);
@@ -868,9 +872,24 @@
               return this.engine.tabIndexValue;
             },
             cgfTDStyle: function (fieldName) {
-	            let width = this.$vanilla.getAtributeValueFromArrayObject(this.pConfig.header,this.$constGrid.HEADER.TABLE_FIELD_NAME,fieldName,'width');
+	            let col = this.$vanilla.getAtributeValueFromArrayObject(this.pConfig.header,this.$constGrid.HEADER.TABLE_FIELD_NAME,fieldName);
+                this.cfgAlignText(col.alignText);
+
 	            return {
-	            	width: width + 'px'
+	            	width: col.width + 'px'
+                }
+            },
+            cfgAlignText: function (align) {
+                this.divCenterAlign = false;
+                this.divRightAlign = false;
+                this.divLeftAlign  = false;
+
+                if(align == this.$constGrid.ALIGN_TEXT_LEFT){
+                    this.divLeftAlign  = true;
+                }else if(align == this.$constGrid.ALIGN_TEXT_RIGHT){
+                    this.divRightAlign = true;
+                }else if(align == this.$constGrid.ALIGN_TEXT_CENTER){
+                    this.divCenterAlign = true;
                 }
             }
         },

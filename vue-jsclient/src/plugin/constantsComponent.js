@@ -62,6 +62,9 @@ const constantsComponent = {
 	        SQL_UPDATE_DELETE: 'updateDelete',
 	        SQL_INSERT: 'insert',
 	        SQL_DELETE: 'delete',
+            ALIGN_TEXT_LEFT: 'alignLeft',
+            ALIGN_TEXT_RIGHT: 'alignRight',
+            ALIGN_TEXT_CENTER: 'alignCenter',
             getIcon: function (fawIcon, icon, color) {
                 return {fawIcon:fawIcon, icon: icon, color: color}
             },
@@ -69,7 +72,7 @@ const constantsComponent = {
                 CAPTION_TYPE_FIELD: 'field'  ,
                 CAPTION_TYPE_ACTION: 'action',
                 TABLE_FIELD_NAME: 'tableFieldName',
-                getHeader: function (id, caption, width, tableFieldName, type, orderBy, defaultOrder, filterBy, fieldFilterName) {
+                getHeader: function (id, caption, width, tableFieldName, type, orderBy, defaultOrder, filterBy, fieldFilterName, alignText) {
 
                 	if(type == this.CAPTION_TYPE_ACTION){
 		                orderBy = false;
@@ -85,7 +88,11 @@ const constantsComponent = {
                         fieldFilterName = tableFieldName;
                     }
 
-                    return {id: id, caption: caption,   width: width,  tableFieldName: tableFieldName,  type: type, orderBy: {order: orderBy, defaultOrder: defaultOrder}, filterBy: filterBy, fieldFilterName: fieldFilterName};
+                	if(alignText == undefined || alignText == null){
+                        alignText = 'alignLeft'; // ALIGN_TEXT_LEFT
+                    }
+
+                    return {id: id, caption: caption,   width: width,  tableFieldName: tableFieldName,  type: type, orderBy: {order: orderBy, defaultOrder: defaultOrder}, filterBy: filterBy, fieldFilterName: fieldFilterName, alignText: alignText};
                 }
             },
             BODY:{
