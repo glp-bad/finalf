@@ -292,6 +292,10 @@
         computed: {
         },
         methods: {
+            setAdditionalFilter:function(arrayFilter){
+                // array object {fieldName, value}
+                this.post.additionalFilter = arrayFilter;
+            },
             cfgInputFilterText: function(){
                 let cfg = this.$app.cfgInputField("inputFilterText", 20);
                 return cfg;
@@ -917,7 +921,8 @@
                         filterBy: {
 					        header: new Array(),
                             newFilter: false
-                        }
+                        },
+                        additionalFilter: null
 				}
             }
 		}

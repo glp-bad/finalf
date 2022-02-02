@@ -15,12 +15,14 @@ class BussinesInvoice extends MyModel {
 
 
     public function gridFacturiPartener(GridPaginateOrderFilter $gridSet){
+
         $paginate   = $gridSet->getPaginate();
         $pageNumber = $paginate['offsetPage'];
         $perPage    = $paginate['perPage'];
 
         $orderBy  = $gridSet->getOrder();
         $filterBy = $gridSet->getFilter();
+        $additionalFilter = $gridSet->getAdditionlFilter();
 
         $whereFilterBy =  '';
 
@@ -34,7 +36,7 @@ class BussinesInvoice extends MyModel {
                         (select distinct t_factura.id
                             from t_factura
                                 inner join t_factura_d on t_factura_d.id_factura = t_factura.id
-                            where t_factura.id_avocat = $this->idAvocat and t_factura.id_part = 34 and t_factura.salvata = 1
+                            where t_factura.id_avocat = $this->idAvocat and t_factura.id_part = {$additionalFilter['id_part']} and t_factura.salvata = 1
                         ) as sume_facturi
                     inner join  t_factura on t_factura.id = sume_facturi.id
                     $whereFilterBy"
@@ -52,7 +54,7 @@ class BussinesInvoice extends MyModel {
                              select t_factura.id, sum(nSumaFaraTva) as nSumaFaraTVA, sum(nSumaTVA) as nSumaTVA, sum(nTotal) as nTotal
                                 from t_factura
                                     inner join t_factura_d on t_factura_d.id_factura = t_factura.id
-                                where t_factura.id_avocat = $this->idAvocat and t_factura.id_part = 34 and t_factura.salvata = 1
+                                where t_factura.id_avocat = $this->idAvocat and t_factura.id_part = {$additionalFilter['id_part']} and t_factura.salvata = 1
                                 group by t_factura.id
                         ) as sume_facturi
                     inner join  t_factura on t_factura.id = sume_facturi.id

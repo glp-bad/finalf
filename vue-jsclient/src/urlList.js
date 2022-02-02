@@ -19,5 +19,6 @@ export default [
     {name: "editPartener",          url: "public/app/editPartener"},
     {name: "nomTipPartener",        url: "public/app/nomTipPartener"},
     {name: "invocesListPartener",   url: "public/app/invocesListPartener"},
+    {name: "partenerAdressList",    url: "public/app/partener/listaAdrese"},
 
 ]

@@ -7,6 +7,7 @@ use App\allClass\helpers\response\SqlMessageResponse;
 use App\allClass\helpers\Check;
 use App\Http\Controllers\Controller;
 use App\Models\app\ModelParteneri;
+use App\Models\app\ModelPartenerAdrese;
 use App\Models\nomenclatoare\ModelNomTipPartener;
 use App\MyAppConstants;
 use \Illuminate\Http\Request;
@@ -26,7 +27,6 @@ class ParteneriController extends Controller
 
         return json_encode(new SqlMessageResponse($succes, $lastId, $messages, $records));
     }
-
 
     public function editPartener(Request $request) {
             $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
@@ -91,14 +91,16 @@ class ParteneriController extends Controller
             return $msg->toJson();
     }
 
-
     public function gridListParteneri(Request $request) {
         $gridPaginateOrderFilter = new GridPaginateOrderFilter($request);
         $partneriList = new ModelParteneri($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
         return $partneriList->selectForGrid($gridPaginateOrderFilter);
     }
 
-
+    public function listaAdrese(Request $request) {
+        $listaAdresa = new ModelPartenerAdrese($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        return $listaAdresa->selectAdresePartener(31);
+    }
 
     public function nomTipPartener() {
         $nom = new ModelNomTipPartener($this->getSession()->get(MyAppConstants::ID_AVOCAT), null);
@@ -163,7 +165,6 @@ class ParteneriController extends Controller
             $arrayReturn['ro'] = $ro;
 
         return ['field'=>$arrayReturn, 'errorMsg'=>$errorMsg];
-
     }
 
 }

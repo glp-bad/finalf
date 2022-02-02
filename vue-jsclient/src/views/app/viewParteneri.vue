@@ -14,6 +14,11 @@
                 </div>
                 <div class="tab" :id="this.$constTab.getIdTab('3p')">
                     <div class="up-line"></div>
+                    <div class="antet-tab">
+                        <div class="buttons-container"></div>
+                        <div class="title">{{this.tabs.tab03.title}}</div>
+                    </div>
+
                     <my-grid :ref=this.REF_GRID_INVOICES
                              :pConfig=this.gridConfigPartnerInvoices
                              @emitSelectDataGridInvoices = "emitSelectDataGridInvoices"
@@ -22,10 +27,15 @@
                 </div>
                 <div class="tab" :id="this.$constTab.getIdTab('2p')">
                     <div class="up-line"></div>
-
                     <form-partener :ref=this.REF_PARTENER_EDIT
                         @emitNewRecord = "emitNewRecord"
                     ></form-partener>
+                </div>
+                <div class="tab" :id="this.$constTab.getIdTab('4p')">
+                    <div class="up-line"></div>
+                    <my-list
+                        :pConfig=this.cfgListaAdresaConfig
+                    ></my-list>
                 </div>
             </template>
         </tab-parteneri>
@@ -34,17 +44,19 @@
 </template>
 
 <script>
-    import Tab from "@/components/base/Tab";
-    import Gridul from '@/components/base/Gridul';
+    import Tab          from "@/components/base/Tab";
+    import Gridul       from '@/components/base/Gridul';
     import formPartener from '@/components/app/form/formPartener';
-    import Button from "@/components/base/Button";
+    import Button       from "@/components/base/Button";
+    import Lista       from "@/components/base/Lista";
 
     export default {
 		components: {
             'tab-parteneri': Tab,
             'my-grid': Gridul,
             'form-partener': formPartener,
-            'my-button': Button
+            'my-button': Button,
+            'my-list': Lista
         },
 		name: "view-parteneri",
 		created() {
@@ -54,11 +66,24 @@
 		    this.TAB_PARTENERI = {id: '1p'},
             this.TAB_FACTURI = {id: '3p', isLoading: false},
             this.ICON_ADD_PARTENER =  this.$constComponent.ICON_ADD_PERSON("blue");
+		    this.runtime = {
+		        additionalFilter: new Array()
+            };
+            this.cfgListaAdresaConfig = {
+                header: [
+                    {caption: 'Nume' },
+                    {caption: 'Prenume mare' },
+                    {caption: 'Varsa acum' }
+                ],
+                cfg: { urlData: 'partenerAdressList', loadOnCreate: true}
+            }
+		    ,
             this.tabConfig = {
                 header: [
                     this.$constTab.getHeader('1p','Parteneri'),
                     this.$constTab.getHeader('3p','Facturi'),
-                    this.$constTab.getHeader('2p','Editare date partener'),
+                    this.$constTab.getHeader('2p','Date partener'),
+                    this.$constTab.getHeader('4p','Adrese'),
                 ],
                 defaultTabId: '1p',
                 tabsWidth: '1040px'
@@ -77,7 +102,7 @@
                         //this.$constGrid.getActionButton(9, 'Edit din functie', 'deleteCeva', this.$constGrid.ICON_DELETE),
                         //this.$constGrid.getActionButton(10, 'Delete din functie', 'editCeva', this.$constGrid.ICON_EDIT)
                     ],
-                    returnField: ['cNume'],             // return field and edit when selected row
+                    returnField: ['cNume', 'cui'],             // return field and edit when selected row
                     cfg: {
                         width: 1100,
                         height: 500,
@@ -148,46 +173,63 @@
 		},
         mounted () {
 		    this.$refs.refTab.goToTab(this.tabConfig.defaultTabId);
-            this.$refs.refTab.tabOnOff('2p','off');
+            this.emitSelectDataOnGrid();
+            // this.$refs.refTab.tabOnOff('2p','off');
         },
 		methods: {
             emitNewRecord: function (newId){
                 this.post.idPk = newId;
                 this.changePartenerSelected = true; // resetez inregistrarea selectata
+                this.emitSelectDataOnGrid();
             },
 		    emitClickTab: function (idTab) {
 		        if(idTab == this.TAB_EDIT.id) {
                     this.$refs[this.REF_PARTENER_EDIT].getDataPartener(this.post.idPk);
+
                 } else if(idTab == this.TAB_PARTENERI.id) {
                     if(this.changePartenerSelected){
                         this.changePartenerSelected = false;
                         this.$refs.gridParteneri.resetSelectionRow();
+
+                        this.additionlFilterInvoiceData();
                     }
+
                 }else if(idTab == this.TAB_FACTURI.id) {
 		            if(!this.TAB_FACTURI.isLoading) {
                         this.TAB_FACTURI.isLoading = true;
+
+                        this.$refs[this.REF_GRID_INVOICES].setAdditionalFilter(this.runtime.additionalFilter);
                         this.$refs[this.REF_GRID_INVOICES].goToPage(null, '1');
                     }
+
                 }
             },
             emitSelectDataGridInvoices: function () {
                  console.log('am selectat o factura');
+
             },
             emitSelectDataOnGrid: function (selectData) {
-
                 console.log('am selectat un partener');
 
 		        let onOff = 'on';
-		        let title = null;
 		        if(this.$check.isUndef(selectData)) {
                     onOff = 'off';
                     this.post.idPk = -1;
                 } else {
                     this.post.idPk = selectData.idPk;
                     this.TAB_FACTURI.isLoading = false;
+                    this.tabs.tab03.title = selectData.cNume + '    ['+selectData.cui + ']';
                 }
                 this.$refs.refTab.tabOnOff('2p', onOff);
-		        // edit tab
+                this.$refs.refTab.tabOnOff('3p', onOff);
+
+                this.additionlFilterInvoiceData();
+
+            },
+            additionlFilterInvoiceData: function () {
+                this.runtime.additionalFilter = [
+                    {'id_part': this.post.idPk}
+                ];
             }
 		},
 		data () {
@@ -196,7 +238,9 @@
                 changePartenerSelected: false,
 			    tabs: {
 			        tab01: {},
-                    tab02: {}
+                    tab02: {},
+                    tab03: {title: '...'},
+                    tab04: {}
                 }
             }
 		}

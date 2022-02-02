@@ -13,12 +13,13 @@ class GridPaginateOrderFilter {
 	private $requestPaginate = null;
 	private $requestFilter   = null;
 	private $requestOrder    = null;
+	private $additionaFilter = null;
 
 	public function __construct($request) {
-
-		$this->requestPaginate = $request->paginate;
+	    $this->requestPaginate = $request->paginate;
 		$this->requestFilter   = $request->filterBy;
 		$this->requestOrder    = $request->orderBy;
+        $this->additionaFilter = $request->additionalFilter;
 
 	}
 
@@ -39,6 +40,10 @@ class GridPaginateOrderFilter {
 
 		return $where ;
 	}
+
+    public function getAdditionlFilter(){
+	    return $this->additionaFilter[0];
+    }
 
 	public function getOrder(){
 		$sqlOrder = $this->requestOrder['fieldName'] . ' ' . $this->requestOrder['order'];

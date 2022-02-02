@@ -1,0 +1,26 @@
+.ff-lista {
+    .container {
+        .tableClass {
+            .theadClass {
+                background: $ff-base;
+                position: sticky;
+                top: 0;
+
+                .thClass {
+                    border: 1px solid darken($ff-base, 20%);
+                    font-size: map-get($ff-grid, "header-font-size");
+                    font-weight: normal;
+                    color: #FFFFFF;
+                    padding: 5px;
+                }
+            }
+
+            .tbodyClass {
+                .tdClass{
+                }
+            }
+
+
+        }
+    }
+}

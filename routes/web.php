@@ -5,8 +5,6 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\App\ParteneriController;
 use App\Http\Controllers\App\PartenerInvoicesController;
 
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,10 +23,11 @@ Route::post('app/login',               [LoginController::class,             'log
 Route::post('app/logout',              [LoginController::class,             'logout'])->middleware('auth');
 Route::post('app/loginCheck',          [LoginController::class,             'loginCheck'])->middleware('auth');
 
-Route::post('app/gridListParteneri',   [ParteneriController::class,         'gridListParteneri'])->middleware('auth');
-Route::post('app/partenerGetData',     [ParteneriController::class,         'partenerGetData'])->middleware('auth');
-Route::post('app/nomTipPartener',      [ParteneriController::class,         'nomTipPartener'])->middleware('auth');
-Route::post('app/editPartener',        [ParteneriController::class,         'editPartener'])->middleware('auth');
+Route::post('app/gridListParteneri',        [ParteneriController::class, 'gridListParteneri'])->middleware('auth');
+Route::post('app/partenerGetData',          [ParteneriController::class, 'partenerGetData'])->middleware('auth');
+Route::post('app/nomTipPartener',           [ParteneriController::class, 'nomTipPartener'])->middleware('auth');
+Route::post('app/editPartener',             [ParteneriController::class, 'editPartener'])->middleware('auth');
+Route::post('app/partener/listaAdrese',    [ParteneriController::class, 'listaAdrese'])->middleware('auth');
 
 Route::post('app/invocesListPartener', [PartenerInvoicesController::class,  'invocesListPartener'])->middleware('auth');
 
