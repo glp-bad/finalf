@@ -37,6 +37,11 @@
 				            text-overflow: ellipsis;
 							padding: 2px;
 
+                            &CenterAlign {
+                                @extend .tdDiv;
+                                text-align: center;
+                            }
+
 			            }
 		            }
 	            }

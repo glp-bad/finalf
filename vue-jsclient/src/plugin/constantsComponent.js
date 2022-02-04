@@ -46,6 +46,18 @@ const constantsComponent = {
 		    MODE_EDIT: 'edit',
             MODE_NEW: 'new'
         },
+        app.config.globalProperties.$constList = {
+            HEADER: {
+                CAPTION_TYPE_FIELD: 'field'  ,
+                CAPTION_TYPE_ACTION: 'action'
+            },
+            getActionButton: function (id, tooltip, emitAction, icon) {
+                return {id: id, tooltip: tooltip, emitAction: emitAction, icon: icon };
+            },
+            getHeader: function (id, caption, width, fieldName, type) {
+                return {id: id, caption: caption,  width: width,  fieldName: fieldName,  type: type};
+            }
+        },
         app.config.globalProperties.$constGrid = {
             ID_NAME: 'idPk',
             ICON_CLASS: 'fas',

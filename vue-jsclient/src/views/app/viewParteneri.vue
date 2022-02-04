@@ -48,7 +48,7 @@
     import Gridul       from '@/components/base/Gridul';
     import formPartener from '@/components/app/form/formPartener';
     import Button       from "@/components/base/Button";
-    import Lista       from "@/components/base/Lista";
+    import Lista        from "@/components/base/Lista";
 
     export default {
 		components: {
@@ -71,9 +71,12 @@
             };
             this.cfgListaAdresaConfig = {
                 header: [
-                    {caption: 'Adresa', fieldName: 'cAdresa' },
-	                {caption: 'Localitate', fieldName: 'localitate' }
-
+                     this.$constList.getHeader(1, 'Adresa', 200, 'cAdresa', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
+                     this.$constList.getHeader(2, 'Localitate', 200, 'localitate', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
+                     this.$constList.getHeader(3, 'Adresa implicita', 100, 'null', this.$constList.HEADER.CAPTION_TYPE_ACTION)
+                ],
+                recordActionButon: [
+                    this.$constList.getActionButton(4, 'adresa implicita', 'emitCheckBox', this.$constGrid.getIcon('fas','skull', '#adad00')),
                 ],
                 cfg: { urlData: 'partenerAdressList', loadOnCreate: true}
             }
@@ -84,6 +87,9 @@
                     this.$constTab.getHeader('3p','Facturi'),
                     this.$constTab.getHeader('2p','Date partener'),
                     this.$constTab.getHeader('4p','Adrese'),
+                ],
+                actionButtonHeader: [
+                    //this.$constList.getActionButton(7, 'Altceva din functie', 'altCeca', this.$constGrid.getIcon('fas','skull', '#adad00')),
                 ],
                 defaultTabId: '1p',
                 tabsWidth: '1040px'
@@ -134,12 +140,12 @@
                         this.$constGrid.HEADER.getHeader(2,'Nr. factura',150,'nr_f', this.$constGrid.HEADER.CAPTION_TYPE_FIELD,             true,  false, true, null, null),
                         this.$constGrid.HEADER.getHeader(3,'TVA',30,'nProcTVA', this.$constGrid.HEADER.CAPTION_TYPE_FIELD,                  false,  false, false, null, this.$constGrid.ALIGN_TEXT_CENTER),
                         this.$constGrid.HEADER.getHeader(4,'Total fara TVA',110,'nSumaFaraTva', this.$constGrid.HEADER.CAPTION_TYPE_FIELD,  false, false, false, null, this.$constGrid.ALIGN_TEXT_RIGHT),
-                        this.$constGrid.HEADER.getHeader(4,'Total TVA',110,'nSumaTVA', this.$constGrid.HEADER.CAPTION_TYPE_FIELD,           false, false, false, null, this.$constGrid.ALIGN_TEXT_RIGHT),
-                        this.$constGrid.HEADER.getHeader(4,'Total',120,'nTotal', this.$constGrid.HEADER.CAPTION_TYPE_FIELD,                 false, false, false, null, this.$constGrid.ALIGN_TEXT_RIGHT)
-                        // this.$constGrid.HEADER.getHeader(6,'action',50,null, this.$constGrid.HEADER.CAPTION_TYPE_ACTION, false, false, false)
+                        this.$constGrid.HEADER.getHeader(5,'Total TVA',110,'nSumaTVA', this.$constGrid.HEADER.CAPTION_TYPE_FIELD,           false, false, false, null, this.$constGrid.ALIGN_TEXT_RIGHT),
+                        this.$constGrid.HEADER.getHeader(6,'Total',120,'nTotal', this.$constGrid.HEADER.CAPTION_TYPE_FIELD,                 false, false, false, null, this.$constGrid.ALIGN_TEXT_RIGHT)
+                        // this.$constGrid.HEADER.getHeader(7,'action',50,null, this.$constGrid.HEADER.CAPTION_TYPE_ACTION, false, false, false)
                     ],
                     actionButtonHeader: [
-                        //this.$constGrid.getActionButton(7, 'Altceva din functie', 'altCeca', this.$constGrid.getIcon('fas','skull', '#adad00')),
+                        // this.$constGrid.getActionButton(8, 'Altceva din functie', 'altCeca', this.$constGrid.getIcon('fas','skull', '#adad00'))
                         // this.$constGrid.getActionButton(8, 'printeaza factura', 'invoicePrint', this.$constGrid.ICON_PRINT)
                         //this.$constGrid.getActionButton(9, 'Edit din functie', 'deleteCeva', this.$constGrid.ICON_DELETE),
                         //this.$constGrid.getActionButton(10, 'Delete din functie', 'editCeva', this.$constGrid.ICON_EDIT)
