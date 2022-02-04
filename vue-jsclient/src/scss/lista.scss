@@ -1,6 +1,13 @@
 .ff-lista {
     .container {
+	    display: grid;
+	    // background: yellow;
+
+
         .tableClass {
+	        border-collapse: collapse;
+	        table-layout: fixed;
+
             .theadClass {
                 background: $ff-base;
                 position: sticky;
@@ -16,9 +23,30 @@
             }
 
             .tbodyClass {
-                .tdClass{
-                }
+
+	            .trClass {
+
+			        &:hover {
+				        background: lighten($ff-hover-color, 35%);
+				        // cursor: pointer;
+			        }
+		            .tdClass {
+			            .tdDiv{
+				            white-space: nowrap;
+				            overflow: hidden;
+				            text-overflow: ellipsis;
+							padding: 2px;
+
+			            }
+		            }
+	            }
             }
+
+	        tr {
+		        &:nth-child(even) {
+			        background: lighten($ff-base, 50%);
+		        }
+	        }
 
 
         }

@@ -13,9 +13,11 @@
               </thead>
               <tbody class="tbodyClass">
                   <template v-for="(tr, index) in this.dataList">
-                        <tr>
+                        <tr class="trClass" :idPk="tr.id">
                             <template v-for="(td, index) in tr" v-bind:key="index">
-                                <td>{{td}}</td>
+                                <td class="tdClass" v-if="privateCfgFieldShow(index)">
+                                        <div class="tdDiv"> {{td}} </div>
+                                </td>
                             </template>
                         </tr>
                   </template>
@@ -34,6 +36,10 @@
         },
 		directives: {},
         created() {
+			this.runtime = {
+				fieldArray: []
+            },
+			this.privateSetRuntimeData()
         },
         mounted() {
 		    if(this.pConfig.cfg.loadOnCreate) {
@@ -59,6 +65,15 @@
                         this.showModalLoadingDiv = false;
                     });
 
+            },
+            privateCfgFieldShow(fieldName){
+	            return this.runtime.fieldArray.includes(fieldName);
+
+            },
+	        privateSetRuntimeData() {
+	            this.pConfig.header.forEach(h => {
+		            this.runtime.fieldArray.push(h.fieldName);
+	            });
             }
         },
 		data () {

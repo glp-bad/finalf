@@ -71,9 +71,9 @@
             };
             this.cfgListaAdresaConfig = {
                 header: [
-                    {caption: 'Nume' },
-                    {caption: 'Prenume mare' },
-                    {caption: 'Varsa acum' }
+                    {caption: 'Adresa', fieldName: 'cAdresa' },
+	                {caption: 'Localitate', fieldName: 'localitate' }
+
                 ],
                 cfg: { urlData: 'partenerAdressList', loadOnCreate: true}
             }
