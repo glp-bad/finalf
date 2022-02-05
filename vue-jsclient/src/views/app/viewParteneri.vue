@@ -35,6 +35,7 @@
                     <div class="up-line"></div>
                     <my-list
                         :pConfig=this.cfgListaAdresaConfig
+                        @emitAdresaImplicita = "emitAdresaImplicita"
                     ></my-list>
                 </div>
             </template>
@@ -76,9 +77,11 @@
                      this.$constList.getHeader(3, 'Adresa implicita', 100, 'null', this.$constList.HEADER.CAPTION_TYPE_ACTION)
                 ],
                 recordActionButon: [
-                    this.$constList.getActionButton(4, 'adresa implicita', 'emitCheckBox', this.$constGrid.getIcon('fas','skull', '#adad00')),
+                    // this.$constList.getActionButton(4, 'adresa implicita', 'emitButton', this.$constGrid.getIcon('fas','skull', '#adad00'), this.$constList.ACTION_BUTTON.TYPE_BUTTON, null),
+                    this.$constList.getActionButton(5, 'adresa implicita', 'emitAdresaImplicita', null, this.$constList.ACTION_BUTTON.TYPE_CHECKBOX, this.$app.cfgCheckBox('ro', false))   // poate fi un singur checkbox pe linie, trebuie setat si filedNameForCheckBox, campul poate fi doar 1 si 0
+                    // this.$constList.getActionButton(4, 'adresa implicita', 'emitCheckBox', this.$constGrid.getIcon('fas','skull', '#adad00')),
                 ],
-                cfg: { urlData: 'partenerAdressList', loadOnCreate: true}
+                cfg: { urlData: 'partenerAdressList', loadOnCreate: true, filedNameForCheckBox: 'activ'}
             }
 		    ,
             this.tabConfig = {
@@ -183,6 +186,21 @@
             // this.$refs.refTab.tabOnOff('2p','off');
         },
 		methods: {
+            setAdressActive: function (){
+                console.log('setetz adresa implicita pentru id-ul: ', this.postAdress.idPk );
+            },
+            emitAdresaImplicita: function (checkBoxControl){
+              this.postAdress.idPk = checkBoxControl.getAttribute("idPk");
+              if(!checkBoxControl.checked){
+                  // este deja bifat, nu fac nimic, refac bifa;
+                  checkBoxControl.checked = true;
+              }else{
+                  console.log('intreba daca vrea sa devina addresa implicita');
+                  checkBoxControl.checked = false;
+                  this.setAdressActive();
+              }
+
+            },
             emitNewRecord: function (newId){
                 this.post.idPk = newId;
                 this.changePartenerSelected = true; // resetez inregistrarea selectata
@@ -241,6 +259,7 @@
 		data () {
 			return {
                 post: { idPk: null },
+                postAdress: { idPk: null },
                 changePartenerSelected: false,
 			    tabs: {
 			        tab01: {},
@@ -255,4 +274,5 @@
 </script>
 
 <style scoped></style>
+
 

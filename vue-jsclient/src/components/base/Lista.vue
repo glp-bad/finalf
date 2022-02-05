@@ -20,7 +20,7 @@
                   <template v-for="(tr, index) in this.dataList">
                         <tr class="trClass" :idPk="tr.id">
                             <template v-for="(td, index) in tr" v-bind:key="index">
-                                <td class="tdClass" v-if="privateCfgFieldShow(index)">
+                                <td class="tdClass" v-if="privateCfgFieldShow(index, tr)">
                                         <div class="tdDiv"> {{td}} </div>
                                 </td>
                             </template>
@@ -30,10 +30,17 @@
                                 <div  class="tdDivCenterAlign">
                                     <div class="toolbar-icon-inline" >
                                         <template v-for="ph in pConfig.recordActionButon">
-                                            <div class="divButton">
+                                            <div v-if="ph.typeButton === this.$constList.ACTION_BUTTON.TYPE_BUTTON" class="divButton">
                                                 <my-button @click="this.privateCfgEmitAction($event, ph.emitAction)" :heightButton=22 :buttonType=1 :title="ph.tooltip" :style=privateCfgIconColor(ph.icon.color)>
                                                     <font-awesome-icon :icon=this.privateCfgIconPictureAction(ph.icon) size="1x"/>
                                                 </my-button>
+                                            </div>
+                                            <div v-if="ph.typeButton === this.$constList.ACTION_BUTTON.TYPE_CHECKBOX" class="divButton">
+                                                <my-checkBox @click="this.privateCfgEmitCheckBoxEmitAction($event, ph.emitAction)" :idPk = this.idPk
+                                                    :pConfig = ph.cfgCheckBox
+                                                    :ref= ph.cfgCheckBox.ref
+                                                    :pCheck = privateCfgSetCheckBox()
+                                                ></my-checkBox>
                                             </div>
                                         </template>
                                     </div>
@@ -54,26 +61,31 @@
 <script>
 
     import Button       from "@/components/base/Button";
+    import CheckBox       from "@/components/base/CheckBox";
 
 	export default {
 		name: "my-lista",
         components: {
-            'my-button': Button
+            'my-button': Button,
+            'my-checkBox': CheckBox
         },
         props: {
             pConfig: {type: Object, required: true}
         },
 		directives: {},
         created() {
-			this.runtime = {
-				fieldArray: []
+			this.cfgTime = {
+				fieldArray: [],
+                checkBoxValue: null,
+                idPk: null
             },
-			this.privateSetRuntimeData()
+			this.privateCfgSetData()
         },
         mounted() {
 		    if(this.pConfig.cfg.loadOnCreate) {
                 this.showList();
             }
+		    console.log(this.pConfig.recordActionButon)
         },
         methods: {
 		    showList: function (){
@@ -103,20 +115,36 @@
                     color: color
                 }
             },
-            privateCfgEmitAction:function(event, action) {
-                // this.cfgMouseNavigate(event);
-                //this.$emit(action, this.selectdRow);
+            privateCfgEmitCheckBoxEmitAction:function(event, action) {
+                this.$emit(action, event.target);
             },
-            privateCfgFieldShow(fieldName) {
-	            return this.runtime.fieldArray.includes(fieldName);
+            privateCfgEmitAction:function(event, action) {
+                this.$emit(action, event.target);
+            },
+            privateCfgSetCheckBox:function() {
+		        let returnVal = false;
+		        if(this.cfgTime.checkBoxValue == 1){
+                    returnVal = true;
+                }
+
+		        return returnVal;
+            },
+            privateCfgFieldShow(fieldName, tr) {
+		        this.idPk = tr.id;
+		        if(this.pConfig.cfg.filedNameForCheckBox == fieldName){
+		            if(tr[this.pConfig.cfg.filedNameForCheckBox] == 1){
+                        this.cfgTime.checkBoxValue = true;
+                    }else{
+                        this.cfgTime.checkBoxValue = false;
+                    }
+                }
+
+	            return this.cfgTime.fieldArray.includes(fieldName);
 
             },
-            privateCfgTypeField(type) {
-                return this.runtime.fieldArray.includes(fieldName);
-            },
-	        privateSetRuntimeData() {
+	        privateCfgSetData() {
 	            this.pConfig.header.forEach(h => {
-		            this.runtime.fieldArray.push(h.fieldName);
+		            this.cfgTime.fieldArray.push(h.fieldName);
 	            });
             }
         },

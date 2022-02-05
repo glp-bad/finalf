@@ -49,10 +49,14 @@ const constantsComponent = {
         app.config.globalProperties.$constList = {
             HEADER: {
                 CAPTION_TYPE_FIELD: 'field'  ,
-                CAPTION_TYPE_ACTION: 'action'
+                CAPTION_TYPE_ACTION: 'action',
             },
-            getActionButton: function (id, tooltip, emitAction, icon) {
-                return {id: id, tooltip: tooltip, emitAction: emitAction, icon: icon };
+            ACTION_BUTTON: {
+                TYPE_BUTTON: 'button',
+                TYPE_CHECKBOX: 'checkBox'
+            },
+            getActionButton: function (id, tooltip, emitAction, icon, typeButton, cfgCheckBox) {
+                return {id: id, tooltip: tooltip, emitAction: emitAction, icon: icon, typeButton: typeButton, cfgCheckBox: cfgCheckBox };
             },
             getHeader: function (id, caption, width, fieldName, type) {
                 return {id: id, caption: caption,  width: width,  fieldName: fieldName,  type: type};

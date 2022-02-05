@@ -1,5 +1,6 @@
 <template>
     <input type="checkbox"
+           :checked = this.dataModel
            :id=this.pConfig.id
            :name=this.pConfig.id
            v-model="dataModel"
@@ -10,11 +11,17 @@
 	export default {
 		name: "my-checkBox",
         props: {
-            pConfig: {type: Object, required: true}
+            pConfig: {type: Object, required: true},
+            pCheck: {type: Boolean, required: false}
         },
 		directives:{},
 		mounted() {
 			this.dataModel = this.defaultValue;
+			if(this.pCheck != undefined){
+			    if(this.pCheck){
+			        this.setValue(true);
+                }
+            }
         },
         methods: {
 			getValue: function () {
