@@ -1,5 +1,5 @@
 <template>
-    <input type="checkbox"
+    <input type="checkbox" class="ff-checkbox"
            :checked = this.dataModel
            :id=this.pConfig.id
            :name=this.pConfig.id

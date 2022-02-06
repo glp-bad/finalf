@@ -79,6 +79,9 @@
                 checkBoxValue: null,
                 idPk: null
             },
+            this.runtime = {
+                post: null
+            },
 			this.privateCfgSetData()
         },
         mounted() {
@@ -88,7 +91,10 @@
 		    console.log(this.pConfig.recordActionButon)
         },
         methods: {
-		    showList: function (){
+		    showList: function (postData){
+		        if(!this.$check.isUndef(postData)){
+    		        this.runtime.post = postData;
+                }
                 this.getDataFromServer();
             },
             getDataFromServer: function () {
@@ -96,7 +102,7 @@
 
                 let uri = this.$url.getUrl(this.pConfig.cfg.urlData);
                 this.axios
-                    .post(uri, this.post)
+                    .post(uri, this.runtime.post)
                     .then(response => {
                         this.showModalLoadingDiv = true;
                         this.dataList = response.data;

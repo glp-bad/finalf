@@ -32,11 +32,8 @@
                     ></form-partener>
                 </div>
                 <div class="tab" :id="this.$constTab.getIdTab('4p')">
+                    <form-partener-adrese :ref="this.REF_LISTA_ADRESS"></form-partener-adrese>
                     <div class="up-line"></div>
-                    <my-list
-                        :pConfig=this.cfgListaAdresaConfig
-                        @emitAdresaImplicita = "emitAdresaImplicita"
-                    ></my-list>
                 </div>
             </template>
         </tab-parteneri>
@@ -48,6 +45,7 @@
     import Tab          from "@/components/base/Tab";
     import Gridul       from '@/components/base/Gridul';
     import formPartener from '@/components/app/form/formPartener';
+    import formPartenerAdrese from '@/components/app/form/formPartenerAdrese';
     import Button       from "@/components/base/Button";
     import Lista        from "@/components/base/Lista";
 
@@ -56,6 +54,7 @@
             'tab-parteneri': Tab,
             'my-grid': Gridul,
             'form-partener': formPartener,
+            'form-partener-adrese': formPartenerAdrese,
             'my-button': Button,
             'my-list': Lista
         },
@@ -63,27 +62,16 @@
 		created() {
 		    this.REF_PARTENER_EDIT = 'refPartenerEdit',
             this.REF_GRID_INVOICES = 'refGridParteneriInvoices',
+            this.REF_LISTA_ADRESS = 'refListaAdress',
             this.TAB_EDIT = {id: '2p', urlGetDate: this.$url.getUrl('partenerGetData')},
 		    this.TAB_PARTENERI = {id: '1p'},
             this.TAB_FACTURI = {id: '3p', isLoading: false},
+            this.TAB_ADRESE = {id: '4p', isLoading: false},
             this.ICON_ADD_PARTENER =  this.$constComponent.ICON_ADD_PERSON("blue");
 		    this.runtime = {
-		        additionalFilter: new Array()
+		        additionalFilter: new Array(),
+                sendDataToServer: false
             };
-            this.cfgListaAdresaConfig = {
-                header: [
-                     this.$constList.getHeader(1, 'Adresa', 200, 'cAdresa', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-                     this.$constList.getHeader(2, 'Localitate', 200, 'localitate', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-                     this.$constList.getHeader(3, 'Adresa implicita', 100, 'null', this.$constList.HEADER.CAPTION_TYPE_ACTION)
-                ],
-                recordActionButon: [
-                    // this.$constList.getActionButton(4, 'adresa implicita', 'emitButton', this.$constGrid.getIcon('fas','skull', '#adad00'), this.$constList.ACTION_BUTTON.TYPE_BUTTON, null),
-                    this.$constList.getActionButton(5, 'adresa implicita', 'emitAdresaImplicita', null, this.$constList.ACTION_BUTTON.TYPE_CHECKBOX, this.$app.cfgCheckBox('ro', false))   // poate fi un singur checkbox pe linie, trebuie setat si filedNameForCheckBox, campul poate fi doar 1 si 0
-                    // this.$constList.getActionButton(4, 'adresa implicita', 'emitCheckBox', this.$constGrid.getIcon('fas','skull', '#adad00')),
-                ],
-                cfg: { urlData: 'partenerAdressList', loadOnCreate: true, filedNameForCheckBox: 'activ'}
-            }
-		    ,
             this.tabConfig = {
                 header: [
                     this.$constTab.getHeader('1p','Parteneri'),
@@ -186,21 +174,6 @@
             // this.$refs.refTab.tabOnOff('2p','off');
         },
 		methods: {
-            setAdressActive: function (){
-                console.log('setetz adresa implicita pentru id-ul: ', this.postAdress.idPk );
-            },
-            emitAdresaImplicita: function (checkBoxControl){
-              this.postAdress.idPk = checkBoxControl.getAttribute("idPk");
-              if(!checkBoxControl.checked){
-                  // este deja bifat, nu fac nimic, refac bifa;
-                  checkBoxControl.checked = true;
-              }else{
-                  console.log('intreba daca vrea sa devina addresa implicita');
-                  checkBoxControl.checked = false;
-                  this.setAdressActive();
-              }
-
-            },
             emitNewRecord: function (newId){
                 this.post.idPk = newId;
                 this.changePartenerSelected = true; // resetez inregistrarea selectata
@@ -225,7 +198,12 @@
                         this.$refs[this.REF_GRID_INVOICES].setAdditionalFilter(this.runtime.additionalFilter);
                         this.$refs[this.REF_GRID_INVOICES].goToPage(null, '1');
                     }
+                }else if(idTab == this.TAB_ADRESE.id) {
+                    if(!this.TAB_ADRESE.isLoading) {
+                        this.TAB_ADRESE.isLoading = true;
 
+                        this.$refs[this.REF_LISTA_ADRESS].showList({idPartner: this.post.idPk});
+                    }
                 }
             },
             emitSelectDataGridInvoices: function () {
@@ -242,10 +220,14 @@
                 } else {
                     this.post.idPk = selectData.idPk;
                     this.TAB_FACTURI.isLoading = false;
+                    this.TAB_ADRESE.isLoading = false;
                     this.tabs.tab03.title = selectData.cNume + '    ['+selectData.cui + ']';
+                    this.$refs[this.REF_LISTA_ADRESS].setIdAndTitle(this.tabs.tab03.title, this.post.idPk);
                 }
+
                 this.$refs.refTab.tabOnOff('2p', onOff);
                 this.$refs.refTab.tabOnOff('3p', onOff);
+                this.$refs.refTab.tabOnOff('4p', onOff);
 
                 this.additionlFilterInvoiceData();
 
