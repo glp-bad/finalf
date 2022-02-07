@@ -32,6 +32,34 @@ class ModelPartenerAdrese extends MyModel {
         return $rezult;
     }
 
+	public function setDefaultAdress($id, $idPartner){
+
+		// DB::rollback();
+		DB::beginTransaction();
+
+			$rezult = DB::update(
+				"update t_parteneri_adrese 
+						set activ = 0, 
+							last_update = :lastUpdate, id_user = :id_user  
+	                    where t_parteneri_adrese.id_part = :id_part and activ = 1;",
+				['id_part'=> $idPartner, 'lastUpdate' => MyHelp::getCarbonDateNow(),'id_user'=>$this->idUser]
+			);
+
+
+			$rezult = DB::update(
+				"update t_parteneri_adrese 
+						set activ = 1,
+							last_update = :lastUpdate, id_user = :id_user 
+	                    where t_parteneri_adrese.id = :id;",
+				['id'=> $id, 'lastUpdate' => MyHelp::getCarbonDateNow(),'id_user'=>$this->idUser]
+			);
+
+
+		DB::commit();
+
+		return $rezult;
+	}
+
     public function selectAdresePartener($idPartener){
         $rezult = DB::select(
             " SELECT t_parteneri_adrese.id,

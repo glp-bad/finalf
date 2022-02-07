@@ -98,9 +98,14 @@ class ParteneriController extends Controller
     }
 
     public function listaAdrese(Request $request) {
-        $listaAdresa = new ModelPartenerAdrese($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
-        return $listaAdresa->selectAdresePartener(31);
+        $modelPartenerAdrese = $this->getModelPartenerAdrese();
+        return $modelPartenerAdrese->selectAdresePartener(intval($request['idPartner']));
     }
+
+	public function setActivAdress(Request $request) {
+		$modelPartenerAdrese = $this->getModelPartenerAdrese();
+		$modelPartenerAdrese->setDefaultAdress(intval($request->idPk), intval($request->idPartner));
+	}
 
     public function nomTipPartener() {
         $nom = new ModelNomTipPartener($this->getSession()->get(MyAppConstants::ID_AVOCAT), null);
@@ -109,6 +114,10 @@ class ParteneriController extends Controller
         $messages = null;
         $records  = $nom->selectForSimpleDropDown();
         return json_encode(new SqlMessageResponse($succes, $lastId, $messages, $records));
+    }
+
+    private function getModelPartenerAdrese(){
+    	return new ModelPartenerAdrese($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
     }
 
     private function checkField($idPk, $field){

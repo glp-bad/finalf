@@ -27,7 +27,8 @@ Route::post('app/gridListParteneri',        [ParteneriController::class, 'gridLi
 Route::post('app/partenerGetData',          [ParteneriController::class, 'partenerGetData'])->middleware('auth');
 Route::post('app/nomTipPartener',           [ParteneriController::class, 'nomTipPartener'])->middleware('auth');
 Route::post('app/editPartener',             [ParteneriController::class, 'editPartener'])->middleware('auth');
-Route::post('app/partener/listaAdrese',    [ParteneriController::class, 'listaAdrese'])->middleware('auth');
+Route::post('app/partener/listaAdrese',     [ParteneriController::class, 'listaAdrese'])->middleware('auth');
+Route::post('app/partener/setActivAdress',  [ParteneriController::class, 'setActivAdress'])->middleware('auth');
 
 Route::post('app/invocesListPartener', [PartenerInvoicesController::class,  'invocesListPartener'])->middleware('auth');
 

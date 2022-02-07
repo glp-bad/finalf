@@ -52,13 +52,13 @@
 </template>
 
 <script>
-    import AlertWindow from "@/components/base/AlertWindow.vue";
-    import FormTab from "@/components/base/FormTab.vue";
-    import InputField from "@/components/base/InputField.vue";
-    import DropDownSimple from "@/components/base/DropDownSimple.vue";
-    import CheckBox from "@/components/base/CheckBox.vue";
-    import Button from "@/components/base/Button";
-    import Lista        from "@/components/base/Lista";
+    import AlertWindow      from "@/components/base/AlertWindow.vue";
+    import FormTab          from "@/components/base/FormTab.vue";
+    import InputField       from "@/components/base/InputField.vue";
+    import DropDownSimple   from "@/components/base/DropDownSimple.vue";
+    import CheckBox         from "@/components/base/CheckBox.vue";
+    import Button           from "@/components/base/Button";
+    import Lista            from "@/components/base/Lista";
 
     export default {
         components: {
@@ -75,6 +75,7 @@
             this.REF_FROM = 'refForm';
             this.REF_BUTTON_ADD_ADRESS = 'refButtonAddAdress';
             this.REF_LISTA_ADRESE = 'refListaAdresa';
+	        this.URL_SET_DEFAULT_ADRESS = this.$url.getUrl('setActivAdress');
             this.ICON_ADD_PARTENER =  this.$constComponent.ICON_ADD_PERSON("blue");
             this.cfgListaAdresaConfig = {
                 header: [
@@ -91,8 +92,10 @@
             },
             this.runtime = {
                 sendDataToServer: false,
+	            showModalLoadingDiv: false,
                 idPartner: -1,
-                post: { idPk: null, field: {}, sqlAction: null}
+                post: { idPk: null, field: {}, sqlAction: null},
+	            postAdress: {idPk: null, idPartner: null}
             };
             this.cfgtime = {
             };
@@ -107,18 +110,61 @@
             serverGetDataList: function (idPk) {
             },
             serverCheckAdress: function (){
+
+
+	            if(!this.runtime.sendDataToServer){
+		            this.$refs.refYesNo.setCaption("Adresa partener");
+		            this.$refs.refYesNo.setMessage("Activez adresa selectata?");
+		            this.$refs.refYesNo.show();
+	            }
+
+	            if(this.runtime.sendDataToServer){
+		            this.runtime.sendDataToServer = false;
+
+		            this.axios
+			            .post(this.URL_SET_DEFAULT_ADRESS, this.runtime.postAdress)
+			            .then(response => {
+				            if (response.data.succes){
+					            if(this.MODE == this.$constFROM.MODE_NEW){
+						            this.runtime.showModalLoadingDiv = true;
+						            this.post.idPk = response.data.lastId;
+						            this.$emit(this.EMIT_NEW_RECORD, this.post.idPk);
+					            }
+
+					            //this.getDataPartener(this.post.idPk);
+					            //this.$refs.infoWindowRef.setCaption("Succes");
+					            //this.$refs.infoWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+					            //this.$refs.infoWindowRef.show();
+				            }
+				            else {
+					            //this.$refs.validateWindowRef.setCaption("Datele nu pot fi inregistrate");
+					            //this.$refs.validateWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+					            //this.$refs.validateWindowRef.show();
+				            }
+
+			            })
+			            .catch(error => console.log(error))
+			            .finally(() => {
+				            this.runtime.showModalLoadingDiv = false;
+			            	this.showList({idPartner: this.runtime.postAdress.idPk});
+			            });
+
+
+	            }
             },
             setFormNewAdress: function (){
             },
             emitAdresaImplicita: function (checkBoxControl){
-                // this.postAdress.idPk = checkBoxControl.getAttribute("idPk");
+
+                this.runtime.postAdress.idPk = checkBoxControl.getAttribute("idPk");
+	            this.runtime.postAdress.idPartner = this.runtime.idPartner;
+
                 if(!checkBoxControl.checked){
                     // este deja bifat, nu fac nimic, refac bifa;
                     checkBoxControl.checked = true;
-                }else{
-                    console.log('intreba daca vrea sa devina addresa implicita');
+                } else {
                     checkBoxControl.checked = false;
-                    // this.setAdressActive();
+                    this.serverCheckAdress();
                 }
 
             },
@@ -136,6 +182,7 @@
             emitYesNoButton: function (yes) {
                 if(yes == 1){
                     this.runtime.sendDataToServer = true;
+	                this.serverCheckAdress();
                 }else{
                     this.runtime.sendDataToServer = false;
                 }

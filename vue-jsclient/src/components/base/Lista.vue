@@ -2,6 +2,12 @@
     <div class="ff-lista">
         <div class="container">
 
+            <div class = "loading-modal" v-if="this.showModalLoadingDiv">
+                <div>
+                    <font-awesome-icon :icon=this.$constComponent.ICON_SPINNER size="4x" spin/>
+                </div>
+            </div>
+
             <table class="tableClass">
 
               <!-- ---------------------------------------------------------------------------------------------- -->
