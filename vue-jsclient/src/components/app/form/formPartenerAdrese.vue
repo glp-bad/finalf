@@ -29,7 +29,7 @@
             <div class="antet">
                 <div class="buttons-container">
                     <div class="prime-button last-button">
-                        <my-button  :ref=this.REF_BUTTON_ADD_ADRESS @click="this.setFormNewAdress" :heightButton=22 :buttonType=2 title="adaug adresa noua" :style="this.ICON_ADD_PARTENER.colorStyle">
+                        <my-button  :ref=this.REF_BUTTON_ADD_ADRESS @click="this.setFormNewAdress" :heightButton=22 :buttonType=2 title="adauga adresa noua" :style="this.ICON_ADD_PARTENER.colorStyle">
                             <font-awesome-icon :icon=this.$constComponent.cfgIconPicture(this.ICON_ADD_PARTENER) size="1x" />
                         </my-button>
                     </div>
@@ -76,7 +76,7 @@
             this.REF_BUTTON_ADD_ADRESS = 'refButtonAddAdress';
             this.REF_LISTA_ADRESE = 'refListaAdresa';
 	        this.URL_SET_DEFAULT_ADRESS = this.$url.getUrl('setActivAdress');
-            this.ICON_ADD_PARTENER =  this.$constComponent.ICON_ADD_PERSON("blue");
+            this.ICON_ADD_PARTENER =  this.$constComponent.ICON_PLUS_SQUARE("blue");
             this.cfgListaAdresaConfig = {
                 header: [
                     this.$constList.getHeader(1, 'Adresa', 200, 'cAdresa', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
@@ -107,7 +107,7 @@
             showList: function (postData){
                   this.$refs[this.REF_LISTA_ADRESE].showList(postData);
             },
-            serverGetDataList: function (idPk) {
+            serverGetDataList: function () {
             },
             serverCheckAdress: function (){
 
@@ -127,8 +127,6 @@
 				            if (response.data.succes){
 					            if(this.MODE == this.$constFROM.MODE_NEW){
 						            this.runtime.showModalLoadingDiv = true;
-						            this.post.idPk = response.data.lastId;
-						            this.$emit(this.EMIT_NEW_RECORD, this.post.idPk);
 					            }
 
 					            //this.getDataPartener(this.post.idPk);
@@ -146,7 +144,7 @@
 			            .catch(error => console.log(error))
 			            .finally(() => {
 				            this.runtime.showModalLoadingDiv = false;
-			            	this.showList({idPartner: this.runtime.postAdress.idPk});
+			            	this.showList({idPartner: this.runtime.postAdress.idPartner});
 			            });
 
 
@@ -178,6 +176,7 @@
             setIdAndTitle: function (title, idPk){
               this.runtime.idPartner = idPk;
               this.titleForm =  title;
+
             },
             emitYesNoButton: function (yes) {
                 if(yes == 1){

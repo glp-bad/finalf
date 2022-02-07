@@ -12,6 +12,9 @@ const constantsComponent = {
             SQL_UPDATE: 'update',
             SQL_INSERT: 'insert',
             SQL_DELETE: 'delete',
+			ICON_PLUS_SQUARE: function (color){
+				return {fawIcon:'fas', icon: 'plus-square', color: color, colorStyle: {color: color }};
+			},
             ICON_ADD_PERSON: function (color){
                 return {fawIcon:'fas', icon: 'user-plus', color: color, colorStyle: {color: color }};
             },

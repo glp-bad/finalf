@@ -94,7 +94,6 @@
 		    if(this.pConfig.cfg.loadOnCreate) {
                 this.showList();
             }
-		    console.log(this.pConfig.recordActionButon)
         },
         methods: {
 		    showList: function (postData){
