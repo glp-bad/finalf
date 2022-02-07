@@ -38,6 +38,22 @@
             </div>
         </template>
         <template v-slot:slotContent>
+
+            <form>
+                <table class="ff-form-table">
+                    <tr>
+                        <td class="label-left bold">
+                            <label :for=INPUT_ADRESA.id>{{INPUT_ADRESA.caption}}</label></td>
+                        <td class="control">
+                            <input-field
+                                    :ref = INPUT_ADRESA.ref
+                                    :pConfig = INPUT_ADRESA
+                            ></input-field></td>
+                    </tr>
+                </table>
+            </form>
+
+
             <my-list-adress
                 :ref = this.REF_LISTA_ADRESE
                 :pConfig=this.cfgListaAdresaConfig
@@ -75,6 +91,7 @@
             this.REF_FROM = 'refForm';
             this.REF_BUTTON_ADD_ADRESS = 'refButtonAddAdress';
             this.REF_LISTA_ADRESE = 'refListaAdresa';
+	        this.INPUT_ADRESA = this.cfgAdresa();
 	        this.URL_SET_DEFAULT_ADRESS = this.$url.getUrl('setActivAdress');
             this.ICON_ADD_PARTENER =  this.$constComponent.ICON_PLUS_SQUARE("blue");
             this.cfgListaAdresaConfig = {
@@ -104,6 +121,7 @@
         mounted () {
         },
         methods: {
+
             showList: function (postData){
                   this.$refs[this.REF_LISTA_ADRESE].showList(postData);
             },
@@ -186,6 +204,16 @@
                     this.runtime.sendDataToServer = false;
                 }
             },
+	        cfgAdresa: function(){
+		        let cfg = this.$app.cfgInputField("adresa", 120);
+		        cfg.setValidate(3,150);
+		        cfg.setValidateFunction(this.validateNume);
+		        cfg.setCaption("Adresa");
+		        cfg.setMandatory(true);
+		        cfg.setMaska("");
+		        return cfg;
+	        },
+
             setPost: function (component, value){
             },
             setPostAction: function (value){
