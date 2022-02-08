@@ -26,6 +26,7 @@ Route::post('app/loginCheck',          [LoginController::class,             'log
 Route::post('app/gridListParteneri',        [ParteneriController::class, 'gridListParteneri'])->middleware('auth');
 Route::post('app/partenerGetData',          [ParteneriController::class, 'partenerGetData'])->middleware('auth');
 Route::post('app/nomTipPartener',           [ParteneriController::class, 'nomTipPartener'])->middleware('auth');
+Route::post('app/nomLocalitati',            [ParteneriController::class, 'nomLocalitati'])->middleware('auth');
 Route::post('app/editPartener',             [ParteneriController::class, 'editPartener'])->middleware('auth');
 Route::post('app/partener/listaAdrese',     [ParteneriController::class, 'listaAdrese'])->middleware('auth');
 Route::post('app/partener/setActivAdress',  [ParteneriController::class, 'setActivAdress'])->middleware('auth');

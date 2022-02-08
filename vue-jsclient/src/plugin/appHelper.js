@@ -379,7 +379,15 @@ const appHelper = {
                 cfg.setDefaultValue({id: 0, text: ''});
 
                 return cfg;
-            }
+            },
+	        cfgSelectSearch(id, url, width) {
+		        let cfg = factoryConfigControl.getConfig(factoryConfigControl.SELECT_SEARCH);
+		        cfg.setBaseConfig(id, width);
+		        cfg.setUrl(url);
+		        cfg.setDefaultValue({id: 0, text: ''});
+
+		        return cfg;
+	        }
         }
 
 

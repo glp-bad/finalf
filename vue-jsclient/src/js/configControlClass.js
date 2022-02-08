@@ -46,6 +46,18 @@ class SelectSimple extends ConfigControl{
     }
 }
 
+
+class SelectSearch extends ConfigControl{
+	// defaultValue: {id: 0, text: ''},
+
+	url= '#';
+	dataMethod = 'local';       // get data from local or server
+	placeHolder = '...search';
+	setUrl(url){
+		this.url = url;
+	}
+}
+
 class InputField extends ConfigControl
 {
     minLength= 0;
@@ -71,6 +83,7 @@ export default class factoryConfigControl {
     static INPUT_FIELD = 'inputField';
     static CHECK_BOX   = 'checkBox';
     static SELECT_SIMPLE   = 'selectSimple';
+	static SELECT_SEARCH   = 'selectSearch';
 
     static getConfig(control){
         switch (control)
@@ -84,6 +97,9 @@ export default class factoryConfigControl {
             case factoryConfigControl.SELECT_SIMPLE:
                 return new SelectSimple();
                 break;
+	        case factoryConfigControl.SELECT_SEARCH:
+		        return new SelectSearch();
+		        break;
             default:
                 console.error("!!! ATENTIE !!! nu exista configurare pentru controlul " + control);
        }

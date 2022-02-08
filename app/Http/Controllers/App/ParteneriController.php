@@ -8,6 +8,7 @@ use App\allClass\helpers\Check;
 use App\Http\Controllers\Controller;
 use App\Models\app\ModelParteneri;
 use App\Models\app\ModelPartenerAdrese;
+use App\Models\nomenclatoare\ModelNomLocalitati;
 use App\Models\nomenclatoare\ModelNomTipPartener;
 use App\MyAppConstants;
 use \Illuminate\Http\Request;
@@ -105,6 +106,16 @@ class ParteneriController extends Controller
 	public function setActivAdress(Request $request) {
 		$modelPartenerAdrese = $this->getModelPartenerAdrese();
 		$modelPartenerAdrese->setDefaultAdress(intval($request->idPk), intval($request->idPartner));
+	}
+
+
+	public function nomLocalitati() {
+		$nom = new ModelNomLocalitati($this->getSession()->get(MyAppConstants::ID_AVOCAT), null);
+		$succes = true;
+		$lastId = -1;
+		$messages = null;
+		$records  = $nom->selectForSearchDropDown();
+		return json_encode(new SqlMessageResponse($succes, $lastId, $messages, $records));
 	}
 
     public function nomTipPartener() {

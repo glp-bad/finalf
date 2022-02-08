@@ -25,6 +25,9 @@ export default [
 	{name: "setActivAdress",        url: "public/app/partener/setActivAdress"},
     {name: "editPartener",          url: "public/app/editPartener"},
     {name: "nomTipPartener",        url: "public/app/nomTipPartener"},
+	{name: "nomLocalitati",         url: "public/app/nomLocalitati"},
+
+
     {name: "invocesListPartener",   url: "public/app/invocesListPartener"}
 
 ]

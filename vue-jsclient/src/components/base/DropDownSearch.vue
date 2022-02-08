@@ -1,6 +1,6 @@
 <template>
     <div class="ff-dropdown-search">
-        <input :ref=REF_SEARCH type="text" v-on:keyup="keySearch" :placeholder=this.pPlaceHolder />
+        <input :ref=REF_SEARCH type="text" v-on:keyup="keySearch" :placeholder=this.pConfig.placeHolder />
         <!-- <div class="icon" :ref=REF_ICON @click="iconClick"><i class="fas fa-search"></i></div> -->
         <div class="icon" :ref=REF_ICON @click="iconClick">
             <font-awesome-icon :icon="['fas', 'search']" size="2x"/>
@@ -42,25 +42,14 @@
             this.KEY_PRESS_CONTROL_BROWSER = ['Tab', 'Escape']
 		},
 		props: {
-			pDataMethod: {
-				type: String,
-				required: true
-			},
-            pUrlData:  {
-	            type: String,
-	            required: true
-            },
-            pPlaceHolder:  {
-                type: String,
-                default: '... search',
-                required: false
-            }
+			pConfig: {type: Object, required: true}
+
 		},
         components: {
             'list-rezult': TableList
         },
 		mounted() {
-			if(this.pDataMethod == this.DATA_METHOD_LOCAL){
+			if(this.pConfig.dataMethod == this.DATA_METHOD_LOCAL){
                 this.getDataFromServer();
             }
 
@@ -116,12 +105,12 @@
                 this.$refs[this.REF_REZULT].style.display = display;
             },
             search: function () {
-	            if(this.pDataMethod == this.DATA_METHOD_LOCAL){
+	            if(this.pConfig.dataMethod == this.DATA_METHOD_LOCAL){
 		            this.rezultData = this.localData.filter(dataText => dataText.caption.toLowerCase().indexOf(this.post.wordSearch.toLowerCase()) !== -1);
                     this.showOptionList();
                 }
 
-	            if(this.pDataMethod == this.DATA_METHOD_SERVER){
+	            if(this.pConfig.dataMethod == this.DATA_METHOD_SERVER){
                     this.getDataFromServer();
 	            }
             },
@@ -134,15 +123,14 @@
                 }
 	        },
             getDataFromServer: function () {
-	            let uri = this.$url.getUrl(this.pUrlData);
 	            this.axios
-		            .post(uri, this.post)
+		            .post(this.pConfig.url, this.post)
 		            .then(response => {
-                            if(this.pDataMethod == this.DATA_METHOD_LOCAL) {
+                            if(this.pConfig.dataMethod == this.DATA_METHOD_LOCAL) {
                                 this.localData = response.data;
                             }
 
-                            if(this.pDataMethod == this.DATA_METHOD_SERVER) {
+                            if(this.pConfig.dataMethod == this.DATA_METHOD_SERVER) {
                                 this.rezultData = response.data;
                                 this.showOptionList();
                             }

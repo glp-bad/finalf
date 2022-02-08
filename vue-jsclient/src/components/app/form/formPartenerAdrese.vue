@@ -48,10 +48,22 @@
                             <input-field
                                     :ref = INPUT_ADRESA.ref
                                     :pConfig = INPUT_ADRESA
-                            ></input-field></td>
+                            ></input-field>
+                        </td>
+                        <td class="control">
+                            <my-dropdown-search :pUrlData="'searchTableTest'"
+                                                :ref = INPUT_LOCALITATE.ref
+                                                :pConfig = INPUT_LOCALITATE
+                            ></my-dropdown-search>
+                        </td>
                     </tr>
+
+
                 </table>
             </form>
+
+
+
 
 
             <my-list-adress
@@ -71,7 +83,7 @@
     import AlertWindow      from "@/components/base/AlertWindow.vue";
     import FormTab          from "@/components/base/FormTab.vue";
     import InputField       from "@/components/base/InputField.vue";
-    import DropDownSimple   from "@/components/base/DropDownSimple.vue";
+    import DropDownSearch   from "@/components/base/DropDownSearch.vue";
     import CheckBox         from "@/components/base/CheckBox.vue";
     import Button           from "@/components/base/Button";
     import Lista            from "@/components/base/Lista";
@@ -81,7 +93,7 @@
             'form-tab': FormTab,
             'validate-window': AlertWindow,
             'input-field': InputField,
-            'type-partener': DropDownSimple,
+	        'my-dropdown-search': DropDownSearch,
             'check-box': CheckBox,
             'my-button': Button,
             'my-list-adress': Lista
@@ -92,6 +104,8 @@
             this.REF_BUTTON_ADD_ADRESS = 'refButtonAddAdress';
             this.REF_LISTA_ADRESE = 'refListaAdresa';
 	        this.INPUT_ADRESA = this.cfgAdresa();
+	        this.INPUT_LOCALITATE = this.cfgLocalitate();
+
 	        this.URL_SET_DEFAULT_ADRESS = this.$url.getUrl('setActivAdress');
             this.ICON_ADD_PARTENER =  this.$constComponent.ICON_PLUS_SQUARE("blue");
             this.cfgListaAdresaConfig = {
@@ -110,9 +124,10 @@
             this.runtime = {
                 sendDataToServer: false,
 	            showModalLoadingDiv: false,
+	            message: [],
                 idPartner: -1,
                 post: { idPk: null, field: {}, sqlAction: null},
-	            postAdress: {idPk: null, idPartner: null}
+	            postAdress: {idPk: null, idPartner: null, field: {}}
             };
             this.cfgtime = {
             };
@@ -204,10 +219,30 @@
                     this.runtime.sendDataToServer = false;
                 }
             },
+	        setPostAdress: function (component, value){
+    	        this.runtime.postAdress['field'][component.name] = value;
+	        },
+	        validateAdress: function (){
+		        let value = this.$refs[this.INPUT_ADRESA.ref].getValue();
+		        if(!this.$check.lenghtMinMax(value, this.INPUT_ADRESA.minLength, this.INPUT_ADRESA.maxLength)){
+			        this.runtime.message.push(this.$app.getFormMessageClass(this.INPUT_ADRESA.id, this.INPUT_ADRESA.caption,
+				        'trebuie sa aiba minim ' + this.INPUT_ADRESA.minLength + " si maxim " + this.INPUT_ADRESA.maxLength + " caractere"));
+		        }
+
+		        this.setPostAdress(this.INPUT_ADRESA, value);
+            },
+	        cfgLocalitate: function(){
+		        let cfg = this.$app.cfgSelectSearch('nomLocalitati', this.$url.getUrl('nomLocalitati'), 220);
+			        cfg.setValidateFunction(this.validateLocalitate);
+			        cfg.setCaption("Localitate");
+			        cfg.setMandatory(true);
+			        return cfg;
+            },
+
 	        cfgAdresa: function(){
-		        let cfg = this.$app.cfgInputField("adresa", 120);
-		        cfg.setValidate(3,150);
-		        cfg.setValidateFunction(this.validateNume);
+		        let cfg = this.$app.cfgInputField("adresa", 70);
+		        cfg.setValidate(6,200);
+		        cfg.setValidateFunction(this.validateAdress);
 		        cfg.setCaption("Adresa");
 		        cfg.setMandatory(true);
 		        cfg.setMaska("");

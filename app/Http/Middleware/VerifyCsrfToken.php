@@ -16,6 +16,7 @@ class VerifyCsrfToken extends Middleware
         'app/gridListParteneri',
         'app/partenerGetData',
         'app/nomTipPartener',
+	    'app/nomLocalitati',
         'app/editPartener',
         'app/partener/listaAdrese'];
 
