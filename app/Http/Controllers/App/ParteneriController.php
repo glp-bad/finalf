@@ -109,12 +109,14 @@ class ParteneriController extends Controller
 	}
 
 
-	public function nomLocalitati() {
+	public function nomLocalitati(Request $request) {
+
 		$nom = new ModelNomLocalitati($this->getSession()->get(MyAppConstants::ID_AVOCAT), null);
 		$succes = true;
 		$lastId = -1;
 		$messages = null;
-		$records  = $nom->selectForSearchDropDown();
+		$records  = $nom->selectForSearchDropDown($request->wordSearch);
+
 		return json_encode(new SqlMessageResponse($succes, $lastId, $messages, $records));
 	}
 

@@ -24,10 +24,10 @@
               <!-- ---------------------------------------------------------------------------------------------- -->
               <tbody class="tbodyClass">
                   <template v-for="(tr, index) in this.dataList">
-                        <tr class="trClass" :idPk="tr.id">
+                        <tr class="trClass" :idPk="tr.id" @click="this.privateCfgEmitRowSelection($event, this.pConfig.cfg.emitListRowSelection)">
                             <template v-for="(td, index) in tr" v-bind:key="index">
-                                <td class="tdClass" v-if="privateCfgFieldShow(index, tr)">
-                                        <div class="tdDiv"> {{td}} </div>
+                                <td class="tdClass" v-if="privateCfgFieldShow(index, tr)" :field=index>
+                                        <div class="tdDiv">{{td}}</div>
                                 </td>
                             </template>
 
@@ -125,6 +125,9 @@
                 return {
                     color: color
                 }
+            },
+	        privateCfgEmitRowSelection: function(event, action){
+		        this.$emit(action, event.target);
             },
             privateCfgEmitCheckBoxEmitAction:function(event, action) {
                 this.$emit(action, event.target);

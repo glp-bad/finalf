@@ -207,11 +207,11 @@
                 }
             },
             emitSelectDataGridInvoices: function () {
-                 console.log('am selectat o factura');
+                 // console.log('am selectat o factura');
 
             },
             emitSelectDataOnGrid: function (selectData) {
-                console.log('am selectat un partener');
+                // console.log('am selectat un partener');
 
 		        let onOff = 'on';
 		        if(this.$check.isUndef(selectData)) {

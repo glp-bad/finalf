@@ -1,9 +1,16 @@
 <template>
     <div class="ff-dropdown-search">
+
+        <div class = "loading-modal" v-if="this.showModalLoadingDiv">
+            <div>
+                <font-awesome-icon :icon=this.$constComponent.ICON_SPINNER size="1x" spin/>
+            </div>
+        </div>
+
         <input :ref=REF_SEARCH type="text" v-on:keyup="keySearch" :placeholder=this.pConfig.placeHolder />
         <!-- <div class="icon" :ref=REF_ICON @click="iconClick"><i class="fas fa-search"></i></div> -->
         <div class="icon" :ref=REF_ICON @click="iconClick">
-            <font-awesome-icon :icon="['fas', 'search']" size="2x"/>
+            <font-awesome-icon :icon="['fas', 'search']" size="1x"/>
         </div>
 
 
@@ -106,6 +113,7 @@
             },
             search: function () {
 	            if(this.pConfig.dataMethod == this.DATA_METHOD_LOCAL){
+		            console.log('search: ', this.localData);
 		            this.rezultData = this.localData.filter(dataText => dataText.caption.toLowerCase().indexOf(this.post.wordSearch.toLowerCase()) !== -1);
                     this.showOptionList();
                 }
@@ -123,6 +131,9 @@
                 }
 	        },
             getDataFromServer: function () {
+	            this.showModalLoadingDiv = true;
+	            this.$vanilla.inputReadOnly(this.$refs[this.REF_SEARCH], true);
+
 	            this.axios
 		            .post(this.pConfig.url, this.post)
 		            .then(response => {
@@ -131,17 +142,22 @@
                             }
 
                             if(this.pConfig.dataMethod == this.DATA_METHOD_SERVER) {
-                                this.rezultData = response.data;
+                                this.rezultData = response.data.records;
                                 this.showOptionList();
                             }
 			            }
 		            )
-		            .catch(error => console.log(error));
+		            .catch(error => console.log(error))
+		            .finally(() => {
+			            this.$vanilla.inputReadOnly(this.$refs[this.REF_SEARCH], false);
+			            this.showModalLoadingDiv = false;
+		            });
 
             }
         },
 		data () {
 			return {
+				showModalLoadingDiv: false,
 			    engine: {keyRender: 1},
                 localData: null,
 				rezultData: new Array(),

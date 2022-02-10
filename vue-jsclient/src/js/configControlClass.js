@@ -51,7 +51,7 @@ class SelectSearch extends ConfigControl{
 	// defaultValue: {id: 0, text: ''},
 
 	url= '#';
-	dataMethod = 'local';       // get data from local or server
+	dataMethod = 'server';       // implict server
 	placeHolder = '...search';
 	setUrl(url){
 		this.url = url;

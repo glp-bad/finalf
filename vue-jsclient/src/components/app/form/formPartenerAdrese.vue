@@ -70,6 +70,7 @@
                 :ref = this.REF_LISTA_ADRESE
                 :pConfig=this.cfgListaAdresaConfig
                 @emitAdresaImplicita = "emitAdresaImplicita"
+                @emitListRowSelection = 'emitListAdressRowSelection'
             ></my-list-adress>
         </template>
 
@@ -119,7 +120,7 @@
                     this.$constList.getActionButton(5, 'adresa implicita', 'emitAdresaImplicita', null, this.$constList.ACTION_BUTTON.TYPE_CHECKBOX, this.$app.cfgCheckBox('ro', false))   // poate fi un singur checkbox pe linie, trebuie setat si filedNameForCheckBox, campul poate fi doar 1 si 0
                     // this.$constList.getActionButton(4, 'adresa implicita', 'emitCheckBox', this.$constGrid.getIcon('fas','skull', '#adad00')),
                 ],
-                cfg: { urlData: 'partenerAdressList', loadOnCreate: false, filedNameForCheckBox: 'activ'}
+                cfg: { urlData: 'partenerAdressList', loadOnCreate: false, filedNameForCheckBox: 'activ', emitListRowSelection: 'emitListRowSelection'}
             },
             this.runtime = {
                 sendDataToServer: false,
@@ -184,6 +185,16 @@
 	            }
             },
             setFormNewAdress: function (){
+            },
+	        emitListAdressRowSelection: function(target){
+                if(target.tagName == 'DIV'){
+                    // console.log(target.parentNode);
+                    let tr = target.closest('tr');
+
+
+                    console.log(tr);
+
+                }
             },
             emitAdresaImplicita: function (checkBoxControl){
 

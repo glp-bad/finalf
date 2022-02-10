@@ -64,6 +64,13 @@ const appHelper = {
 
 		            return valReturn;
 	            },
+	            inputReadOnly: function(input, readonly){
+	            	if(readonly){
+			            input.setAttribute("readonly", true);
+		            }else{
+						input.removeAttribute("readonly");
+		            }
+	            },
         	    disableButton: function(htmlButton){
 		            htmlButton.setAttribute('disabled',true);
 		            htmlButton.classList.add('disable');                    // class name
