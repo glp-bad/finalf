@@ -74,6 +74,9 @@
 	            this.dataSelected = data;
 	            this.$refs[this.REF_SEARCH].value = this.dataSelected.caption;
             },
+            getValue: function (){
+		        return this.dataSelected;
+            },
 	        resetDataSelected(){
                 this.dataSelected = null;
 	        },

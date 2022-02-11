@@ -14,6 +14,37 @@ class ModelPartenerAdrese extends MyModel {
         $this->tableName = 't_parteneri_adrese';
     }
 
+
+
+    public function update($r){
+        $rezult = DB::update(
+            "update t_parteneri_adrese 
+                            set cAdresa = :cAdresa, 
+                                id_localitate= :id_localitate,
+                                id_user= :id_user,
+                                last_update = :lastUpdate
+                    where id= :id;
+            ",
+             ['id' => $r['idPk'], 'cAdresa' => $r['adresa'], 'id_localitate' => $r['idLocalitate'], 'id_user'=>$this->idUser, 'lastUpdate'=> MyHelp::getCarbonDateNow()]
+        );
+
+        return $rezult;
+    }
+
+    public function insert($r){
+        $rezult = DB::insert(
+            "insert into t_parteneri_adrese (id_part, cAdresa, id_localitate, activ, id_user) values (:id_part, :cAdresa, :id_localitate, :activ, :id_user);",
+            ['id_part' => $r['idPartener'], 'cAdresa' => $r['adresa'], 'id_localitate' => $r['idLocalitate'], 'activ' => 0, 'id_user'=>$this->idUser]
+        );
+
+        $lastIdInserted = DB::getPdo()->lastInsertId();
+        $this->setDefaultAdress($lastIdInserted, $r['idPartener']);
+        unset($rezult);
+
+        return $lastIdInserted;
+    }
+
+
     public function selectEntity($id){
         $rezult = DB::select(
             " SELECT `t_parteneri_adrese`.`id`,
@@ -78,6 +109,16 @@ class ModelPartenerAdrese extends MyModel {
         );
 
         return $rezult;
+    }
+
+    public static function getObjectForUpdateInsert(){
+        $arrayReturn = [
+            'idPk'  => null,
+            'idPartener'  => null,
+            'adresa' => null,
+            'idLocalitate' => 0
+        ];
+
     }
 
 }

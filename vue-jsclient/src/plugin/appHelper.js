@@ -148,6 +148,13 @@ const appHelper = {
                         document.onmousemove = null;
                     }
                 },
+                /**
+                 * @param objArray
+                 * @param propNameId
+                 * @param propId
+                 * @param propNameReturn
+                 * @returns {null}
+                 */
                 getAtributeValueFromArrayObject: function (objArray, propNameId, propId, propNameReturn){
                     let returnVal = null;
                     for (let i = 0; i < objArray.length; i++) {

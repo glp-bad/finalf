@@ -83,13 +83,72 @@ class ParteneriController extends Controller
                         $msg->messages= $e->getMessage();
                         $msg->succes = false;
                     }
-
-
                 }
-
             }
 
             return $msg->toJson();
+    }
+
+
+    public function editAdressPartener(Request $request) {
+
+        $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
+        $modelPartenerAdrese = new ModelPartenerAdrese($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        $dataInsert = $this->checkFieldAdress($request->idPk, $request->idPartner, $request->field);
+
+
+        if( count($dataInsert['errorMsg']) > 0){
+            $msg->succes = false;
+            $msg->lastId = -1;
+            $msg->messages= $dataInsert['errorMsg'];
+
+            return $msg->toJson();
+        }
+
+        //  -------------------------------------------------------------------------------
+
+
+        if($request->sqlAction == MyAppConstants::CLIENT_SQL_UPDATE){
+            try {
+                $insert = $modelPartenerAdrese->update($dataInsert['field']);
+                $msg->lastId = $insert;
+
+                if($insert < 1){
+                    $msg->messages= 'Datele nu s-au inregistrat.';
+                    $msg->succes = false;
+
+                }else{
+                    $msg->messages= 'Datele s-au inregistrat cu succes!';
+                    $msg->succes = true;
+                }
+
+            }catch (\Exception $e){
+                $msg->messages= 'Server error.';
+                $msg->errorMsg = $e->getMessage();
+                $msg->succes = false;
+            }
+
+        }elseif($request->sqlAction == MyAppConstants::CLIENT_SQL_INSERT){
+            try {
+                $insert = $modelPartenerAdrese->insert($dataInsert['field']);
+                $msg->lastId = $insert;
+
+                if($insert < 1){
+                    $msg->messages= 'Datele nu s-au inregistrat.';
+                    $msg->succes = false;
+
+                }else{
+                    $msg->messages= 'Datele s-au inregistrat cu succes!';
+                    $msg->succes = true;
+                }
+
+            }catch (\Exception $e){
+                $msg->messages= 'Server error.';
+                $msg->errorMsg = $e->getMessage();
+                $msg->succes = false;
+            }
+        }
+           return $msg->toJson();
     }
 
     public function gridListParteneri(Request $request) {
@@ -104,8 +163,12 @@ class ParteneriController extends Controller
     }
 
 	public function setActivAdress(Request $request) {
+        $msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false );
+
 		$modelPartenerAdrese = $this->getModelPartenerAdrese();
 		$modelPartenerAdrese->setDefaultAdress(intval($request->idPk), intval($request->idPartner));
+
+        return $msg->toJson();
 	}
 
 
@@ -131,6 +194,39 @@ class ParteneriController extends Controller
 
     private function getModelPartenerAdrese(){
     	return new ModelPartenerAdrese($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+    }
+
+
+    private function checkFieldAdress($idPk, $idPartener, $field){
+        $arrayReturn = ModelPartenerAdrese::getObjectForUpdateInsert();
+        $errorMsg = [];
+
+        $arrayReturn['idPk'] = $idPk;
+
+        // -----------------------------------------------------------------------------------------------------
+        $adressaLength = strlen($field["name_adresa"]);
+        if($adressaLength < 6 || $adressaLength > 200){
+            $errorMsg[]="Adresa trebuie sa aiba intre 6 si 200 de caractere.";
+        }
+        $arrayReturn['adresa'] = $field["name_adresa"];
+
+        // -----------------------------------------------------------------------------------------------------
+        $arrayReturn['idLocalitate'] = $field["name_nomLocalitati"];
+
+        if(intval($arrayReturn['idLocalitate'])<1){
+            $errorMsg[]="Trebuie sa alegi o localitate.";
+        }
+
+        // -----------------------------------------------------------------------------------------------------
+        $arrayReturn['idPartener'] = $idPartener;
+
+        if(intval($arrayReturn['idPartener'])<1){
+            $errorMsg[]="Trebuie sa alegi un partener ca sa poti aduga o adresa!";
+        }
+
+
+        return ['field'=>$arrayReturn, 'errorMsg'=>$errorMsg];
+
     }
 
     private function checkField($idPk, $field){

@@ -96,6 +96,9 @@
             }
         },
         methods: {
+		    getDataList: function(){
+		      return this.dataList;
+            },
 		    showList: function (postData){
 		        if(!this.$check.isUndef(postData)){
     		        this.runtime.post = postData;

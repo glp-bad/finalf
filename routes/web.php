@@ -30,6 +30,9 @@ Route::post('app/nomLocalitati',            [ParteneriController::class, 'nomLoc
 Route::post('app/editPartener',             [ParteneriController::class, 'editPartener'])->middleware('auth');
 Route::post('app/partener/listaAdrese',     [ParteneriController::class, 'listaAdrese'])->middleware('auth');
 Route::post('app/partener/setActivAdress',  [ParteneriController::class, 'setActivAdress'])->middleware('auth');
+Route::post('app/partener/editAdressPartener',  [ParteneriController::class, 'editAdressPartener'])->middleware('auth');
+
+
 
 Route::post('app/invocesListPartener', [PartenerInvoicesController::class,  'invocesListPartener'])->middleware('auth');
 
