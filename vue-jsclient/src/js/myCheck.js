@@ -66,6 +66,28 @@ export class CheckCuiRo {
 }
 
 
+export class CheckIBAN{
+    iban = "";
+    ibanLenght = 24;
+
+
+    constructor(iban) {
+        this.iban = iban.toString();
+    }
+    check() {
+        // ------------------------------------------------------ out
+        if(this.iban.length != this.ibanLenght){
+            return this.returnMsg(false,'lungimea codului IBAN trebuie sa fie de: ' + this.ibanLenght);
+        }
+
+       return this.returnMsg(true,"ok");
+
+    }
+    returnMsg(succes, reason){
+        return {succes: succes, reason: reason};
+    }
+}
+
 export class CheckCnpRo{
     // https://contabcaf.blogspot.com/2012/11/algoritm-de-validare-pentru-cnp.html
 

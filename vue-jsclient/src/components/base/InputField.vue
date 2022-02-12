@@ -7,6 +7,7 @@
                :size = this.pConfig.sizeField
                :placeholder=this.pConfig.placeHolder
                v-model = "dataModel"
+               v-maska= this.pConfig.maska
         >
     </div>
 </template>

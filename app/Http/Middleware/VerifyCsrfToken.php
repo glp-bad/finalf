@@ -12,15 +12,20 @@ class VerifyCsrfToken extends Middleware
      *
      * @var array<int, string>
      */
+
     protected $except = [
         'app/gridListParteneri',
         'app/partenerGetData',
         'app/nomTipPartener',
 	    'app/nomLocalitati',
         'app/editPartener',
-        'app/partener/listaAdrese'];
+        'app/partener/listaAdrese',
+        'app/partener/listBancCont'
+    ];
 
-	public function handle($request, Closure $next)
+    //protected $except = [];
+
+    public function handle($request, Closure $next)
 	{
 
 		if (env('VUE_APP_ENV') == 'vueClient')

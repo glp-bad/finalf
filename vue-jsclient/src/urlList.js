@@ -23,7 +23,11 @@ export default [
     {name: "partenerGetData",       url: "public/app/partenerGetData"},
 	{name: "partenerAdressList",    url: "public/app/partener/listaAdrese"},
 	{name: "setActivAdress",        url: "public/app/partener/setActivAdress"},
-    {name: "editAdressPartener",        url: "public/app/partener/editAdressPartener"},
+    {name: "editAdressPartener",    url: "public/app/partener/editAdressPartener"},
+    {name: "partenerListBancCont",    url: "public/app/partener/listBancCont"},
+    {name: "partenerSetBancCont",    url: "public/app/partener/setBancCont"},
+
+
 
 
 

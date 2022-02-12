@@ -32,8 +32,13 @@
                     ></form-partener>
                 </div>
                 <div class="tab" :id="this.$constTab.getIdTab('4p')">
-                    <form-partener-adrese :ref="this.REF_LISTA_ADRESS"></form-partener-adrese>
                     <div class="up-line"></div>
+                    <form-partener-adrese :ref="this.REF_LISTA_ADRESS"></form-partener-adrese>
+                </div>
+                <div class="tab" :id="this.$constTab.getIdTab('5p')">
+                    <div class="up-line"></div>
+                    <form-partener-banc :ref="this.REF_LISTA_BANK"></form-partener-banc>
+
                 </div>
             </template>
         </tab-parteneri>
@@ -46,6 +51,7 @@
     import Gridul       from '@/components/base/Gridul';
     import formPartener from '@/components/app/form/formPartener';
     import formPartenerAdrese from '@/components/app/form/formPartenerAdrese';
+    import formPartenerBancAcount from '@/components/app/form/formPartenerBancAcount';
     import Button       from "@/components/base/Button";
     import Lista        from "@/components/base/Lista";
 
@@ -55,6 +61,7 @@
             'my-grid': Gridul,
             'form-partener': formPartener,
             'form-partener-adrese': formPartenerAdrese,
+            'form-partener-banc': formPartenerBancAcount,
             'my-button': Button,
             'my-list': Lista
         },
@@ -63,10 +70,12 @@
 		    this.REF_PARTENER_EDIT = 'refPartenerEdit',
             this.REF_GRID_INVOICES = 'refGridParteneriInvoices',
             this.REF_LISTA_ADRESS = 'refListaAdress',
+            this.REF_LISTA_BANK = 'refListaBanca',
             this.TAB_EDIT = {id: '2p', urlGetDate: this.$url.getUrl('partenerGetData')},
 		    this.TAB_PARTENERI = {id: '1p'},
             this.TAB_FACTURI = {id: '3p', isLoading: false},
             this.TAB_ADRESE = {id: '4p', isLoading: false},
+            this.TAB_BANC_COUNT = {id: '5p', isLoading: false},
             this.ICON_ADD_PARTENER =  this.$constComponent.ICON_ADD_PERSON("blue");
 		    this.runtime = {
 		        additionalFilter: new Array(),
@@ -78,6 +87,7 @@
                     this.$constTab.getHeader('3p','Facturi'),
                     this.$constTab.getHeader('2p','Date partener'),
                     this.$constTab.getHeader('4p','Adrese'),
+                    this.$constTab.getHeader('5p','Conturi bancare'),
                 ],
                 actionButtonHeader: [
                     //this.$constList.getActionButton(7, 'Altceva din functie', 'altCeca', this.$constGrid.getIcon('fas','skull', '#adad00')),
@@ -204,7 +214,16 @@
 
                         this.$refs[this.REF_LISTA_ADRESS].showList({idPartner: this.post.idPk});
                     }
+                }else if(idTab == this.TAB_BANC_COUNT.id) {
+                    if(!this.TAB_BANC_COUNT.isLoading) {
+                        this.TAB_BANC_COUNT.isLoading = true;
+                        this.$refs[this.REF_LISTA_BANK].showList({idPartner: this.post.idPk});
+                    }
                 }
+
+
+
+                // privateSetIdAndTitle
             },
             emitSelectDataGridInvoices: function () {
                  // console.log('am selectat o factura');
@@ -221,13 +240,16 @@
                     this.post.idPk = selectData.idPk;
                     this.TAB_FACTURI.isLoading = false;
                     this.TAB_ADRESE.isLoading = false;
+                    this.TAB_BANC_COUNT.isLoading = false;
                     this.tabs.tab03.title = selectData.cNume + '    ['+selectData.cui + ']';
                     this.$refs[this.REF_LISTA_ADRESS].setIdAndTitle(this.tabs.tab03.title, this.post.idPk);
+                    this.$refs[this.REF_LISTA_BANK].setIdAndTitle(this.tabs.tab03.title, this.post.idPk);
                 }
 
                 this.$refs.refTab.tabOnOff('2p', onOff);
                 this.$refs.refTab.tabOnOff('3p', onOff);
                 this.$refs.refTab.tabOnOff('4p', onOff);
+                this.$refs.refTab.tabOnOff('5p', onOff);
 
                 this.additionlFilterInvoiceData();
 
@@ -247,7 +269,8 @@
 			        tab01: {},
                     tab02: {},
                     tab03: {title: '...'},
-                    tab04: {}
+                    tab04: {},
+                    tab05: {}
                 }
             }
 		}

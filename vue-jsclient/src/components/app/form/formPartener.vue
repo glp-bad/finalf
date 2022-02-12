@@ -216,14 +216,14 @@
 
                     this.setPostAction(this.$constComponent.SQL_UPDATE);
                     this.fillForm();
-                    console.log('transform formul in modul EDIT !!!!');
+
                 }
 
                 if(this.MODE == this.$constFROM.MODE_NEW){
                     this.captionButton = "Adaug partener";
                     this.setPostAction(this.$constComponent.SQL_INSERT);
                     this.resetfillForm();
-                    console.log('transform formul in NEW !!!!');
+
                 }
 
             },

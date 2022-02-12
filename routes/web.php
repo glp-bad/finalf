@@ -29,6 +29,14 @@ Route::post('app/nomTipPartener',           [ParteneriController::class, 'nomTip
 Route::post('app/nomLocalitati',            [ParteneriController::class, 'nomLocalitati'])->middleware('auth');
 Route::post('app/editPartener',             [ParteneriController::class, 'editPartener'])->middleware('auth');
 Route::post('app/partener/listaAdrese',     [ParteneriController::class, 'listaAdrese'])->middleware('auth');
+Route::post('app/partener/listBancCont',     [ParteneriController::class, 'listBancCont'])->middleware('auth');
+Route::post('app/partener/setBancCont',     [ParteneriController::class, 'setBancCont'])->middleware('auth');
+
+
+
+
+
+
 Route::post('app/partener/setActivAdress',  [ParteneriController::class, 'setActivAdress'])->middleware('auth');
 Route::post('app/partener/editAdressPartener',  [ParteneriController::class, 'editAdressPartener'])->middleware('auth');
 

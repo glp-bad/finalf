@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 class ModelUserLogged extends MyModel {
 
-    private $idUser;
     private $idUserLogin;
     private $lastAction;
     private $logged;

@@ -36,6 +36,7 @@ class ConfigControl {
 
 
 class CheckBox extends ConfigControl{}
+class InputIBAN extends ConfigControl{}
 
 class SelectSimple extends ConfigControl{
     // defaultValue: {id: 0, text: ''},
@@ -84,6 +85,7 @@ export default class factoryConfigControl {
     static CHECK_BOX   = 'checkBox';
     static SELECT_SIMPLE   = 'selectSimple';
 	static SELECT_SEARCH   = 'selectSearch';
+    static INPUT_IBAN      = 'inputIban';
 
     static getConfig(control){
         switch (control)
@@ -100,6 +102,9 @@ export default class factoryConfigControl {
 	        case factoryConfigControl.SELECT_SEARCH:
 		        return new SelectSearch();
 		        break;
+            case factoryConfigControl.INPUT_IBAN:
+                return new InputIBAN();
+                break;
             default:
                 console.error("!!! ATENTIE !!! nu exista configurare pentru controlul " + control);
        }

@@ -4,7 +4,7 @@ import format       from '../../node_modules/date-fns/format'
 import urlList      from "../urlList";
 import cssList      from "../cssList";
 import factoryConfigControl   from "../js/configControlClass";
-import {CheckCuiRo, CheckCnpRo}   from "../js/myCheck";
+import {CheckCuiRo, CheckCnpRo, CheckIBAN}   from "../js/myCheck";
 import {v4 as uuidv4} from '../../node_modules/uuid'
 
 const appHelper = {
@@ -287,7 +287,9 @@ const appHelper = {
                     returnCheck = succes.succes;
 
                 }else if(tip == 'RO_IBAN'){
-                    returnCheck = false;
+                    check = new CheckIBAN(cod);
+                    let succes = check.check();
+                    returnCheck = succes.succes;
                 }else{
                     console.error('tipul de verificare nu este definit ' + tip)
                 }
@@ -325,8 +327,35 @@ const appHelper = {
 
             }
 
-        }
+        },
 
+        app.config.globalProperties.$string = {
+            splitStringIn (shir, charNumber){
+                let arraySplit = [];
+                let word = '';
+                let countWord = 0;
+                let firstNumberString = true;
+                for(let i=0; i < shir.length; i++ ){
+
+                    if(countWord < charNumber){
+                        word += shir[i];
+                        countWord++;
+                    }else{
+                        arraySplit.push(word);
+                        if(firstNumberString){
+                            firstNumberString = false;
+                            charNumber--;
+                        }
+                         word = shir[i];
+                        countWord = 0;
+                    }
+                }
+
+                arraySplit.push(word);
+
+                return arraySplit;
+            }
+        },
         app.config.globalProperties.$app = {
             getUuid () {
                 return uuidv4();
@@ -401,7 +430,12 @@ const appHelper = {
 		        cfg.setDefaultValue({id: 0, text: ''});
 
 		        return cfg;
-	        }
+	        },
+            cfgInputIBAN(id, width) {
+                let cfg = factoryConfigControl.getConfig(factoryConfigControl.INPUT_IBAN);
+                cfg.setBaseConfig(id, width);
+                return cfg;
+            }
         }
 
 

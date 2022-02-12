@@ -6,6 +6,7 @@ use App\allClass\helpers\GridPaginateOrderFilter;
 use App\allClass\helpers\response\SqlMessageResponse;
 use App\allClass\helpers\Check;
 use App\Http\Controllers\Controller;
+use App\Models\app\ModelPartenerContBanca;
 use App\Models\app\ModelParteneri;
 use App\Models\app\ModelPartenerAdrese;
 use App\Models\nomenclatoare\ModelNomLocalitati;
@@ -162,6 +163,20 @@ class ParteneriController extends Controller
         return $modelPartenerAdrese->selectAdresePartener(intval($request['idPartner']));
     }
 
+    public function listBancCont(Request $request) {
+        $modelPartenerBancCount = $this->getModelPartenerBancCount();
+        return $modelPartenerBancCount->selectConturiPartener(intval($request['idPartner']));
+    }
+
+
+    public function setBancCont(Request $request) {
+        $msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false );
+        $modelPartenerBancCount = $this->getModelPartenerBancCount();
+        $modelPartenerBancCount->setDefaultCont(intval($request->idPk), intval($request->idPartner));
+
+        return $msg->toJson();
+    }
+
 	public function setActivAdress(Request $request) {
         $msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false );
 
@@ -194,6 +209,11 @@ class ParteneriController extends Controller
 
     private function getModelPartenerAdrese(){
     	return new ModelPartenerAdrese($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+    }
+
+
+    private function getModelPartenerBancCount(){
+        return new ModelPartenerContBanca($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
     }
 
 
