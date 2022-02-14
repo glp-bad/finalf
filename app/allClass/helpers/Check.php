@@ -12,6 +12,15 @@ namespace App\allClass\helpers;
 
 class Check {
 
+
+    public static function iban ($iban) {
+        if(strlen($iban) != 24){
+            return false;
+        }
+
+        return true;
+    }
+
     public static function cif ($cif_str) {
         /* Opreste scriptul daca stringul furnizat
            pentru CIF are 0 caractere ori mai mult de 10 */

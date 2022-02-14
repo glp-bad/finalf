@@ -186,6 +186,51 @@ class ParteneriController extends Controller
         return $msg->toJson();
 	}
 
+    public function editAccountPartener(Request $request) {
+        $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
+
+        $dataInsert = $this->checkFieldAccount($request->idPk, $request->idPartner, $request->field);
+        if( count($dataInsert['errorMsg']) > 0){
+            $msg->succes = false;
+            $msg->lastId = -1;
+            $msg->messages= $dataInsert['errorMsg'];
+
+            return $msg->toJson();
+        }
+
+        //  -------------------------------------------------------------------------------
+            $modelPartenerBancCount = $this->getModelPartenerBancCount();
+            try {
+                $msg->succes = true;
+
+                if($request->sqlAction == MyAppConstants::CLIENT_SQL_UPDATE){
+                    $msg->lastId = $modelPartenerBancCount->update($dataInsert['field']);
+                    if($msg->lastId < 1){
+                        $msg->messages= 'Datele nu au putut fi modificate.';
+                        $msg->succes = false;
+                    }else{
+                        $msg->messages= 'Datele au fost modificate.';
+                    }
+                }elseif($request->sqlAction == MyAppConstants::CLIENT_SQL_INSERT) {
+                    $msg->lastId = $modelPartenerBancCount->insert($dataInsert['field']);
+                    if($msg->lastId < 1){
+                        $msg->messages= 'Datele nu s-au inregistrat.';
+                        $msg->succes = false;
+                    }else{
+                        $msg->messages= 'Datele s-au inregistrat.';
+                    }
+                }
+
+            }catch (\Exception $e){
+                $msg->messages= 'Server error.';
+                $msg->errorMsg = $e->getMessage();
+                $msg->succes = false;
+            }
+
+        return $msg->toJson();
+
+    }
+
 
 	public function nomLocalitati(Request $request) {
 
@@ -217,6 +262,51 @@ class ParteneriController extends Controller
     }
 
 
+    private function checkFieldAccount($idPk, $idPartener, $field){
+
+        $arrayReturn = ModelPartenerContBanca::getObjectForUpdateInsert();
+        $errorMsg = [];
+
+        $arrayReturn['idPk'] = $idPk;
+
+
+        // -----------------------------------------------------------------------------------------------------
+        $sucursalaLength = strlen($field["name_sucursala"]);
+        if($sucursalaLength < 1 || $sucursalaLength > 30){
+            $errorMsg[]="Sucursala trebuie sa aiba intre 1 si 30 de caractere.";
+        }
+        $arrayReturn['sucursala'] = $field["name_sucursala"];
+
+
+        // -----------------------------------------------------------------------------------------------------
+        $bancaLength = strlen($field["name_banca"]);
+        if($bancaLength < 1 || $bancaLength > 30){
+            $errorMsg[]="Banca trebuie sa aiba intre 1 si 30 de caractere.";
+        }
+        $arrayReturn['banca'] = $field["name_banca"];
+
+
+        // -----------------------------------------------------------------------------------------------------
+        $checkIabn = Check::iban($field["name_inputIban"]);
+
+        if(!$checkIabn){
+            $errorMsg[]="IABN invalid.";
+        }
+
+        $arrayReturn['iban'] = $field["name_inputIban"];
+
+
+
+        // -----------------------------------------------------------------------------------------------------
+        if(intval($idPartener)<1){
+            $errorMsg[]="Trebuie sa alegi un partener ca sa poti adauga un cont!";
+        }
+
+        $arrayReturn['idPartener'] = $idPartener;
+
+        return ['field'=>$arrayReturn, 'errorMsg'=>$errorMsg];
+    }
+
     private function checkFieldAdress($idPk, $idPartener, $field){
         $arrayReturn = ModelPartenerAdrese::getObjectForUpdateInsert();
         $errorMsg = [];
@@ -241,7 +331,7 @@ class ParteneriController extends Controller
         $arrayReturn['idPartener'] = $idPartener;
 
         if(intval($arrayReturn['idPartener'])<1){
-            $errorMsg[]="Trebuie sa alegi un partener ca sa poti aduga o adresa!";
+            $errorMsg[]="Trebuie sa alegi un partener ca sa poti adauga o adresa!";
         }
 
 

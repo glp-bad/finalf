@@ -12,18 +12,17 @@ class ModelPartenerContBanca extends MyModel {
         $this->tableName = 't_parteneri_banca';
     }
 
-
-
     public function update($r){
         $rezult = DB::update(
-            "update t_parteneri_adrese 
-                            set cAdresa = :cAdresa, 
-                                id_localitate= :id_localitate,
+            "update t_parteneri_banca 
+                            set cBanca = :banca,
+                                cSucursala= :sucursala ,
+                                cIBAN= :iban,
                                 id_user= :id_user,
                                 last_update = :lastUpdate
                     where id= :id;
             ",
-             ['id' => $r['idPk'], 'cAdresa' => $r['adresa'], 'id_localitate' => $r['idLocalitate'], 'id_user'=>$this->idUser, 'lastUpdate'=> MyHelp::getCarbonDateNow()]
+             ['id' => $r['idPk'], 'banca' => $r['banca'], 'sucursala' => $r['sucursala'],'iban' => $r['iban'], 'id_user'=>$this->idUser, 'lastUpdate'=> MyHelp::getCarbonDateNow()]
         );
 
         return $rezult;
@@ -108,8 +107,9 @@ class ModelPartenerContBanca extends MyModel {
         $arrayReturn = [
             'idPk'  => null,
             'idPartener'  => null,
-            'adresa' => null,
-            'idLocalitate' => 0
+            'banca' => null,
+            'sucursala' => null,
+            'iban' => null
         ];
 
     }

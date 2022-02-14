@@ -31,6 +31,8 @@ Route::post('app/editPartener',             [ParteneriController::class, 'editPa
 Route::post('app/partener/listaAdrese',     [ParteneriController::class, 'listaAdrese'])->middleware('auth');
 Route::post('app/partener/listBancCont',     [ParteneriController::class, 'listBancCont'])->middleware('auth');
 Route::post('app/partener/setBancCont',     [ParteneriController::class, 'setBancCont'])->middleware('auth');
+Route::post('app/partener/editAccountPartener',     [ParteneriController::class, 'editAccountPartener'])->middleware('auth');
+
 
 
 

@@ -31,7 +31,7 @@
                      @emitYesNoButton = "emitYesNoButtonNew"
     ></validate-window>
 
-    <form-tab :ref = this.REF_FROM>
+    <form-tab :ref = this.REF_FORM>
         <template v-slot:slotTitle>
             <div class="antet">
                 <div class="buttons-container">
@@ -120,12 +120,11 @@
         },
         name: "form-partener-banc_acount",
         created() {
-            this.REF_FROM = 'refForm';
+            this.REF_FORM = 'refForm';
             this.REF_LISTA_BANC_COUNT = 'refListaBancCount';
 	        this.runtime = {
                 mode: this.$constFROM.MODE_EDIT,
                 sendDataToServer: false,
-	            showModalLoadingDiv: false,
 	            message: [],
                 idPartner: -1,
                 post: { idPk: null, field: {}, sqlAction: null},
@@ -138,6 +137,7 @@
                 REF_BUTTON_UPDATE_ACCOUNT: 'refButtonUpdateAccount',
                 ICON_ADD_CONT: this.$constComponent.ICON_PLUS_SQUARE("blue"),
                 URL_SET_DEFAULT_ACCOUNT: this.$url.getUrl('partenerSetBancCont'),
+                URL_EDIT_ACCOUNT: this.$url.getUrl('editAccountPartener'),
                 INPUT_BANCA: this.cfgBanca(),
                 INPUT_SUCURSALA: this.cfgSucursala(),
                 INPUT_IBAN: this.cfgInputIBAN(),
@@ -183,7 +183,6 @@
                 }
 
                 if(!this.runtime.sendDataToServer){
-
                     let msg = "nimic";
 
                     if(this.runtime.mode == this.$constFROM.MODE_EDIT){
@@ -195,6 +194,37 @@
                     this.$refs.refYesNoNew.setCaption("Adresa");
                     this.$refs.refYesNoNew.setMessage(msg);
                     this.$refs.refYesNoNew.show();
+                }
+
+                if(this.runtime.sendDataToServer){
+                    this.runtime.sendDataToServer = false;
+                    this.$refs[this.REF_FORM].showModal(true);
+
+
+                    this.axios
+                        .post(this.cfgtime.URL_EDIT_ACCOUNT , this.runtime.postAccount)
+                        .then(response => {
+
+                            if (response.data.succes){
+                                //this.getDataPartener(this.post.idPk);
+                                //this.$refs.infoWindowRef.setCaption("Succes");
+                                //this.$refs.infoWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+                                //this.$refs.infoWindowRef.show();
+                            }
+                            else {
+                                //this.$refs.validateWindowRef.setCaption("Datele nu pot fi inregistrate");
+                                //this.$refs.validateWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+                                //this.$refs.validateWindowRef.show();
+                            }
+
+                        })
+                        .catch(error => console.log(error))
+                        .finally(() => {
+                            this.showList({idPartner: this.runtime.postAccount.idPartner});
+                            this.$refs[this.REF_FORM].showModal(false);
+                        });
+
+
                 }
             },
             serverCheckAccount: function (){
@@ -302,7 +332,7 @@
             emitYesNoButtonNew: function (yes) {
                 if(yes == 1){
                     this.runtime.sendDataToServer = true;
-                    // this.serverEditAdress();
+                    this.serverEditAccount();
                 }else{
                     this.runtime.sendDataToServer = false;
                 }
@@ -323,6 +353,10 @@
                 let returnMessage = false;
                 this.runtime.message = [];
                 this.$check.validateForm(this.$refs);
+
+                this.runtime.postAccount.idPartner = this.runtime.idPartner;
+
+
 
                 if( this.runtime.message.length>0 ){
                     this.$refs.validateWindowRef.setCaption("Datele nu pot fi inregistrate");
@@ -355,10 +389,9 @@
             validateIban: function (){
                 let obj = this.cfgtime.INPUT_IBAN;
                 let value = this.$refs[obj.ref].getValue();
-                let checkCode = this.$check.checkCode( this.$constBussines.RO_IBAN ,value);
+                let checkCode = this.$check.checkCode(this.$constBussines.RO_IBAN ,value);
                 if(!checkCode){
-                    this.runtime.message.push(this.$app.getFormMessageClass(obj.id, obj.caption,
-                        " Cont IBAN incorect!"));
+                    this.runtime.message.push(this.$app.getFormMessageClass(obj.id, obj.caption, " Cont IBAN incorect!"));
                 }
                 this.privateSetPostAccount(obj, value);
             },

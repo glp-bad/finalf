@@ -26,6 +26,9 @@ export default [
     {name: "editAdressPartener",    url: "public/app/partener/editAdressPartener"},
     {name: "partenerListBancCont",    url: "public/app/partener/listBancCont"},
     {name: "partenerSetBancCont",    url: "public/app/partener/setBancCont"},
+    {name: "editAccountPartener",    url: "public/app/partener/editAccountPartener"},
+
+
 
 
 
