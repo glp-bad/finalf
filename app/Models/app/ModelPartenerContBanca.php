@@ -30,12 +30,12 @@ class ModelPartenerContBanca extends MyModel {
 
     public function insert($r){
         $rezult = DB::insert(
-            "insert into t_parteneri_adrese (id_part, cAdresa, id_localitate, activ, id_user) values (:id_part, :cAdresa, :id_localitate, :activ, :id_user);",
-            ['id_part' => $r['idPartener'], 'cAdresa' => $r['adresa'], 'id_localitate' => $r['idLocalitate'], 'activ' => 0, 'id_user'=>$this->idUser]
+            "insert into t_parteneri_banca (id_part, cBanca, cSucursala, cIBAN, activ, id_user) values (:id_part, :banca, :sucursala, :iban, :activ, :id_user);",
+            ['id_part' => $r['idPartener'], 'banca' => $r['banca'], 'sucursala' => $r['sucursala'],'iban' => $r['iban'], 'activ' => 1, 'id_user'=>$this->idUser]
         );
 
         $lastIdInserted = DB::getPdo()->lastInsertId();
-        $this->setDefaultAdress($lastIdInserted, $r['idPartener']);
+        $this->setDefaultCont($lastIdInserted, $r['idPartener']);
         unset($rezult);
 
         return $lastIdInserted;
