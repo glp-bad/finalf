@@ -1,5 +1,5 @@
 <template>
-    <div class="ff-dropdown-search">
+    <div class="ff-dropdown-search" :ref=REF_DIV_CONTAINER>
 
         <div class = "loading-modal" v-if="this.showModalLoadingDiv">
             <div>
@@ -22,6 +22,7 @@
                 @selectData = "emitSelectData"
                 @tabKey = "emitPressTabKey"
                 :key=this.engine.keyRender
+                :pWidth = this.pConfig.sizeField
 
             ></list-rezult>
 
@@ -36,6 +37,7 @@
 	export default {
 		name: "drop-down-search",
 		created() {
+		    this.REF_DIV_CONTAINER = 'divContainer',
 			this.REF_SEARCH = 'searchRef',
 			this.REF_ICON = 'iconRef',
             this.REF_REZULT = 'rezultRef',
@@ -59,6 +61,8 @@
 			if(this.pConfig.dataMethod == this.DATA_METHOD_LOCAL){
                 this.getDataFromServer();
             }
+
+			this.$refs[this.REF_DIV_CONTAINER].style.width = this.pConfig.sizeField + 'px';
 
 		},
         methods:{

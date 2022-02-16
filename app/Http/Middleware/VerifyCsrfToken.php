@@ -13,7 +13,6 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
 
-    /*
     protected $except = [
         'app/gridListParteneri',
         'app/partenerGetData',
@@ -21,11 +20,12 @@ class VerifyCsrfToken extends Middleware
 	    'app/nomLocalitati',
         'app/editPartener',
         'app/partener/listaAdrese',
-        'app/partener/listBancCont'
+        'app/partener/listBancCont',
+        'app/listPartener'
     ];
-    */
 
-    protected $except = [];
+
+    // protected $except = [];
 
     public function handle($request, Closure $next)
 	{

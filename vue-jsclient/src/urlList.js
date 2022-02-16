@@ -28,17 +28,11 @@ export default [
     {name: "partenerSetBancCont",    url: "public/app/partener/setBancCont"},
     {name: "editAccountPartener",    url: "public/app/partener/editAccountPartener"},
 
-
-
-
-
-
-
     {name: "editPartener",          url: "public/app/editPartener"},
     {name: "nomTipPartener",        url: "public/app/nomTipPartener"},
 	{name: "nomLocalitati",         url: "public/app/nomLocalitati"},
 
-
+    {name: "listPartener",          url: "public/app/listPartener"},
     {name: "invocesListPartener",   url: "public/app/invocesListPartener"}
 
 ]

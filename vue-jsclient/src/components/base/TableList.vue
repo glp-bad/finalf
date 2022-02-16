@@ -1,5 +1,5 @@
 <template>
-    <div class="ff-table-list">
+    <div class="ff-table-list" :ref=REF_TABLE_CONTAINER>
         <div class="tableDiv" :ref=REF_TABLEDIV>
             <table :ref=REF_TABLE>
                 <thead :ref=REF_HEAD>
@@ -26,6 +26,7 @@
 	export default {
 		name: "table-list",
 		created() {
+            this.REF_TABLE_CONTAINER      = 'tTableRefContainer',
 			this.REF_TABLE      = 'tTableRef',
             this.REF_TABLEDIV   = 'tTableDivRef',
 			this.REF_HEAD       = 'tHeadRef',
@@ -37,9 +38,11 @@
 		},
 		props: {
 		    pHeader: {type: Array, required: false},
-			pData: {type: Array, required: true}
+			pData: {type: Array, required: true},
+            pWidth: {type: Number, required: false}
 		},
 		mounted() {
+		    this.$refs[this.REF_TABLE_CONTAINER].style.width = this.pWidth + 'px';
 			this.initTable();
 
 		},

@@ -4,6 +4,7 @@ import Controale from '../views/test/Controale.vue'
 import viewGridul from '../views/test/viewGridul'
 import viewAvocat from '../views/app/viewAvocat'
 import viewParteneri from '../views/app/viewParteneri'
+import viewInvoices from '../views/app/viewInvoices'
 
 const routes = [
   {
@@ -13,6 +14,7 @@ const routes = [
   },
    {     name: 'Avocat',            path: '/viewAvocat',    component: viewAvocat   },
    {     name: 'Parteneri',         path: '/viewParteneri', component: viewParteneri   },
+    {     name: 'Facturez',         path: '/viewInvoices', component: viewInvoices   },
    {     name: 'TestControale',     path: '/testControale', component: Controale   },
    {     name: 'Gridul',            path: '/viewGridul',    component: viewGridul  },
 ]

@@ -3,6 +3,7 @@
         <ul>
             <li><router-link to="/viewAvocat">Avocatul</router-link></li>
             <li><router-link to="/viewParteneri">Parteneri</router-link></li>
+            <li><router-link to="/viewInvoices">Facturez</router-link></li>
             <!--
             <li><router-link to="/viewGridul">Gridul</router-link></li>
             <li><router-link to="/testControale">Test controale</router-link></li>

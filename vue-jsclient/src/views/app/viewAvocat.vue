@@ -36,9 +36,9 @@
             this.gridConfig = {
                 header: [
                     this.$constTab.getHeader(1,'Date avocat'),
-                    this.$constTab.getHeader(2,'Tab 002'),
-                    this.$constTab.getHeader(3,'Si inca un Tab 003'),
-                    this.$constTab.getHeader(4,'Si numarul 4')
+                    this.$constTab.getHeader(2,'Tab 02'),
+                    this.$constTab.getHeader(3,'Tab 03'),
+                    this.$constTab.getHeader(4,'Tav 04')
                 ],
                 defaultTabId: 3,
                 tabsWidth: '700px'

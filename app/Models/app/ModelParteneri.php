@@ -72,6 +72,26 @@ class ModelParteneri extends MyModel {
 
     }
 
+
+    public function selectForSearchDropDown($wordSearch){
+
+         $rezult = DB::select("
+					select a.id, a.caption
+					FROM 
+					(
+	                    SELECT t_parteneri.id,
+	                            concat(t_parteneri.cNume,'/ ',t_parteneri.cui) as caption
+						from t_parteneri 
+	                    where t_parteneri.id_avocat= :idAvocat
+	                    order by t_parteneri.cNume   
+	                ) a    
+	                where a.caption like '%$wordSearch%'",
+            ['idAvocat'=> $this->idAvocat]
+         );
+
+        return $rezult;
+    }
+
     public function selectForGrid(GridPaginateOrderFilter $gridSet){
         $paginate   = $gridSet->getPaginate();
         $pageNumber = $paginate['offsetPage'];
