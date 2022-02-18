@@ -6,7 +6,7 @@
             </div>
         </div>
 
-        <select :name=pConfig.name :id=pConfig.id :ref=SELECT_REF @change="changeValue" :disabled=this.isDisabled>
+        <select :name=pConfig.name :id=pConfig.id :ref=SELECT_REF @change="changeValue" :disabled=this.isDisabled v-bind:class="{'disable-background': this.readOnly }">
             <option v-for="dval in dataList" :value=dval.id :selected="dval.selected">
                     {{dval.text}}
             </option>
@@ -37,14 +37,14 @@
                     .then(response => {
                         this.showModalLoadingDiv = true;
 
-                        let list = [this.$constSelect.getRecordSelect(0,'...select option')];
+                        let list = [this.$constSelect.getRecordSelect(0,this.pConfig.placeHolder)];
                         this.dataList = list.concat(response.data.records);
                     })
                     .catch(error => console.log(error))
                     .finally(() => {
                         this.showModalLoadingDiv = false;
                         if(!this.isShowSelectedData){
-                            this.setValue(this.dataSelected.id);
+                            this.setDefaultValue();
                         }
                     });
             },
@@ -78,12 +78,39 @@
 	        getValue: function () {
 		        return this.dataSelected;
 	        },
+            setReadOnly: function (readOnly) {
+                if(readOnly){
+                    this.isDisabled = true;
+                }else{
+                    this.isDisabled = false;
+                }
+
+                this.readOnly = readOnly;
+            },
+            /**
+             * deprecated use setReadOnly
+             * @param isEnabled
+             */
             enabled: function (isEnabled) {
 				if(isEnabled){
 					this.isDisabled = false;
                 }else{
 					this.isDisabled = true;
                 }
+            },
+            setDefaultValue: function(){
+              if(!this.$check.isUndef(this.pConfig.defaultValue)){
+                  let id = 0;
+                  for(let i=0; i < this.dataList.length; i++){
+                      if(this.dataList[i].id == this.pConfig.defaultValue.id){
+                          this.dataList[i].selected = true;
+                          id = this.pConfig.defaultValue.id;
+                          break;
+                      }
+                  }
+
+                  this.setValue(id);
+              }
             },
             config: function () {
 				if(this.pConfig.sizeField > 0){
@@ -102,7 +129,8 @@
                 dataSelected: {id: 0, text: null, candidateKey: null},
                 isShowSelectedData: false,
                 isDisabled: true,
-                post: null
+                post: null,
+                readOnly: false
 			}
 		}
 	}

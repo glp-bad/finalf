@@ -21,7 +21,8 @@ class VerifyCsrfToken extends Middleware
         'app/editPartener',
         'app/partener/listaAdrese',
         'app/partener/listBancCont',
-        'app/listPartener'
+        'app/listPartener',
+        'app/nomInvoiceType'
     ];
 
 

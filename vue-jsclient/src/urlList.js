@@ -24,16 +24,21 @@ export default [
 	{name: "partenerAdressList",    url: "public/app/partener/listaAdrese"},
 	{name: "setActivAdress",        url: "public/app/partener/setActivAdress"},
     {name: "editAdressPartener",    url: "public/app/partener/editAdressPartener"},
-    {name: "partenerListBancCont",    url: "public/app/partener/listBancCont"},
-    {name: "partenerSetBancCont",    url: "public/app/partener/setBancCont"},
-    {name: "editAccountPartener",    url: "public/app/partener/editAccountPartener"},
+    {name: "partenerListBancCont",  url: "public/app/partener/listBancCont"},
+    {name: "partenerSetBancCont",   url: "public/app/partener/setBancCont"},
+    {name: "editAccountPartener",   url: "public/app/partener/editAccountPartener"},
 
     {name: "editPartener",          url: "public/app/editPartener"},
     {name: "nomTipPartener",        url: "public/app/nomTipPartener"},
 	{name: "nomLocalitati",         url: "public/app/nomLocalitati"},
 
     {name: "listPartener",          url: "public/app/listPartener"},
-    {name: "invocesListPartener",   url: "public/app/invocesListPartener"}
+    {name: "invocesListPartener",   url: "public/app/invocesListPartener"},
+    {name: "nomInvoiceType",        url: "public/app/nomInvoiceType"},
+    {name: "insertInvoiceAntet",    url: "public/app/invoice/insertInvoiceAntet"}
+
+
+
 
 ]
 

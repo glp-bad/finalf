@@ -41,6 +41,9 @@ Route::post('app/partener/editAdressPartener', [ParteneriController::class, 'edi
 
 Route::post('app/invocesListPartener',  [PartenerInvoicesController::class,  'invocesListPartener'])->middleware('auth');
 Route::post('app/listPartener',         [PartenerInvoicesController::class,  'listPartener'])->middleware('auth');
+Route::post('app/nomInvoiceType',       [PartenerInvoicesController::class,  'nomInvoiceType'])->middleware('auth');
+Route::post('app/invoice/insertInvoiceAntet',  [PartenerInvoicesController::class,  'insertInvoiceAntet'])->middleware('auth');
+
 
 
 

@@ -41,9 +41,15 @@ class InputIBAN extends ConfigControl{}
 class SelectSimple extends ConfigControl{
     // defaultValue: {id: 0, text: ''},
 
+    placeHolder = '...select option';
+
     url= '#';
     setUrl(url){
         this.url = url;
+    }
+
+    setPlaceHolder(text) {
+        this.placeHolder = text;
     }
 }
 
@@ -64,7 +70,7 @@ class InputField extends ConfigControl
     minLength= 0;
     maxLength= 0;
     maska= "";
-    placeHolder="..."
+    placeHolder = "...";
 
     setMaska(maska) {
         this.maska = maska;
@@ -80,12 +86,33 @@ class InputField extends ConfigControl
 }
 
 
+class InputDateTimeField extends ConfigControl
+{
+    maska= "";
+    placeHolder="dd/MM/yyyy";
+    dateShowDefault = 'currentDate';    // currentDate, firstDayMonth, lastDayMonth
+    setMaska(maska) {
+        this.maska = maska;
+    }
+    setPlaceHolder(text) {
+        this.placeHolder = text;
+    }
+
+    // DATE_CURRENT: 'currentDate',
+    setShowDefault(type) {
+        this.dateShowDefault = type;
+    }
+
+}
+
+
 export default class factoryConfigControl {
     static INPUT_FIELD = 'inputField';
     static CHECK_BOX   = 'checkBox';
     static SELECT_SIMPLE   = 'selectSimple';
 	static SELECT_SEARCH   = 'selectSearch';
     static INPUT_IBAN      = 'inputIban';
+    static INPUT_DATETIME  = 'inputDatetime';
 
     static getConfig(control){
         switch (control)
@@ -104,6 +131,9 @@ export default class factoryConfigControl {
 		        break;
             case factoryConfigControl.INPUT_IBAN:
                 return new InputIBAN();
+                break;
+            case factoryConfigControl.INPUT_DATETIME:
+                return new InputDateTimeField();
                 break;
             default:
                 console.error("!!! ATENTIE !!! nu exista configurare pentru controlul " + control);

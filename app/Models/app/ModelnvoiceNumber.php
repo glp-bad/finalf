@@ -11,6 +11,41 @@ class ModelnvoiceNumber extends MyModel {
         $this->tableName = 't_facturi_numar';
     }
 
+
+    /*
+      @_fnTip tinyint,      -- 1 factura, 2 chitanta
+        set @LitereNrFactura  = 'FAGD '
+
+        if @_fnTip = 2 set @LitereNrFactura  = 'CAGD '
+            public function insert($id){
+
+            }
+
+    set @cZero = replicate('0',8-@nLung)
+    */
+
+    public function getNumber($nTip){
+        $checkNrNefolosit = DB::select(
+            " 
+             SELECT id from t_facturi_numar where id_avocat = :idAvocat and nTip = :nTip and folosit = 0 order by nNr asc limit 1
+                    ",["idAvocat"=>$this->idAvocat, "nTip"=>$nTip]
+        );
+
+        // avem numar nefolosit
+        if(!empty($checkNrNefolosit)){
+
+        }else{
+            // generam un numar nou
+
+
+        }
+
+
+
+
+        dd($checkNrNefolosit);
+    }
+
     public function selectEntity($id){
         $rezult = DB::select(
             " 
@@ -31,6 +66,15 @@ class ModelnvoiceNumber extends MyModel {
         return $rezult;
     }
 
+
+    public static function getObjectInseret(){
+        $arrayReturn = [
+            'idPk'  => null,
+            'adresa' => null,
+            'idLocalitate' => 0
+        ];
+
+    }
 
 
 

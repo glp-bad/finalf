@@ -35,3 +35,9 @@ body, html {
     height: $wokbenchHeight;
     background: $ff-background-color-wokbench;
 }
+
+
+// all control
+.disable-background{
+    background: $ff-disabled-background !important;
+}

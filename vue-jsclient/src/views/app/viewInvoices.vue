@@ -40,7 +40,7 @@ export default {
                     this.$constTab.getHeader('2t', 'Lista facturi')
                 ],
                 defaultTabId: '1t',
-                tabsWidth: '700px'
+                tabsWidth: '1000px'
             }
         }
      },

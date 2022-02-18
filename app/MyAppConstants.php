@@ -35,6 +35,8 @@ class MyAppConstants {
     const BUSS_TIP_PARTENER_PERSOANA_FIZICA = 'pf';
     const BUSS_STRING_CUI_WITHOUT_RO = '--';
     const BUSS_STRING_CUI_RO = 'RO';
+    const BUSS_NR_FACTURA_DANA  = ['nTip' => 1, 'nrString' => 'FAGD', 'lenghtFillNumber' => 8];
+    const BUSS_NR_CHITANTA_DANA = ['nTip' => 2, 'nrString' => 'CAGD', 'lenghtFillNumber' => 8];
 
 
 

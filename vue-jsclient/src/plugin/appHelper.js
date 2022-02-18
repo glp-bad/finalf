@@ -1,6 +1,6 @@
-import startOfMonth from '../../node_modules/date-fns/startOfMonth'
-import endOfMonth   from '../../node_modules/date-fns/endOfMonth'
-import format       from '../../node_modules/date-fns/format'
+import startOfMonth from '../../node_modules/date-fns/startOfMonth';
+import endOfMonth   from '../../node_modules/date-fns/endOfMonth';
+import format       from '../../node_modules/date-fns/format';
 import urlList      from "../urlList";
 import cssList      from "../cssList";
 import factoryConfigControl   from "../js/configControlClass";
@@ -228,16 +228,40 @@ const appHelper = {
             },
 
 
-        app.config.globalProperties.$startEndCurrentMonth = function () {
-            let formatString = 'dd/MM/yyyy';
+        app.config.globalProperties.$startEndCurrentMonth = function (formatDate) {
 
+            let formatString = 'dd/MM/yyyy';
+            if(formatDate != undefined){
+                formatString = formatDate;
+            }
             let curDate = new Date();
             let dataIn  = startOfMonth(curDate);
             let dataSf  = endOfMonth(curDate);
-            return {monthIn: format(dataIn, formatString)  , monthSf: format(dataSf, formatString)};
+            return {monthIn: format(dataIn, formatString)  , monthSf: format(dataSf, formatString), currentDate: format(curDate, formatString)};
         }
 
         app.config.globalProperties.$check = {
+            isExistDate(dataCheck, yearCheck){
+                 let data = dataCheck.year + "," + dataCheck.month + ","  + dataCheck.day;
+                 let dataJs = new Date(data);
+                 let returValid = false;
+
+                //console.log(parseInt(dataCheck.year), parseInt(dataCheck.month), parseInt(dataCheck.day));
+                //console.log(dataJs.getFullYear() , dataJs.getMonth()+1, dataJs.getDate());
+
+                 if(!isNaN(dataJs.getDate())){
+
+                     let year = true;
+                     if(yearCheck){
+                        if(parseInt(dataCheck.year) < 2022 || parseInt(dataCheck.year) > 2050){
+                            year = false;
+                        }
+                     }
+                     returValid = dataJs.getFullYear() === parseInt(dataCheck.year) && dataJs.getMonth()+1 === parseInt(dataCheck.month) && dataJs.getDate() === parseInt(dataCheck.day) && year;
+                 }
+
+                 return returValid;
+            },
             isUndef (v) {
                 return v === undefined || v === null
             },
@@ -390,6 +414,12 @@ const appHelper = {
             cfgInputField(id, sizeField){
                 let cfg = factoryConfigControl.getConfig(factoryConfigControl.INPUT_FIELD);
                 cfg.setBaseConfig(id, sizeField);
+                return cfg;
+            },
+            cfgInputDateTimeField(id, sizeField){
+                let cfg = factoryConfigControl.getConfig(factoryConfigControl.INPUT_DATETIME);
+                cfg.setBaseConfig(id, sizeField);
+                cfg.setMaska("##/##/####");             // default day/month/year
                 return cfg;
             },
             cfgTextFIeld(){

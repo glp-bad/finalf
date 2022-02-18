@@ -11,6 +11,10 @@ class Modelnvoice extends MyModel {
         $this->tableName = 't_factura';
     }
 
+
+    public function insert($id){
+    }
+
     public function selectEntity($id){
         $rezult = DB::select(
             " 
@@ -34,5 +38,14 @@ class Modelnvoice extends MyModel {
 
 
 
+    public static function getObjectInseretAntet(){
+        $arrayReturn = [
+            'idPk'  => null,
+            'idPartener'  => null,
+            'adresa' => null,
+            'idLocalitate' => 0
+        ];
+
+    }
 
 }

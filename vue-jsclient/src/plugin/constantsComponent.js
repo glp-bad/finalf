@@ -5,7 +5,12 @@ const constantsComponent = {
             RO_CUI: 'RO_CUI',
             RO_CNP: 'RO_CNP',
             RO_IBAN: 'RO_IBAN',
-            PERSOANA_FIZICA: 'pf' // from data base
+            PERSOANA_FIZICA: 'pf', // from data base
+            DATE_CURRENT: 'currentDate',
+            DATE_FIRSTDAY: 'firstDayMonth',
+            DATE_LASTDAY: 'lastDayMonth',
+            DATE_DISPLAY_FORMAT: 'dd/MM/yyyy',
+            DATE_DISPLAY_SEPARATOR: '/'
         },
 		app.config.globalProperties.$constComponent = {
 			ICON_SPINNER: ['fas', 'spinner'],
@@ -15,6 +20,9 @@ const constantsComponent = {
 			ICON_PLUS_SQUARE: function (color){
 				return {fawIcon:'fas', icon: 'plus-square', color: color, colorStyle: {color: color }};
 			},
+            ICON_MINUS_SQUARE: function (color){
+                return {fawIcon:'fas', icon: 'minus-square', color: color, colorStyle: {color: color }};
+            },
             ICON_ADD_PERSON: function (color){
                 return {fawIcon:'fas', icon: 'user-plus', color: color, colorStyle: {color: color }};
             },

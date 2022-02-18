@@ -7,7 +7,7 @@
             </div>
         </div>
 
-        <input :ref=REF_SEARCH type="text" v-on:keyup="keySearch" :placeholder=this.pConfig.placeHolder />
+        <input :ref=REF_SEARCH type="text" v-on:keyup="keySearch" :placeholder=this.pConfig.placeHolder v-bind:class="{'disable-background': this.readOnly }"/>
         <!-- <div class="icon" :ref=REF_ICON @click="iconClick"><i class="fas fa-search"></i></div> -->
         <div class="icon" :ref=REF_ICON @click="iconClick">
             <font-awesome-icon :icon="['fas', 'search']" size="1x"/>
@@ -74,6 +74,15 @@
             emitPressTabKey: function (){
 		        this.$refs[this.REF_SEARCH].focus();
             },
+            setReadOnly: function (readOnly) {
+                if(readOnly) {
+                    this.$refs[this.REF_SEARCH].setAttribute('readonly', readOnly);
+                }else{
+                    this.$refs[this.REF_SEARCH].removeAttribute('readonly');
+                }
+
+                this.readOnly = readOnly;
+            },
             setDataSelected(data){
 	            this.dataSelected = data;
 	            this.$refs[this.REF_SEARCH].value = this.dataSelected.caption;
@@ -89,17 +98,19 @@
 			},
 	        keySearch: function (event) {
 
-                if(this.KEY_PRESS_CONTROL_BROWSER.includes(event.key)){
-                    // do nothing
-                }else{
-                    this.post.wordSearch = this.$refs[this.REF_SEARCH].value;
-                    this.resetDataSelected();
-                    this.delaySearchCancel();
+		        if(!this.readOnly) {
+                    if (this.KEY_PRESS_CONTROL_BROWSER.includes(event.key)) {
+                        // do nothing
+                    } else {
+                        this.post.wordSearch = this.$refs[this.REF_SEARCH].value;
+                        this.resetDataSelected();
+                        this.delaySearchCancel();
 
-                    if(this.post.wordSearch.length >= this.LAST_LETTERS_NUMBER_FOR_SEARCH){
-                        this.delaySearch();
-                    }else{
-                        this.hideOption();
+                        if (this.post.wordSearch.length >= this.LAST_LETTERS_NUMBER_FOR_SEARCH) {
+                            this.delaySearch();
+                        } else {
+                            this.hideOption();
+                        }
                     }
                 }
 	        },
@@ -120,7 +131,7 @@
             },
             search: function () {
 	            if(this.pConfig.dataMethod == this.DATA_METHOD_LOCAL){
-		            console.log('search: ', this.localData);
+		            // console.log('search: ', this.localData);
 		            this.rezultData = this.localData.filter(dataText => dataText.caption.toLowerCase().indexOf(this.post.wordSearch.toLowerCase()) !== -1);
                     this.showOptionList();
                 }
@@ -171,7 +182,8 @@
                 countRezultData: 0,
                 timeOut: null,
 				post:  {wordSearch: null},
-				dataSelected: null
+				dataSelected: null,
+                readOnly: false
             }
 		}
 	}
