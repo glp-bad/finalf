@@ -10,7 +10,9 @@ const constantsComponent = {
             DATE_FIRSTDAY: 'firstDayMonth',
             DATE_LASTDAY: 'lastDayMonth',
             DATE_DISPLAY_FORMAT: 'dd/MM/yyyy',
-            DATE_DISPLAY_SEPARATOR: '/'
+            DATE_DISPLAY_SEPARATOR: '/',
+            BUSS_NR_FACTURA_DANA:  1,       // const BUSS_NR_FACTURA_DANA
+            BUSS_NR_CHITANTA_DANA: 2
         },
 		app.config.globalProperties.$constComponent = {
 			ICON_SPINNER: ['fas', 'spinner'],

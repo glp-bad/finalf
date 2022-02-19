@@ -93,6 +93,9 @@
 	        resetDataSelected(){
                 this.dataSelected = null;
 	        },
+            clearWordSearch(){
+                this.$refs[this.REF_SEARCH].value = '';
+            },
 			iconClick: function () {
                 this.$refs[this.REF_SEARCH].focus();
 			},

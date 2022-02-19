@@ -35,10 +35,11 @@ export default [
     {name: "listPartener",          url: "public/app/listPartener"},
     {name: "invocesListPartener",   url: "public/app/invocesListPartener"},
     {name: "nomInvoiceType",        url: "public/app/nomInvoiceType"},
-    {name: "insertInvoiceAntet",    url: "public/app/invoice/insertInvoiceAntet"}
-
-
-
+    {name: "insertInvoiceAntet",    url: "public/app/invoice/insertInvoiceAntet"},
+    {name: "checkWorkingInvoice",   url: "public/app/invoice/checkWorkingInvoice"},
+    {name: "deleteInvoiceAntet",    url: "public/app/invoice/deleteInvoiceAntet"},
+    {name: "nomInvoiceTemplate",    url: "public/app/nomInvoiceTemplate"},
+    {name: "insertInvoiceArticol",  url: "public/app/invoice/insertInvoiceArticol"}
 
 ]
 

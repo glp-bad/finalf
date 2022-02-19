@@ -25,6 +25,10 @@
 		directives: { maska },
 		mounted() {
 			this.vModelData = null;
+			if(!this.$check.isUndef(this.pConfig.defaultValue)){
+                this.dataModel = this.pConfig.defaultValue;
+            }
+
 			// document.addEventListener('keydown', this.keydownPress);
 			// document.addEventListener('keyup', this.keydownPress);
         },

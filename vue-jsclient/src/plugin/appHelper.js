@@ -240,6 +240,18 @@ const appHelper = {
             return {monthIn: format(dataIn, formatString)  , monthSf: format(dataSf, formatString), currentDate: format(curDate, formatString)};
         }
 
+        app.config.globalProperties.$datetime = {
+            convertDataSqlFormatToView(data, formatDate){
+                let formatString = 'dd/MM/yyyy';
+                if(formatDate != undefined){
+                    formatString = formatDate;
+                }
+
+                let curDate = new Date(data);
+                return format(curDate, formatString);
+            }
+        }
+
         app.config.globalProperties.$check = {
             isExistDate(dataCheck, yearCheck){
                  let data = dataCheck.year + "," + dataCheck.month + ","  + dataCheck.day;

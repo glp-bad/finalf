@@ -39,10 +39,20 @@ Route::post('app/partener/editAdressPartener', [ParteneriController::class, 'edi
 
 
 
-Route::post('app/invocesListPartener',  [PartenerInvoicesController::class,  'invocesListPartener'])->middleware('auth');
-Route::post('app/listPartener',         [PartenerInvoicesController::class,  'listPartener'])->middleware('auth');
-Route::post('app/nomInvoiceType',       [PartenerInvoicesController::class,  'nomInvoiceType'])->middleware('auth');
+Route::post('app/listPartener',                [PartenerInvoicesController::class,  'listPartener'])->middleware('auth');
+Route::post('app/nomInvoiceType',              [PartenerInvoicesController::class,  'nomInvoiceType'])->middleware('auth');
+Route::post('app/nomInvoiceTemplate',  [PartenerInvoicesController::class,  'nomInvoiceTemplate'])->middleware('auth');
+Route::post('app/invocesListPartener',         [PartenerInvoicesController::class,  'invocesListPartener'])->middleware('auth');
 Route::post('app/invoice/insertInvoiceAntet',  [PartenerInvoicesController::class,  'insertInvoiceAntet'])->middleware('auth');
+Route::post('app/invoice/checkWorkingInvoice', [PartenerInvoicesController::class,  'checkWorkingInvoice'])->middleware('auth');
+Route::post('app/invoice/deleteInvoiceAntet',  [PartenerInvoicesController::class,  'deleteInvoiceAntet'])->middleware('auth');
+Route::post('app/invoice/insertInvoiceArticol',  [PartenerInvoicesController::class,  'insertInvoiceArticol'])->middleware('auth');
+
+
+
+
+
+
 
 
 

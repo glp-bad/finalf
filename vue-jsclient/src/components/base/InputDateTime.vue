@@ -49,6 +49,10 @@
 	        setValue: function (value) {
 		        this.dataModel = value;
 	        },
+            setValueFromSqlFormat: function (value) {
+                let dataFormat = this.$datetime.convertDataSqlFormatToView(value);
+                this.dataModel = dataFormat;
+            },
 	        keydownPress: function () {
 			    /*
                 if(event.target.id == this.pConfig.id){

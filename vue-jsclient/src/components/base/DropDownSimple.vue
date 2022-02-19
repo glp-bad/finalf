@@ -21,7 +21,8 @@
             pConfig: {type: Object, required: true}
 		},
 		created() {
-			this.SELECT_REF = 'selectRef'
+			this.SELECT_REF = 'selectRef',
+            this.EMIT_CHANGE = 'emitChange'
         },
 		mounted() {
 			this.config();
@@ -51,6 +52,8 @@
 			changeValue: function () {
 				let refSelect = this.$refs[this.SELECT_REF];
 				this.setValue(refSelect.options[refSelect.selectedIndex].value);
+                this.$emit(this.EMIT_CHANGE, this.getValue());
+
 				// this.setValue(refSelect.options[refSelect.selectedIndex].value, refSelect.options[refSelect.selectedIndex].text);
                 // console.log(refSelect.options[refSelect.selectedIndex].value);
 			},

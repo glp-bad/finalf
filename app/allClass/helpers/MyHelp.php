@@ -57,7 +57,6 @@ class MyHelp {
 
 		if($time == null){
 			$frm = "Y-m-d 00:00:00";
-
 		}else{
 			$frm = "Y-m-d " . $time;
 
@@ -65,5 +64,25 @@ class MyHelp {
 
 		return $date->format($frm);
 	}
+
+    /**
+     * @param $sumaFaraTva
+     * @param $procetTVA    (forma 19)
+     * @return null
+     */
+    public static function getValueFromSumaFaraTva($sumaFaraTva, $procentTVA){
+
+        if($procentTVA > 0) {
+            $proc = ($procentTVA / 100) + 1;
+            $total = $sumaFaraTva * $proc;
+            $sumaTva = $total - $sumaFaraTva;
+
+        }else{
+            $total = $sumaFaraTva;
+            $sumaTva = 0;
+        }
+
+        return ['sumaFaraTva'=>$sumaFaraTva, 'sumaTva'=>$sumaTva, 'total'=>$total];
+    }
 
 }

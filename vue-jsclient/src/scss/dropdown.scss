@@ -5,6 +5,7 @@
     padding: 2px;
     border-radius: 4px;
     background: lighten( $ff-base, 50% );
+    width: fit-content;
 
     .loading-modal {
         display: block;
@@ -27,7 +28,7 @@
 
     select {
 		background-color: map-get($ff-dropdown, "background-color");
-		width: null;
+		width: 100%;
         border: none;
 		option{
             margin: 40px;

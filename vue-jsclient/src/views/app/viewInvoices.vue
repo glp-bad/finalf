@@ -8,7 +8,7 @@
             <template v-slot:tabs>
                 <div class="tab" :id="this.$constTab.getIdTab(this.cfgtime.tabConfig.TAB_NEW.id)">
                     <div class="up-line"></div>
-                    <invoice-make></invoice-make>
+                    <invoice-make :ref="this.cfgtime.REF_CREATE_INVOICE"></invoice-make>
                 </div>
                 <div class="tab" :id="this.$constTab.getIdTab(this.cfgtime.tabConfig.TAB_LIST.id)">
                     <div class="up-line"></div>
@@ -32,6 +32,7 @@ export default {
     name: "view-invoices",
     created() {
         this.cfgtime = {
+            REF_CREATE_INVOICE: 'refCreateInvoice',
             tabConfig: {
                 TAB_NEW: {id: '1t'},
                 TAB_LIST: {id: '2t'},
@@ -40,7 +41,7 @@ export default {
                     this.$constTab.getHeader('2t', 'Lista facturi')
                 ],
                 defaultTabId: '1t',
-                tabsWidth: '1000px'
+                tabsWidth: '1100px'
             }
         }
      },
@@ -50,7 +51,8 @@ export default {
      methods: {
          emitClickTab: function (idTab) {
              if(idTab == this.cfgtime.tabConfig.TAB_NEW.id) {
-                 console.log('click 1 tab');
+                 this.$refs[this.cfgtime.REF_CREATE_INVOICE].checkWorkingInvoice();
+
              } else if(idTab == this.cfgtime.tabConfig.TAB_LIST.id) {
                  console.log('click 2 tab');
              }

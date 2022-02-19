@@ -27,6 +27,9 @@ class ConfigControl {
     setDefaultValue(value){
         this.defaultValue = value;
     }
+    getDefaultValue(){
+        return this.defaultValue;
+    }
     setDisable(disable){
         this.disabled = disable;
     }
