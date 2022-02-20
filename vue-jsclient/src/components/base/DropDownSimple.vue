@@ -104,7 +104,7 @@
                 }
             },
             setDefaultValue: function(){
-              if(!this.$check.isUndef(this.pConfig.defaultValue)){
+              if(!this.$check.isUndef(this.pConfig.defaultValue) && !this.$check.isUndef(this.dataList) ){
                   let id = 0;
                   for(let i=0; i < this.dataList.length; i++){
                       if(this.dataList[i].id == this.pConfig.defaultValue.id){
