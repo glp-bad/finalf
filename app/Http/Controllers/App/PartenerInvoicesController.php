@@ -49,6 +49,13 @@ class PartenerInvoicesController extends Controller
     public function detailInvoiceList(Request $request) {
         $msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false );
         $modelnvoiceDetail = new ModelnvoiceDetail($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+
+        $id = -1;
+
+        if(isset($request->idInvoice)){
+            $id = $request->idInvoice;
+        }
+
         $msg->records  = $modelnvoiceDetail->selectDetailList($request->idInvoice);
 
         $total = 0.00;
