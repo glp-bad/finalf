@@ -86,7 +86,8 @@
                 idPk: null
             },
             this.runtime = {
-                post: null
+                post: null,
+                responseCustom: null
             },
 			this.privateCfgSetData()
         },
@@ -99,24 +100,34 @@
 		    getDataList: function(){
 		      return this.dataList;
             },
+            getCustomResponse: function(){
+                return this.runtime.responseCustom;
+            },
 		    showList: function (postData){
 		        if(!this.$check.isUndef(postData)){
     		        this.runtime.post = postData;
                 }
+
                 this.getDataFromServer();
+
+                return 'ff';
             },
             getDataFromServer: function () {
                 this.showModalLoadingDiv = true;
+                this.runtime.responseCustom = null;
 
                 let uri = this.$url.getUrl(this.pConfig.cfg.urlData);
                 this.axios
                     .post(uri, this.runtime.post)
                     .then(response => {
                         this.showModalLoadingDiv = true;
-                        this.dataList = response.data;
+                        this.dataList = response.data.records;
+                        this.runtime.responseCustom = response.data.custom;
+
                     })
                     .catch(error => console.log(error))
                     .finally(() => {
+                        this.$emit('emitFinallyCustomResponse', this.runtime.responseCustom);
                         this.showModalLoadingDiv = false;
                     });
 

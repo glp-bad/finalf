@@ -39,7 +39,13 @@ export default [
     {name: "checkWorkingInvoice",   url: "public/app/invoice/checkWorkingInvoice"},
     {name: "deleteInvoiceAntet",    url: "public/app/invoice/deleteInvoiceAntet"},
     {name: "nomInvoiceTemplate",    url: "public/app/nomInvoiceTemplate"},
-    {name: "insertInvoiceArticol",  url: "public/app/invoice/insertInvoiceArticol"}
+    {name: "insertInvoiceArticol",  url: "public/app/invoice/insertInvoiceArticol"},
+    {name: "detailInvoiceList",     url: "public/app/invoice/detailInvoiceList"},
+    {name: "deleteItemDetailInvoice", url: "public/app/invoice/deleteItemDetailInvoice"},
+    {name: "saveInvoice", url: "public/app/invoice/saveInvoice"}
+
+
+
 
 ]
 

@@ -38,6 +38,30 @@ class Modelnvoice extends MyModel {
         return $rezult;
     }
 
+    public function saveInvoice($idInvoice) {
+
+        $rezult = DB::update(
+            "update t_factura
+                    inner join t_facturi_numar on t_facturi_numar.id = t_factura.id_nr and t_facturi_numar.id_avocat = :idAvocat01
+                    set t_factura.salvata = 1,
+	                    t_factura.last_update = :lastUpdate01,
+                        t_factura.id_user = :idUser02,
+                        t_facturi_numar.folosit = 1,
+                        t_facturi_numar.last_update = :lastUpdate02,
+                        t_facturi_numar.id_user = :idUser01
+                    where t_factura.id = :idInvoice01   
+	                    and t_factura.id_avocat = :idAvocat02	
+	                    and (SELECT COUNT(*) nr_rec from t_factura_d where t_factura_d.id_factura = :idInvoice02) > 0;",
+            [   'idInvoice01'=> $idInvoice,
+                'idInvoice02'=> $idInvoice,
+                'lastUpdate01' => MyHelp::getCarbonDateNow(), 'lastUpdate02' => MyHelp::getCarbonDateNow(),
+                'idUser01'=> $this->idUser, 'idUser02'=> $this->idUser,
+                'idAvocat01'=>$this->idAvocat, 'idAvocat02'=>$this->idAvocat]
+        );
+
+        return $rezult;
+    }
+
     public function insertAntet(array $insertAntet){
         $rezult = DB::insert(
             "insert into t_factura (id_nr, data_f, id_part, id_tipfactura, nProcTVA, salvata, id_user, created, id_avocat) values (:idNr, :dataF, :idPart, :idTipFactura, :nProcTVA, :salvata, :idUser, :created, :idAvocat);",
@@ -84,3 +108,4 @@ class Modelnvoice extends MyModel {
     }
 
 }
+

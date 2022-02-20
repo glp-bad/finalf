@@ -12,6 +12,7 @@ class SqlMessageResponse
 	public $errorMsg;                   // string
 	public $admin;                      // true false, on client show $errorMsg on windows alert
     public $records;                    // data returned
+    public $custom;                     // data custom
 
     function __construct($succes, $lastId, $messages, $records, $errorMsg=null, $admin=false) {
         $this->succes = $succes;
@@ -20,6 +21,11 @@ class SqlMessageResponse
         $this->lastId = $lastId;
 	    $this->admin = $admin;
 	    $this->records = $records;
+        $this->custom = null;
+    }
+
+    public function setCustomData($custom){
+        $this->custom = $custom;
     }
 
     function toJson(){

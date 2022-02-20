@@ -160,12 +160,24 @@ class ParteneriController extends Controller
 
     public function listaAdrese(Request $request) {
         $modelPartenerAdrese = $this->getModelPartenerAdrese();
-        return $modelPartenerAdrese->selectAdresePartener(intval($request['idPartner']));
+
+        $succes = true;
+        $lastId = -1;
+        $messages = null;
+        $records  = $modelPartenerAdrese->selectAdresePartener(intval($request['idPartner']));
+
+        return json_encode(new SqlMessageResponse($succes, $lastId, $messages, $records));
     }
 
     public function listBancCont(Request $request) {
         $modelPartenerBancCount = $this->getModelPartenerBancCount();
-        return $modelPartenerBancCount->selectConturiPartener(intval($request['idPartner']));
+
+        $succes = true;
+        $lastId = -1;
+        $messages = null;
+        $records  = $modelPartenerBancCount->selectConturiPartener(intval($request['idPartner']));
+
+        return json_encode(new SqlMessageResponse($succes, $lastId, $messages, $records));
     }
 
 

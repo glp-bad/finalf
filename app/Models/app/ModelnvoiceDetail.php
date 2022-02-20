@@ -23,10 +23,45 @@ class ModelnvoiceDetail extends MyModel {
         return $returnId;
     }
 
-    public function deleteDetailInvoice($idPk){
+    public function deleteDetailInvoice($idInvoice){
         $rezult = DB::delete(
             "delete from t_factura_d where id_factura = :idFactura;",
-            ['idFactura'=>$idPk]
+            ['idFactura'=>$idInvoice]
+        );
+
+        return $rezult;
+    }
+
+    /**
+     * @param $idPk
+     * @return int
+     * numai articolele din facturile nesalvate pot fi sterse
+     */
+    public function deleteItemDetailInvoice($idPk){
+        $rezult = DB::delete(
+            "DELETE t_factura_d
+                    FROM t_factura_d
+                    INNER JOIN t_factura ON t_factura.id = t_factura_d.id_factura
+                    where t_factura_d.id = :id and t_factura.salvata = :salvata;",
+            ['id'=>$idPk, 'salvata'=> 0 ]
+        );
+
+        return $rezult;
+    }
+
+    public function selectDetailList($idInvoice){
+        $rezult = DB::select(
+            " 
+                 select id, 
+                        ROW_NUMBER() OVER (
+                            ORDER BY id asc
+                        ) row_num,
+                        cText, 
+                        nSumaFaraTva, nSumaTva, nTotal 
+                 from t_factura_d 
+                 where id_factura = :idInvoice 
+                 order by id asc;"
+            ,["idInvoice"=>$idInvoice]
         );
 
         return $rezult;

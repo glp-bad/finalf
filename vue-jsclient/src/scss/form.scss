@@ -180,6 +180,17 @@ $ff-caption-height: 20px;
             float: right;
             padding: 5px;
         }
+
+        .buttons-left{
+            margin-right: 20px;
+            float: left;
+            padding: 5px;
+        }
+    }
+
+    .form-rezumat-right {
+        display: inline-block;
+        float: right;
     }
 
     .form-bottom-line {

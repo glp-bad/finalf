@@ -45,6 +45,26 @@ class PartenerInvoicesController extends Controller
         return json_encode(new SqlMessageResponse($succes, $lastId, $messages, $records));
     }
 
+
+    public function detailInvoiceList(Request $request) {
+        $msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false );
+        $modelnvoiceDetail = new ModelnvoiceDetail($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        $msg->records  = $modelnvoiceDetail->selectDetailList($request->idInvoice);
+
+        $total = 0.00;
+        $sumaFaraTva = 0.00;
+        $sumaTva = 0.00;
+        foreach ($msg->records as $r){
+            $total += floatval($r->nTotal);
+            $sumaFaraTva += floatval($r->nSumaFaraTva);
+            $sumaTva += floatval($r->nSumaTva);
+        }
+
+        $msg->setCustomData(['total'=>round($total,2), 'sumaFaraTva'=>round($sumaFaraTva,2), 'sumaTva'=>round($sumaTva,2)]);
+
+        return $msg->toJson();
+    }
+
     public function nomInvoiceType(Request $request) {
         $nom = new ModelNomTipFactura($this->getSession()->get(MyAppConstants::ID_AVOCAT), null);
         $succes = true;
@@ -78,6 +98,31 @@ class PartenerInvoicesController extends Controller
     }
 
 
+
+    public function deleteItemDetailInvoice(Request $request){
+        $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
+        $modelnvoiceDetail = new ModelnvoiceDetail($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+
+        $id = $request->idPk;
+
+        try {
+            $deletedCount = $modelnvoiceDetail->deleteItemDetailInvoice($id);
+            if($deletedCount != 1){
+                throw new \Exception("Factura este salvata. Articolul nu poate fi sters!");
+            }
+
+            $msg->succes = true;
+
+        }catch (\Exception $e){
+            $msg->messages= 'App error. Nu se poate sterge antetul. Incercati relogarea in aplicatie.';
+            $msg->errorMsg = $e->getMessage();
+            $msg->succes = false;
+        }
+
+
+        return $msg->toJson();
+    }
+
     public function deleteInvoiceAntet(Request $request) {
         $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
         $modelnvoice = new Modelnvoice($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
@@ -108,6 +153,30 @@ class PartenerInvoicesController extends Controller
         }
 
         return $msg->toJson();
+    }
+
+    public function saveInvoice(Request $request) {
+        $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
+
+        $modelnvoice = new Modelnvoice($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        $idInvoice = $request->id;
+
+        try {
+            $saveAntet = $modelnvoice->saveInvoice($idInvoice);
+
+            if($saveAntet != 2){
+                throw new \Exception("Factura este salvata deja in baza de date sau nu are articole!");
+            }
+
+            $msg->succes = true;
+        }catch (\Exception $e){
+            $msg->messages=  $e->getMessage();
+            $msg->errorMsg = $e->getMessage();
+            $msg->succes = false;
+        }
+
+        return $msg->toJson();
+
     }
 
     public function insertInvoiceArticol(Request $request) {

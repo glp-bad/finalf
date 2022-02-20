@@ -24,11 +24,25 @@
                      @emitYesNoButton = "emitYesNoDeleteAntet"
     ></validate-window>
 
+    <validate-window ref="refYesNoDeleteItemInvoice"
+                     :cWidth=400
+                     :cHeight=200
+                     :cTypeWindows=3
+                     @emitYesNoButton = "emitYesNoDeleteItemInvoice"
+    ></validate-window>
+
     <validate-window ref="refYesNoNew"
                      :cWidth=300
                      :cHeight=200
                      :cTypeWindows=3
                      @emitYesNoButton = "emitYesNoButtonNew"
+    ></validate-window>
+
+    <validate-window ref="refYesNoSaveInvoice"
+                     :cWidth=300
+                     :cHeight=200
+                     :cTypeWindows=3
+                     @emitYesNoButton = "emitYesNoSaveInvoice"
     ></validate-window>
 
     <form-tab :ref = this.REF_FORM>
@@ -133,14 +147,43 @@
 
             </table>
 
-            <table class="ff-form-table">
+            <my-list
+                :ref = this.cfgtime.CFG_INVOICE_DETAIL_LIST.ref
+                :pConfig=this.cfgtime.CFG_INVOICE_DETAIL_LIST
+                @emitListRowSelection = 'emitDetailListRowSelection'
+                @emitStergArticol = 'emitStergArticol'
+                @emitFinallyCustomResponse = 'emitListaSumary'
+            ></my-list>
 
-            </table>
-
+            <br>
+            <div class="form-rezumat-right">
+                <table class="ff-form-table">
+                    <tr>
+                        <td class="label-left bold">
+                            <label>Valoare fara TVA:</label></td>
+                        <td class="control">
+                            {{this.invoiceRezumat.sumaFaraTva}}
+                        </td>
+                        <td class="label-left bold">
+                            <label>&nbsp;&nbsp;&nbsp;Valoare TVA:</label></td>
+                        <td class="control">
+                            {{this.invoiceRezumat.sumaTva}}
+                        </td>
+                        <td class="label-left bold">
+                            <label>&nbsp;&nbsp;&nbsp;Total:</label></td>
+                        <td class="control">
+                            {{this.invoiceRezumat.total}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
 
         </template>
         <template v-slot:slotButton>
+            <div class="buttons-left">
+                <my-button :ref=this.cfgtime.REF_BUTTON_SAVE_INVOICE @click="this.saveInvoice" :heightButton=22 :buttonType=0 title="salvez factura in baza de date">Salvez factura</my-button>
+            </div>
         </template>
 
     </form-tab>
@@ -154,6 +197,7 @@
     import InputDateTime  from "@/components/base/InputDateTime.vue";
     import InputField     from "@/components/base/InputField.vue";
     import Button         from "@/components/base/Button";
+    import Lista          from "@/components/base/Lista";
 
     export default {
         components: {
@@ -163,7 +207,8 @@
             'my-dds': DropDownSimple,
             'my-datetime': InputDateTime,
             'my-inputField': InputField,
-            'my-button': Button
+            'my-button': Button,
+            'my-list': Lista
 
         },
         name: "form-invoice-make",
@@ -176,6 +221,7 @@
                 postNewInvoices: { idPk: null, field: {}, sqlAction: null},
                 postNewItem: { idPk: null, idInvoice: null, field: {}, sqlAction: null},
                 postDeleteAntetInvoices: { idPk: null},
+                postDeleteItemInvoices: { idPk: null},
                 antetData: null
             };
             this.cfgtime = {
@@ -191,11 +237,30 @@
                 REF_BUTTON_ADD_INVOICE:     'refAddInvoice',
                 REF_BUTTON_REMOVE_INVOICE:  'refRemoveInvoice',
                 REF_BUTTON_ADD_ITEM:        'refAddItem',
+                REF_BUTTON_SAVE_INVOICE:    'refSaveInvoice',
                 URL_NEW_INVOICE:            this.$url.getUrl('insertInvoiceAntet'),
                 URL_CHECK_WORKING_INVOICE:  this.$url.getUrl('checkWorkingInvoice'),
                 URL_DELETE_ANTET_INVOICE:   this.$url.getUrl('deleteInvoiceAntet'),
                 URL_INSERT_INVOICE_ARTICOL: this.$url.getUrl('insertInvoiceArticol'),
-                TVA: 19
+                URL_DELETE_INVOICE_ITEM:    this.$url.getUrl('deleteItemDetailInvoice'),
+                URL_SAVE_INVOICE:           this.$url.getUrl('saveInvoice'),
+                TVA: 19,
+                CFG_INVOICE_DETAIL_LIST : {
+                    ref: 'refDetailList',
+                    header: [
+                        this.$constList.getHeader(1, 'Nr.', 10, 'row_num', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
+                        this.$constList.getHeader(2, 'Servicii', 200, 'cText', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
+                        this.$constList.getHeader(3, 'Valoare', 100, 'nSumaFaraTva', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
+                        this.$constList.getHeader(4, 'Valoare TVA', 100, 'nSumaTva', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
+                        this.$constList.getHeader(5, 'Action', 100, 'null', this.$constList.HEADER.CAPTION_TYPE_ACTION)
+                    ],
+                    recordActionButon: [
+                        this.$constList.getActionButton(4, 'sterg articol', 'emitStergArticol', this.$constGrid.ICON_DELETE, this.$constList.ACTION_BUTTON.TYPE_BUTTON, null)
+                        //this.$constList.getActionButton(5, 'adresa implicita', 'emitAdresaImplicita', null, this.$constList.ACTION_BUTTON.TYPE_CHECKBOX, this.$app.cfgCheckBox('ro', false)),   // poate fi un singur checkbox pe linie, trebuie setat si filedNameForCheckBox, campul poate fi doar 1 si 0
+                        // this.$constList.getActionButton(6, 'adresa implicita', 'emitCheckBox', this.$constGrid.getIcon('fas','skull', '#adad00'))
+                    ],
+                    cfg: { urlData: 'detailInvoiceList', loadOnCreate: false, filedNameForCheckBox: 'activ', emitListRowSelection: 'emitListRowSelection'}
+                },
             };
         },
         emits: ['emitNewRecord'],
@@ -224,8 +289,38 @@
                     this.invoiceNumber = this.runtime.antetData.cNr;
                 }
 
-                 console.log(this.runtime.antetData);
+                 // console.log(this.runtime.antetData);
 
+            },
+            saveInvoice: function (){
+                if(!this.runtime.sendDataToServer) {
+                    this.$refs.refYesNoSaveInvoice.setCaption("Salvez");
+                    this.$refs.refYesNoSaveInvoice.setMessage("Salvez factura in baza de date ?");
+                    this.$refs.refYesNoSaveInvoice.show();
+                }
+
+                if(this.runtime.sendDataToServer) {
+                    this.runtime.sendDataToServer = false;
+
+                    this.axios
+                        .post(this.cfgtime.URL_SAVE_INVOICE, this.runtime.antetData)
+                        .then(response => {
+                            if (response.data.succes){
+                            }
+                            else {
+                                this.$refs.validateWindowRef.setCaption("Fail...");
+                                this.$refs.validateWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+                                this.$refs.validateWindowRef.show();
+                            }
+
+                        })
+                        .catch(error => console.log(error))
+                        .finally(() => {
+                            this.checkWorkingInvoice();
+                            this.$refs[this.REF_FORM].showModal(false);
+                        });
+
+                }
             },
             addArticol: function (){
                 if(this.validateInvoiceItem()){
@@ -237,9 +332,6 @@
                     .post(this.cfgtime.URL_INSERT_INVOICE_ARTICOL, this.runtime.postNewItem)
                     .then(response => {
                         if (response.data.succes) {
-                            if(response.data.records.length > 0){
-                            }else{
-                            }
                         }
                         else {
 
@@ -247,13 +339,43 @@
                     })
                     .catch(error => console.log(error))
                     .finally(() => {
+                        this.showListItems();
                         this.$refs[this.REF_FORM].showModal(false);
                     });
 
-                console.log(this.runtime.postNewItem);
+                // console.log(this.runtime.postNewItem);
+            },
+            deleteItemInvoice: function() {
+
+                if(!this.runtime.sendDataToServer){
+                    this.$refs.refYesNoDeleteItemInvoice.setCaption("Sterg elementul din factura?");
+                    this.$refs.refYesNoDeleteItemInvoice.setMessage("Datele sterse nu mai pot fi recuperate.");
+                    this.$refs.refYesNoDeleteItemInvoice.show();
+                }
+
+                if(this.runtime.sendDataToServer) {
+                    this.runtime.sendDataToServer = false;
+
+                    this.axios
+                        .post(this.cfgtime.URL_DELETE_INVOICE_ITEM, this.runtime.postDeleteItemInvoices)
+                        .then(response => {
+                            if (response.data.succes){
+                            }
+                            else {
+                                this.$refs.validateWindowRef.setCaption("Nu se poate sterge elementul");
+                                this.$refs.validateWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+                                this.$refs.validateWindowRef.show();
+                            }
+
+                        })
+                        .catch(error => console.log(error))
+                        .finally(() => {
+                            this.showListItems();
+                            this.$refs[this.REF_FORM].showModal(false);
+                        });
+                }
             },
             deleteAntetInvoice: function() {
-
                 if(!this.runtime.sendDataToServer){
                     this.$refs.refYesNoDeleteAntet.setCaption("Sterg factura?");
                     this.$refs.refYesNoDeleteAntet.setMessage("Numarul de factura va fi pastrat si va fi folosit pentru urmatoarea factura.");
@@ -286,6 +408,19 @@
 
                 }
             },
+            showListItems: function(){
+
+                let $id = 0;
+                if(!this.$check.isUndef(this.runtime.antetData)){
+                    $id = this.runtime.antetData.id;
+                }
+                this.$refs[this.cfgtime.CFG_INVOICE_DETAIL_LIST.ref].showList({idInvoice: $id});
+            },
+            emitListaSumary: function(sumarInvoice){
+                this.invoiceRezumat.sumaFaraTva = sumarInvoice.sumaFaraTva;
+                this.invoiceRezumat.sumaTva = sumarInvoice.sumaTva;
+                this.invoiceRezumat.total = sumarInvoice.total;
+            },
             checkWorkingInvoice: function() {
                 this.$refs[this.REF_FORM].showModal(true);
                 this.axios
@@ -306,6 +441,7 @@
                     .catch(error => console.log(error))
                     .finally(() => {
                         this.fillAFormAntet();
+                        this.showListItems();
                         this.$refs[this.REF_FORM].showModal(false);
                     });
             },
@@ -346,8 +482,34 @@
 
                 this.setModeForm(this.$constFROM.MODE_EDIT);
             },
+            emitStergArticol: function (button){
+                let tr = button.closest('tr');
+                this.runtime.postDeleteItemInvoices.idPk = tr.getAttribute('idPk');
+                this.deleteItemInvoice();
+            },
+            emitDetailListRowSelection: function(target){
+                if(target.tagName == 'DIV'){
+                   // do nothing
+                }
+            },
             emitTemplate: function (data){
                 this.$refs[this.cfgtime.INPUT_TEXT_FACTURA.ref].setValue(data.text);
+            },
+            emitYesNoSaveInvoice: function (yes){
+                if(yes == 1){
+                    this.runtime.sendDataToServer = true;
+                    this.saveInvoice();
+                }else{
+                    this.runtime.sendDataToServer = false;
+                }
+            },
+            emitYesNoDeleteItemInvoice: function (yes){
+                if(yes == 1){
+                    this.runtime.sendDataToServer = true;
+                    this.deleteItemInvoice();
+                }else{
+                    this.runtime.sendDataToServer = false;
+                }
             },
             emitYesNoDeleteAntet: function(yes) {
                 if(yes == 1){
@@ -369,6 +531,7 @@
                     this.$refs[this.cfgtime.REF_BUTTON_ADD_INVOICE].disable(readOnly);
                     this.$refs[this.cfgtime.REF_BUTTON_REMOVE_INVOICE].disable(false);
                     this.$refs[this.cfgtime.REF_BUTTON_ADD_ITEM].disable(false);
+                    this.$refs[this.cfgtime.REF_BUTTON_SAVE_INVOICE].disable(false);
                 }
 
                 if(this.runtime.mode == this.$constFROM.MODE_NEW) {
@@ -377,6 +540,7 @@
                     this.$refs[this.cfgtime.REF_BUTTON_ADD_INVOICE].disable(readOnly);
                     this.$refs[this.cfgtime.REF_BUTTON_REMOVE_INVOICE].disable(true);
                     this.$refs[this.cfgtime.REF_BUTTON_ADD_ITEM].disable(true);
+                    this.$refs[this.cfgtime.REF_BUTTON_SAVE_INVOICE].disable(true);
                 }
 
                 this.$refs[this.cfgtime.INPUT_DATE.ref].setReadOnly(readOnly);
@@ -561,7 +725,8 @@
         },
         data () {
             return {
-                invoiceNumber: '...'
+                invoiceNumber: '...',
+                invoiceRezumat: {total: 0.00, sumaFaraTva: 0.00, sumaTva: 0.00}
             }
         }
     }

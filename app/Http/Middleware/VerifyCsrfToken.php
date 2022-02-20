@@ -14,15 +14,8 @@ class VerifyCsrfToken extends Middleware
      */
 
     protected $except = [
-        'app/gridListParteneri',
-        'app/partenerGetData',
-        'app/nomTipPartener',
-	    'app/nomLocalitati',
-        'app/editPartener',
-        'app/partener/listaAdrese',
-        'app/partener/listBancCont',
-        'app/listPartener',
-        'app/nomInvoiceType'
+        'app',
+        'app/*'
     ];
 
 
