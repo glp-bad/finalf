@@ -61,9 +61,13 @@
                 this.dataSelected.id = -1;
                 this.dataSelected.text = null;
                 this.dataSelected.candidateKey = null;
-                for(let i = 0; i<this.dataList.length; i++ ){
+
+                if(!this.$check.isUndef(this.dataList)) {
+                    for (let i = 0; i < this.dataList.length; i++) {
                         this.dataList[i].selected = false;
+                    }
                 }
+
             },
 	        setValue: function (id) {
                 if(!this.$check.isUndef(this.dataList)) {
