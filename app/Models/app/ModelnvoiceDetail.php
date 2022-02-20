@@ -53,12 +53,10 @@ class ModelnvoiceDetail extends MyModel {
         $rezult = DB::select(
             " 
                  select id, 
-                        ROW_NUMBER() OVER (
-                            ORDER BY id asc
-                        ) row_num,
+                        @i:=@i+1 row_num,
                         cText, 
                         nSumaFaraTva, nSumaTva, nTotal 
-                 from t_factura_d 
+                 from t_factura_d,  (SELECT @i:=0) AS R 
                  where id_factura = :idInvoice 
                  order by id asc;"
             ,["idInvoice"=>$idInvoice]
