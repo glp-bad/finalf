@@ -66,15 +66,17 @@
                 }
             },
 	        setValue: function (id) {
-                this.dataSelected.id = id;
-		        for(let i = 0; i<this.dataList.length; i++ ){
-		            if(this.dataList[i].id == id){
-                        this.dataSelected.text = this.dataList[i].text;
-                        this.dataSelected.candidateKey = this.dataList[i].cTipAbrev;
-                        this.dataList[i].selected = true;
-                        this.isShowSelectedData = true;
-                    }else{
-                        this.dataList[i].selected = false;
+                if(!this.$check.isUndef(this.dataList)) {
+                    this.dataSelected.id = id;
+                    for (let i = 0; i < this.dataList.length; i++) {
+                        if (this.dataList[i].id == id) {
+                            this.dataSelected.text = this.dataList[i].text;
+                            this.dataSelected.candidateKey = this.dataList[i].cTipAbrev;
+                            this.dataList[i].selected = true;
+                            this.isShowSelectedData = true;
+                        } else {
+                            this.dataList[i].selected = false;
+                        }
                     }
                 }
 	        },

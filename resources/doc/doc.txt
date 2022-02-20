@@ -7,6 +7,10 @@ Pentru cPanel:
     cronJob:
     /usr/local/bin/php /home2/badminto/finalf.badmintonclub.ro/artisan schedule:run
 
+Deplot prod:
+1. D:\bin\xampp8\htdocs\finalf\app\Http\Middleware\VerifyCsrfToken.php
+2. ENV VUE_APP_ENV = host
+
 
 
 online resource:
