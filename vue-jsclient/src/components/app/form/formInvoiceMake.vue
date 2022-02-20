@@ -213,7 +213,7 @@
         },
         name: "form-invoice-make",
         created() {
-            this.REF_FORM = 'refForm';
+            this.REF_FORM = 'refFormInvoices';
             this.runtime = {
                 mode: this.$constFROM.MODE_EDIT,
                 sendDataToServer: false,

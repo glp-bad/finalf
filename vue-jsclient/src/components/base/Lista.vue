@@ -179,7 +179,7 @@
 		data () {
 			return {
                 showModalLoadingDiv: false,
-                dataList: null
+                dataList: []
             }
 		}
 	}
