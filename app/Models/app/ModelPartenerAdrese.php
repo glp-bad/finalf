@@ -85,7 +85,6 @@ class ModelPartenerAdrese extends MyModel {
 				['id'=> $id, 'lastUpdate' => MyHelp::getCarbonDateNow(),'id_user'=>$this->idUser]
 			);
 
-
 		DB::commit();
 
 		return $rezult;
