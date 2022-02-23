@@ -9,16 +9,24 @@
 	}
 	li {
 		float: left;
-		a {
-			display: block;
-			color: white;
-			text-align: center;
-			padding: 5px 7px;
-			text-decoration: none;
-			&:hover {
-				&:not(.active) {
-					background-color: map-get($ff-navbar,"hover-color");
+
+		.divShow {
+			display: inline-flex;
+			a {
+				display: block;
+				color: white;
+				text-align: center;
+				padding: 5px 7px;
+				text-decoration: none;
+				&:hover {
+					&:not(.active) {
+						background-color: map-get($ff-navbar, "hover-color");
+					}
 				}
+			}
+
+			&:is(.select-iem) {
+				background-color: map-get($ff-navbar, "hover-color");
 			}
 		}
 	}
