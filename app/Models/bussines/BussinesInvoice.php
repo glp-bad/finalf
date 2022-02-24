@@ -15,9 +15,10 @@ class BussinesInvoice extends MyModel {
 
     public function selectFacturiNeincasate(){
         $rezult = DB::select(
-            " select a.id, a.nr_factura, a.total_factura, a.total_incasat, t_factura.data_f, 
-	                        t_parteneri.cNume as client_name, concat(if(t_parteneri.Ro_='--','',t_parteneri.Ro_), t_parteneri.cui) as client_cod_fiscal, t_tip_organizare_juridica.cTipAbrev as client_tip_firma,
-                            a.total_factura - a.total_incasat as rest_de_incasat, t_tip_factura.cTipfactura as tip_factura
+            " select a.id, t_tip_factura.cTipfactura as tip_factura, a.nr_factura, t_factura.data_f,
+	                        t_parteneri.cNume as client_name, t_tip_organizare_juridica.cTipAbrev as client_tip_firma, concat(if(t_parteneri.Ro_='--','',t_parteneri.Ro_), t_parteneri.cui) as client_cod_fiscal, 
+	                        a.total_factura, a.total_incasat,
+                            a.total_factura - a.total_incasat as rest_de_incasat 
                     from
                     (
                         select t_factura.id, t_facturi_numar.cNr as nr_factura,

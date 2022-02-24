@@ -7,6 +7,8 @@
                 <router-link to="/viewParteneri" @click="this.headerLink($event)">Parteneri</router-link></div></li>
             <li :idPk="3"><div class="divShow">
                 <router-link to="/viewInvoices"  @click="this.headerLink($event)">Facturez</router-link></div></li>
+            <li :idPk="4"><div class="divShow">
+                <router-link to="/viewIncasari"  @click="this.headerLink($event)">Incasari</router-link></div></li>
             <!--
             <li><router-link to="/viewGridul">Gridul</router-link></li>
             <li><router-link to="/testControale">Test controale</router-link></li>

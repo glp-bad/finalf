@@ -1,7 +1,6 @@
 <template>
     <div class="ff-lista">
-        <div class="container">
-
+        <div class="container" :ref=this.cfgTime.REF_CONTAINER>
             <div class = "loading-modal" v-if="this.showModalLoadingDiv">
                 <div>
                     <font-awesome-icon :icon=this.$constComponent.ICON_SPINNER size="4x" spin/>
@@ -27,7 +26,7 @@
                         <tr class="trClass" :idPk="tr.id" @click="this.privateCfgEmitRowSelection($event, this.pConfig.cfg.emitListRowSelection)">
                             <template v-for="(td, index) in tr" v-bind:key="index">
                                 <td class="tdClass" v-if="privateCfgFieldShow(index, tr)" :field=index>
-                                        <div class="tdDiv">{{td}}</div>
+                                        <div :na="privateCgfTDStyle(index)" :class="{tdDivRightAlign, tdDivLeftAlign, tdDivCenterAlign}">{{td}}</div>
                                 </td>
                             </template>
 
@@ -80,10 +79,16 @@
         },
 		directives: {},
         created() {
+	        this.tdDivRightAlign= false,              // class align
+		    this.tdDivLeftAlign = false,               // class align
+		    this.tdDivCenterAlign= false,             // class align
 			this.cfgTime = {
+				REF_CONTAINER: 'refContainer',
+                CLASS_DIMENSION: 'with-dimension',
 				fieldArray: [],
                 checkBoxValue: null,
-                idPk: null
+                idPk: null,
+                headerArrayObject: {}
             },
             this.runtime = {
                 post: null,
@@ -95,6 +100,8 @@
 		    if(this.pConfig.cfg.loadOnCreate) {
                 this.showList();
             }
+
+	        this.privateCfgList();
         },
         methods: {
 		    getDataList: function(){
@@ -173,7 +180,33 @@
 	        privateCfgSetData() {
 	            this.pConfig.header.forEach(h => {
 		            this.cfgTime.fieldArray.push(h.fieldName);
+		            this.cfgTime.headerArrayObject[h.fieldName] = h;
 	            });
+            },
+	        privateCgfTDStyle: function (fieldName) {
+                let align = this.cfgTime.headerArrayObject[fieldName].alignText;
+
+		        this.tdDivRightAlign= false;
+			    this.tdDivLeftAlign = false;
+			    this.tdDivCenterAlign= false;
+
+		        if(align == this.$constComponent.ALIGN_TEXT_LEFT){
+			        this.tdDivLeftAlign  = true;
+		        }else if(align ==  this.$constComponent.ALIGN_TEXT_RIGHT){
+			        this.tdDivRightAlign = true;
+		        }else if(align == this.$constGrid.ALIGN_TEXT_CENTER){
+			        this.tdDivCenterAlign = true;
+		        }
+
+
+	        },
+            privateCfgList(){
+		    	if(!this.$check.isUndef(this.pConfig.cfg.heightList)){
+                    let divContainer = this.$refs[this.cfgTime.REF_CONTAINER];
+
+				    divContainer.classList.add(this.cfgTime.CLASS_DIMENSION);
+				    divContainer.style.height = this.pConfig.cfg.heightList + 'px';
+                }
             }
         },
 		data () {

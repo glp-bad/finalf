@@ -41,8 +41,12 @@ export default [
     {name: "nomInvoiceTemplate",    url: "public/app/nomInvoiceTemplate"},
     {name: "insertInvoiceArticol",  url: "public/app/invoice/insertInvoiceArticol"},
     {name: "detailInvoiceList",     url: "public/app/invoice/detailInvoiceList"},
-    {name: "deleteItemDetailInvoice", url: "public/app/invoice/deleteItemDetailInvoice"},
-    {name: "saveInvoice", url: "public/app/invoice/saveInvoice"}
+    {name: "deleteItemDetailInvoice",   url: "public/app/invoice/deleteItemDetailInvoice"},
+    {name: "saveInvoice",               url: "public/app/invoice/saveInvoice"},
+
+	{name: "listaUnpaidInvoices", url: "public/app/cashing/listaUnpaidInvoices"}
+
+
 
 
 

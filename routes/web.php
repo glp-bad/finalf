@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\App\ParteneriController;
 use App\Http\Controllers\App\PartenerInvoicesController;
+use App\Http\Controllers\App\PartenerInvoicesCashingInController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,9 @@ Route::post('app/invoice/insertInvoiceArticol', [PartenerInvoicesController::cla
 Route::post('app/invoice/detailInvoiceList',    [PartenerInvoicesController::class,  'detailInvoiceList'])->middleware('auth');
 Route::post('app/invoice/deleteItemDetailInvoice', [PartenerInvoicesController::class,  'deleteItemDetailInvoice'])->middleware('auth');
 Route::post('app/invoice/saveInvoice',          [PartenerInvoicesController::class,  'saveInvoice'])->middleware('auth');
+
+// incasari
+Route::post('app/cashing/listaUnpaidInvoices',          [PartenerInvoicesCashingInController::class,  'listaUnpaidInvoices'])->middleware('auth');
 
 
 

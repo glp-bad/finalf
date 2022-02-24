@@ -3,6 +3,11 @@
 	    display: grid;
 	    // background: yellow;
 
+	    &:is(.with-dimension) {
+		    overflow: hidden;
+		    overflow-y: auto;
+	    }
+
 	    .loading-modal {
 		    display: inline-block;
 		    position: absolute;
@@ -56,10 +61,20 @@
 				            text-overflow: ellipsis;
 							padding: 2px;
 
-                            &CenterAlign {
-                                @extend .tdDiv;
-                                text-align: center;
-                            }
+				            // for class binding
+				            &RightAlign {
+					            @extend .tdDiv;
+					            text-align: right;
+				            }
+				            &LeftAlign {
+					            @extend .tdDiv;
+					            text-align: left;
+				            }
+				            &CenterAlign {
+					            @extend .tdDiv;
+					            text-align: center;
+				            }
+
 
 			            }
 		            }

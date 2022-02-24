@@ -19,6 +19,9 @@ const constantsComponent = {
             SQL_UPDATE: 'update',
             SQL_INSERT: 'insert',
             SQL_DELETE: 'delete',
+			ALIGN_TEXT_LEFT: 'alignLeft',
+			ALIGN_TEXT_RIGHT: 'alignRight',
+			ALIGN_TEXT_CENTER: 'alignCenter',
 			ICON_PLUS_SQUARE: function (color){
 				return {fawIcon:'fas', icon: 'plus-square', color: color, colorStyle: {color: color }};
 			},
@@ -71,8 +74,13 @@ const constantsComponent = {
             getActionButton: function (id, tooltip, emitAction, icon, typeButton, cfgCheckBox) {
                 return {id: id, tooltip: tooltip, emitAction: emitAction, icon: icon, typeButton: typeButton, cfgCheckBox: cfgCheckBox };
             },
-            getHeader: function (id, caption, width, fieldName, type) {
-                return {id: id, caption: caption,  width: width,  fieldName: fieldName,  type: type};
+            getHeader: function (id, caption, width, fieldName, type, alignText) {
+
+	            if(alignText == undefined || alignText == null){
+		            alignText = 'alignLeft'; // ALIGN_TEXT_LEFT
+	            }
+
+                return {id: id, caption: caption,  width: width,  fieldName: fieldName,  type: type, alignText: alignText};
             }
         },
         app.config.globalProperties.$constGrid = {
