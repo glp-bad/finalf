@@ -4,7 +4,6 @@
         <input :id = this.pConfig.id
                :name = this.pConfig.name
                ref = "refInput"
-               :size = this.pConfig.sizeField
                :placeholder=this.pConfig.placeHolder
                v-model = "dataModel"
                v-maska= this.pConfig.maska
@@ -34,11 +33,7 @@
 
             if(!this.$check.isUndef(this.pConfig.width)) {
 	            this.$refs[this.REF_DIV_CONTAINER].style.width = this.pConfig.width;
-
-	            console.log(this.pConfig);
             }
-
-
 
 			// document.addEventListener('keydown', this.keydownPress);
 			// document.addEventListener('keyup', this.keydownPress);

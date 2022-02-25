@@ -44,11 +44,8 @@ export default [
     {name: "deleteItemDetailInvoice",   url: "public/app/invoice/deleteItemDetailInvoice"},
     {name: "saveInvoice",               url: "public/app/invoice/saveInvoice"},
 
-	{name: "listaUnpaidInvoices", url: "public/app/cashing/listaUnpaidInvoices"}
-
-
-
-
+	{name: "listaUnpaidInvoices", url: "public/app/cashing/listaUnpaidInvoices"},
+	{name: "nomDocumentTipe", url: "public/app/cashing/nomDocumentTipe"}
 
 
 ]

@@ -76,12 +76,16 @@ const constantsComponent = {
             },
             getHeader: function (id, caption, width, fieldName, type, alignText) {
 
-	            if(alignText == undefined || alignText == null){
+	            if(alignText == undefined || alignText == null) {
 		            alignText = 'alignLeft'; // ALIGN_TEXT_LEFT
 	            }
 
                 return {id: id, caption: caption,  width: width,  fieldName: fieldName,  type: type, alignText: alignText};
             }
+        },
+        app.config.globalProperties.$constRadioButton = {
+	        ALIGNMENT_H: 'horizontally',
+	        ALIGNMENT_V: 'vertical'
         },
         app.config.globalProperties.$constGrid = {
             ID_NAME: 'idPk',

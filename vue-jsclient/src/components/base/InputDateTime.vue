@@ -4,7 +4,6 @@
         <input :id = this.pConfig.id
                :name = this.pConfig.name
                ref = "refInput"
-               :size = this.pConfig.sizeField
                :placeholder=this.pConfig.placeHolder
                v-model = "dataModel"
                v-maska= this.pConfig.maska

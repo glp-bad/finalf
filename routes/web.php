@@ -54,6 +54,9 @@ Route::post('app/invoice/saveInvoice',          [PartenerInvoicesController::cla
 
 // incasari
 Route::post('app/cashing/listaUnpaidInvoices',          [PartenerInvoicesCashingInController::class,  'listaUnpaidInvoices'])->middleware('auth');
+Route::post('app/cashing/nomDocumentTipe',          [PartenerInvoicesCashingInController::class,  'nomDocumentTipe'])->middleware('auth');
+
+
 
 
 

@@ -1,0 +1,30 @@
+.ff-radio-button {
+
+	&:is(.alignment-horizontally) {
+		display: inline-flex;
+	}
+
+	&:is(.alignment-vertical) {
+		display: inline-block;
+	}
+
+	.inputClass {
+		// background-color: #9561e2;
+		cursor: pointer;
+
+	}
+
+	.labelClass {
+		align-self: flex-end;
+
+		&:is(.disabled-option) {
+			color: gray;
+		}
+	}
+
+
+}
+
+
+
+
