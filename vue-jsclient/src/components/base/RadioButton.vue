@@ -19,14 +19,12 @@
 
 <script>
 
-	import { maska } from 'maska'
-
 	export default {
 		name: "my-radio-button",
         props: {
             pConfig: {type: Object, required: true}
         },
-		directives: { maska },
+		directives: {},
 		created() {
 		    this.REF_DIV_CONTAINER='refRadioButton',
 			this.cfgtime = {
