@@ -423,14 +423,14 @@ const appHelper = {
                 return msg;
 
             },
-            cfgInputField(id, sizeField){
+            cfgInputField(id, sizeField, width){
                 let cfg = factoryConfigControl.getConfig(factoryConfigControl.INPUT_FIELD);
-                cfg.setBaseConfig(id, sizeField);
+                cfg.setBaseConfig(id, sizeField, width);
                 return cfg;
             },
-            cfgInputDateTimeField(id, sizeField){
+            cfgInputDateTimeField(id, sizeField, width){
                 let cfg = factoryConfigControl.getConfig(factoryConfigControl.INPUT_DATETIME);
-                cfg.setBaseConfig(id, sizeField);
+                cfg.setBaseConfig(id, sizeField, width);
                 cfg.setMaska("##/##/####");             // default day/month/year
                 return cfg;
             },

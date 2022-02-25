@@ -34,6 +34,11 @@
                     :pConfig = this.cfgtime.CFG_INVOICE_LIST
             ></my-list>
 
+            <input-field
+                    :ref = this.cfgtime.NR_DOCUMENT.ref
+                    :pConfig = this.cfgtime.NR_DOCUMENT
+            ></input-field>
+
         </template>
         <template v-slot:slotButton>
 
@@ -46,12 +51,14 @@
     import AlertWindow    from "@/components/base/AlertWindow.vue";
     import FormTab        from "@/components/base/FormTab.vue";
     import Lista          from "@/components/base/Lista";
+    import InputField from "@/components/base/InputField.vue";
 
     export default {
         components: {
             'validate-window': AlertWindow,
             'form-tab': FormTab,
-            'my-list': Lista
+            'my-list': Lista,
+	        'input-field': InputField,
 
         },
         name: "form-incasez",
@@ -63,12 +70,13 @@
 	            message: []
             };
             this.cfgtime = {
+	            NR_DOCUMENT: this.cfgNrDoc(),
                 CFG_INVOICE_LIST : {
                     ref: 'refDetailList',
                     header: [
 	                    this.$constList.getHeader(1, 'Tip factura',     70, 'tip_factura',       this.$constList.HEADER.CAPTION_TYPE_FIELD ),
                         this.$constList.getHeader(2, 'Nr. factura',     70, 'nr_factura',        this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-	                    this.$constList.getHeader(3, 'Data factura',    70, 'data_f',            this.$constList.HEADER.CAPTION_TYPE_FIELD ),
+	                    this.$constList.getHeader(3, 'Data factura',    70, 'data_f_view',            this.$constList.HEADER.CAPTION_TYPE_FIELD ),
 	                    this.$constList.getHeader(4, 'Client',          70, 'client_name',       this.$constList.HEADER.CAPTION_TYPE_FIELD ),
 	                    this.$constList.getHeader(5, 'Org.',            70, 'client_tip_firma',  this.$constList.HEADER.CAPTION_TYPE_FIELD ),
 	                    this.$constList.getHeader(6, 'CUI',             70, 'client_cod_fiscal', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
@@ -94,6 +102,15 @@
         mounted () {
         },
         methods: {
+	        cfgNrDoc: function(){
+		        let cfg = this.$app.cfgInputField("nrDoc", null, 400);
+		        cfg.setValidate(2,100);
+		        cfg.setValidateFunction(this.validateNrDoc);
+		        cfg.setCaption("Numar document manual");
+		        cfg.setMandatory(true);
+		        cfg.setMaska("");
+		        return cfg;
+	        }
         },
         data () {
             return {

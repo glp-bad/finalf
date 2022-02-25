@@ -8,12 +8,22 @@ class ConfigControl {
     sizeField= 0;               // lungimea controlului, width filed
     defaultValue= null;
     disabled= false;
+    width= null;               // replace sizeField
 
-    setBaseConfig(id, sizeField) {
+    setBaseConfig(id, sizeField, width) {
         this.id = id;
         this.name = 'name_' + id;
         this.ref = 'ref_' + id;
-        this.sizeField = sizeField;
+
+	    if(width === undefined || width === null){
+		    this.sizeField = sizeField;
+		    this.width = null;
+	    }else{
+		    this.sizeField = 0;
+		    this.width = width + 'px';
+	    }
+
+
     }
     setCaption(caption) {
         this.caption = caption;

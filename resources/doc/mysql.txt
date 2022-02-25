@@ -1,0 +1,4 @@
+
+
+-- https://database.guide/list-of-date-format-specifiers-in-mysql/
+	DATE_FORMAT(t_factura.data_f, '%d/%m/%Y') -> 10/04/2012

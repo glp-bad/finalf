@@ -24,3 +24,7 @@ maska: https://github.com/beholdr/maska
 -- header
 Header set Access-Control-Allow-Origin "*"
 Header set Access-Control-Allow-Headers "*"
+
+
+
+

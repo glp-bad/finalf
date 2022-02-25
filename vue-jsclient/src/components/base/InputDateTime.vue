@@ -1,6 +1,6 @@
 
 <template>
-    <div class="ff-input-text">
+    <div class="ff-input-text" :ref=this.REF_DIV_CONTAINER>
         <input :id = this.pConfig.id
                :name = this.pConfig.name
                ref = "refInput"
@@ -23,6 +23,9 @@
             pConfig: {type: Object, required: true}
         },
 		directives: { maska },
+		created() {
+			this.REF_DIV_CONTAINER='refIinputTextContainer'
+		},
 		mounted() {
 			this.vModelData = null;
 			// document.addEventListener('keydown', this.keydownPress);
@@ -62,6 +65,11 @@
 
 	        },
             config: function () {
+
+	            if(!this.$check.isUndef(this.pConfig.width)) {
+		            this.$refs[this.REF_DIV_CONTAINER].style.width = this.pConfig.width;
+	            }
+
 			    let startEndCurrentMonth = this.$startEndCurrentMonth();
                 let returnDate = null;
 

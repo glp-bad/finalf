@@ -584,14 +584,14 @@
                 return cfg;
             },
             cfgInvoiceDate: function(){
-                let cfg = this.$app.cfgInputDateTimeField("invoiceDate", 11);
+                let cfg = this.$app.cfgInputDateTimeField("invoiceDate", 11, 80);
                 cfg.setValidateFunction(this.validateInvoiceDate);
                 cfg.setCaption("Data factura");
                 cfg.setMandatory(true);
                 return cfg;
             },
             cfgTva: function(){
-                let cfg = this.$app.cfgInputField("tva", 2);
+                let cfg = this.$app.cfgInputField("tva", null, 35);
                 cfg.setValidateFunction(this.validateTVA);
                 cfg.setCaption("TVA");
                 cfg.setMandatory(true);
@@ -599,7 +599,7 @@
                 return cfg;
             },
             cfgTextFactura: function(){
-                let cfg = this.$app.cfgInputField("articolFactura", 110);
+                let cfg = this.$app.cfgInputField("articolFactura", null, 650);
                 cfg.setValidate(3,250);
                 cfg.setValidateFunction(this.validateTextFactura);
                 cfg.setCaption("Articol factura");
@@ -608,7 +608,7 @@
                 return cfg;
             },
             cfgSuma: function (){
-                let cfg = this.$app.cfgInputField("sumaArticol", 10);
+                let cfg = this.$app.cfgInputField("sumaArticol", null, 100);
                 // cfg.setValidate(3,250);
                 cfg.setValidateFunction(this.validateSuma);
                 cfg.setCaption("Suma (fara TVA)");
