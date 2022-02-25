@@ -34,7 +34,6 @@
         },
 		mounted() {
 			this.privateConfig();
-			this.getValue();
         },
         methods: {
 	        getValue: function () {
@@ -46,7 +45,6 @@
 				        valueReturn = buttons[i].value;
 				        break;
                     }
-
                 }
 
                 return valueReturn;
@@ -67,7 +65,6 @@
 
                 this.$refs[this.REF_DIV_CONTAINER].classList.add(classAlign);
 
-				// console.log(this.pConfig);
             }
         },
 		data () {
