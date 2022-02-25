@@ -4,6 +4,7 @@
            :id=this.pConfig.id
            :name=this.pConfig.id
            v-model="dataModel"
+           @click="this.privateEmitButtonClick($event, this.pConfig.emit)"
     >
 </template>
 
@@ -16,7 +17,7 @@
         },
 		directives:{},
 		mounted() {
-			this.dataModel = this.defaultValue;
+			this.dataModel = this.pConfig.defaultValue;
 			if(this.pCheck != undefined){
 			    if(this.pCheck){
 			        this.setValue(true);
@@ -31,10 +32,13 @@
                 this.dataModel = val;
             },
 	        resetValue: function () {
-		        this.dataModel = this.defaultValue;
+		        this.dataModel = this.pConfig.defaultValue;
 	        },
 	        keydownPress: function () {
-	        }
+	        },
+            privateEmitButtonClick: function(event, action){
+                this.$emit(action, event.target);
+            },
         },
 		data () {
 			return {

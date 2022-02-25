@@ -34,7 +34,7 @@ class BussinesInvoice extends MyModel {
                         where t_factura.salvata =1
                               and t_facturi_numar.id_avocat = :idAvocat
                              group by t_factura.id, t_facturi_numar.cNr    
-                             having total_factura - total_incasat <> 0
+                             having total_factura - total_incasat <> 0 and total_factura > 0  
                     ) a
                         inner join t_factura on t_factura.id = a.id
                         inner join t_parteneri on t_parteneri.id = t_factura.id_part

@@ -48,7 +48,12 @@ class ConfigControl {
 
 
 
-class CheckBox extends ConfigControl{}
+class CheckBox extends ConfigControl{
+    emit = 'emitClick';
+    setEmit(emit){
+        this.emit = emit;
+    }
+}
 class InputIBAN extends ConfigControl{}
 
 class SelectSimple extends ConfigControl{

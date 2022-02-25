@@ -32,20 +32,59 @@
             <my-list
                 :ref = this.cfgtime.CFG_INVOICE_LIST.ref
                 :pConfig = this.cfgtime.CFG_INVOICE_LIST
+                @emitListRowSelection="emitListRowSelection"
+                @emitFinallyCustomResponse="emitListResumData"
             ></my-list>
 
-            <form>
+            <br>
+            <div class="form-rezumat-right">
                 <table class="ff-form-table">
                     <tr>
+
+                        <td class="label-left bold">
+                            <label>Facturi emise:</label></td>
                         <td class="control">
-                            <check-box
-                                    :pConfig = this.cfgtime.CHECK_MANUAL_NUMBER
-                                    :ref= this.cfgtime.CHECK_MANUAL_NUMBER.ref
-                            ></check-box>
+                            {{this.dataRezumat.nr_facturi}}
+                            &nbsp; &nbsp; &nbsp; &nbsp;
+                            &nbsp; &nbsp; &nbsp; &nbsp;
                         </td>
                         <td class="label-left bold">
-                            <label>{{this.cfgtime.CHECK_MANUAL_NUMBER.caption}}</label></td>
+                            <label>Total facturat:</label></td>
+                        <td class="control">
+                            {{this.dataRezumat.totalFacturat}}
+                        </td>
                         <td class="label-left bold">
+                            <label>&nbsp;&nbsp;&nbsp;Total incasat:</label></td>
+                        <td class="control">
+                            {{this.dataRezumat.totalIncasat}}
+                        </td>
+                        <td class="label-left bold">
+                            <label>&nbsp;&nbsp;&nbsp;Ramas de incasat:</label></td>
+                        <td class="control">
+                            {{this.dataRezumat.totalRamas}}
+                            &nbsp; &nbsp; &nbsp; &nbsp;
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <br>
+            <br>
+                <table class="ff-form-table">
+                    <tr>
+                        <td class="label-left bold" colspan="1">
+                            <div :ref=this.cfgtime.REF_FIELD_NR_FACTURA_SELECTATA>
+                                <label>{{this.numar_factura}}</label>
+                            </div>
+                        </td>
+                        <td class="label-left bold" colspan="3">
+                            <check-box
+                                :pConfig = this.cfgtime.CHECK_MANUAL_NUMBER
+                                :ref= this.cfgtime.CHECK_MANUAL_NUMBER.ref
+                                @emitCheckDocumentManual = "emitCheckDocumentManual"
+                            ></check-box>
+                            <label>{{this.cfgtime.CHECK_MANUAL_NUMBER.caption}}</label>
+                            &nbsp; &nbsp;
                             <input-field
                                 :ref = this.cfgtime.NR_DOCUMENT.ref
                                 :pConfig = this.cfgtime.NR_DOCUMENT
@@ -53,27 +92,30 @@
                         </td>
                     </tr>
                     <tr>
-                        <td class="label-left bold">
-                            <label :for=this.cfgtime.DOCUMENT_DATA.id>{{this.cfgtime.DOCUMENT_DATA.caption}}</label></td>
-                        <td class="control">
+                        <td class="label-left bold" colspan="1">
+
+                            <label :for=this.cfgtime.DOCUMENT_DATA.id>{{this.cfgtime.DOCUMENT_DATA.caption}}</label>
+                            &nbsp;
                             <my-datetime
                                 :ref = this.cfgtime.DOCUMENT_DATA.ref
                                 :pConfig = this.cfgtime.DOCUMENT_DATA
                             ></my-datetime>
-                        </td>
-                        <td class="control">
+                         </td>
+                        <td class="label-left bold" colspan="2">
                             <my-dropdown-simple
                                 :pConfig = this.cfgtime.DOCUMENT_TYPE
                                 :ref = this.cfgtime.DOCUMENT_TYPE.ref
                             ></my-dropdown-simple>
                         </td>
-                        <td class="label-left bold">
+                        <td class="label-right bold">
+                            &nbsp;&nbsp;
                             <label :for=this.cfgtime.AMOUNT_RECIVED.id>{{this.cfgtime.AMOUNT_RECIVED.caption}}</label></td>
                         <td class="control">
                             <input-field
                                 :ref = this.cfgtime.AMOUNT_RECIVED.ref
                                 :pConfig = this.cfgtime.AMOUNT_RECIVED
                             ></input-field>
+                            &nbsp; &nbsp;
                         </td>
 
                         <td class="control">
@@ -83,30 +125,31 @@
                                 @emitClickTipIncasare = 'emitClickTipIncasare'
                             ></my-radio-button>
                         </td>
+
+                        <td class="control">
+                            &nbsp; &nbsp; <my-button  :ref=this.cfgtime.REF_BUTTON_SAVE @click="this.saveData" :heightButton=22 :buttonType=0 title="salvez incasarea in baza de date">Salvez incasare</my-button>
+                        </td>
                     </tr>
                 </table>
 
-            </form>
-
-
-
-        </template>
-        <template v-slot:slotButton>
-
         </template>
 
+        <template v-slot:slotButton></template>
     </form-tab>
+
 </template>
 
 <script>
-    import AlertWindow   from "@/components/base/AlertWindow.vue";
-    import FormTab       from "@/components/base/FormTab.vue";
-    import Lista         from "@/components/base/Lista";
-    import InputField    from "@/components/base/InputField.vue";
-    import CheckBox      from "@/components/base/CheckBox.vue";
-    import InputDateTime from "@/components/base/InputDateTime.vue";
-    import DropDownSimple from "@/components/base/DropDownSimple.vue";
-    import RadioButton    from "@/components/base/RadioButton.vue";
+    import AlertWindow      from "@/components/base/AlertWindow.vue";
+    import FormTab          from "@/components/base/FormTab.vue";
+    import Lista            from "@/components/base/Lista";
+    import InputField       from "@/components/base/InputField.vue";
+    import CheckBox         from "@/components/base/CheckBox.vue";
+    import InputDateTime    from "@/components/base/InputDateTime.vue";
+    import DropDownSimple   from "@/components/base/DropDownSimple.vue";
+    import RadioButton      from "@/components/base/RadioButton.vue";
+    import Button           from "@/components/base/Button";
+
 
 
     export default {
@@ -118,7 +161,8 @@
 	        'check-box': CheckBox,
 	        'my-datetime': InputDateTime,
 	        'my-dropdown-simple': DropDownSimple,
-            'my-radio-button': RadioButton
+            'my-radio-button': RadioButton,
+            'my-button': Button
         },
         name: "form-incasez",
         created() {
@@ -126,9 +170,14 @@
             this.runtime = {
                 mode: this.$constFROM.MODE_EDIT,
                 sendDataToServer: false,
-	            message: []
+	            message: [],
+                postRecordData:{
+                    id_factura: 0
+                }
             };
             this.cfgtime = {
+                REF_BUTTON_SAVE: 'refButtonSave',
+                REF_FIELD_NR_FACTURA_SELECTATA: 'refNrFactura',
 	            TIP_INCASARE: {
 	            	ref: 'refTipIncasare',
 		            alignment: this.$constRadioButton.ALIGNMENT_H,
@@ -150,7 +199,7 @@
                     header: [
 	                    this.$constList.getHeader(1, 'Tip factura',     70, 'tip_factura',       this.$constList.HEADER.CAPTION_TYPE_FIELD ),
                         this.$constList.getHeader(2, 'Nr. factura',     70, 'nr_factura',        this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-	                    this.$constList.getHeader(3, 'Data factura',    70, 'data_f_view',            this.$constList.HEADER.CAPTION_TYPE_FIELD ),
+	                    this.$constList.getHeader(3, 'Data factura',    70, 'data_f_view',       this.$constList.HEADER.CAPTION_TYPE_FIELD ),
 	                    this.$constList.getHeader(4, 'Client',          70, 'client_name',       this.$constList.HEADER.CAPTION_TYPE_FIELD ),
 	                    this.$constList.getHeader(5, 'Org.',            70, 'client_tip_firma',  this.$constList.HEADER.CAPTION_TYPE_FIELD ),
 	                    this.$constList.getHeader(6, 'CUI',             70, 'client_cod_fiscal', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
@@ -166,18 +215,59 @@
                         // this.$constList.getActionButton(6, 'adresa implicita', 'emitCheckBox', this.$constGrid.getIcon('fas','skull', '#adad00'))
                     ],
                     cfg: {  urlData: 'listaUnpaidInvoices', loadOnCreate: true,
-                            filedNameForCheckBox: 'activ', emitListRowSelection: 'emitListRowSelection',
-                            heightList: 300
+                            filedNameForCheckBox: 'activ',
+                            emitListRowSelection: 'emitListRowSelection',
+                            heightList: 310
                     }
                 },
             };
         },
         emits: ['emitNewRecord'],
         mounted () {
+            this.$refs[this.cfgtime.REF_BUTTON_SAVE].disable(true);
+            this.$refs[this.cfgtime.NR_DOCUMENT.ref].setReadOnly(true);
+            this.$refs[this.cfgtime.REF_FIELD_NR_FACTURA_SELECTATA].style.minWidth = '150px';
+            this.$refs[this.cfgtime.REF_FIELD_NR_FACTURA_SELECTATA].closest('td').style.backgroundColor = '#d9d9d9';
         },
         methods: {
+            saveData: function (){
+            },
+            emitListRowSelection: function(dataSelect){
+                this.$refs[this.cfgtime.REF_BUTTON_SAVE].disable(false);
+                let tr = dataSelect.closest('tr');
+
+                for(let i=0; i < tr.children.length; i++){
+                    if(tr.children[i].getAttribute('field') == 'nr_factura'){
+                        this.numar_factura = tr.children[i].firstChild.innerHTML;
+                    }
+                    if(tr.children[i].getAttribute('field') == 'rest_de_incasat'){
+                        this.$refs[this.cfgtime.AMOUNT_RECIVED.ref].setValue(tr.children[i].firstChild.innerHTML);
+                    }
+                }
+                this.runtime.postRecordData.id_factura = tr.getAttribute('idpk');
+                console.log(this.runtime.postRecordData);
+            },
+            emitListResumData: function (dataResume){
+                this.dataRezumat.totalFacturat = dataResume.total_facturat;
+                this.dataRezumat.totalIncasat= dataResume.total_incasari;
+                this.dataRezumat.totalRamas= dataResume.total_ramas_de_incasat;
+                this.dataRezumat.nr_facturi = dataResume.nr_facturi;
+
+
+            },
+            emitCheckDocumentManual: function (event){
+                this.$refs[this.cfgtime.NR_DOCUMENT.ref].setReadOnly(!event.checked);
+
+                if(event.checked){
+                    this.$refs[this.cfgtime.NR_DOCUMENT.ref].setFocus();
+                }else{
+                    this.$refs[this.cfgtime.NR_DOCUMENT.ref].setValue('');
+                }
+
+
+            },
 	        emitClickTipIncasare: function(event){
-	            console.log(this.$refs[this.cfgtime.TIP_INCASARE.ref].getValue());
+	            // console.log(this.$refs[this.cfgtime.TIP_INCASARE.ref].getValue());
             },
 	        emitYesNo: function(){
 
@@ -194,6 +284,7 @@
 	        cfgCheckManualNumber: function (){
 		        let cfg = this.$app.cfgCheckBox('manualNumber', false);
 		        cfg.setCaption('Nr. document manual');
+		        cfg.setEmit('emitCheckDocumentManual');
 		        cfg.setValidateFunction(this.validateManualNumber);
 		        return cfg;
 	        },
@@ -224,6 +315,8 @@
         },
         data () {
             return {
+                dataRezumat: {totalFacturat: 0.00, totalIncasat: 0.00,  totalRamas: 0.00, nr_facturi: 0},
+                numar_factura: '...'
             }
         }
     }

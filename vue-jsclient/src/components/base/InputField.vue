@@ -45,6 +45,9 @@
 	        setValue: function (value) {
 		        this.dataModel = value;
 	        },
+            setFocus: function (){
+                this.$refs.refInput.focus();
+            },
             setReadOnly: function (readOnly) {
                 if(readOnly) {
                     this.$refs.refInput.setAttribute('readonly', readOnly);
