@@ -386,7 +386,7 @@
             },
 
 	        cfgAdresa: function(){
-		        let cfg = this.$app.cfgInputField("adresa", 70);
+		        let cfg = this.$app.cfgInputField("adresa", 70, 600);
 		        cfg.setValidate(6,200);
 		        cfg.setValidateFunction(this.validateAdress);
 		        cfg.setCaption("Adresa");

@@ -94,7 +94,7 @@
 	        keydownPress: function () {
 	        },
             cfg01: function(){
-                let cfg = this.$app.cfgInputField("f01", 3);
+                let cfg = this.$app.cfgInputField("f01", 0, 40 );
                 cfg.setValidate(4,4);
                 cfg.setValidateFunction(this.validate01);
                 cfg.setCaption('Campul 1');
@@ -103,7 +103,7 @@
                 return cfg;
             },
             cfg02: function(){
-                let cfg = this.$app.cfgInputField("f02", 3);
+                let cfg = this.$app.cfgInputField("f02",  0, 40 );
                 cfg.setValidate(4,4);
                 cfg.setValidateFunction(this.validate02);
                 cfg.setCaption('Campul 2');
@@ -112,7 +112,7 @@
                 return cfg;
             },
             cfg03: function(){
-                let cfg = this.$app.cfgInputField("f03", 3);
+                let cfg = this.$app.cfgInputField("f03",  0, 40 );
                 cfg.setValidate(4,4);
                 cfg.setValidateFunction(this.validate03);
                 cfg.setCaption('Campul 3');
@@ -121,7 +121,7 @@
                 return cfg;
             },
             cfg04: function(){
-                let cfg = this.$app.cfgInputField("f04", 3);
+                let cfg = this.$app.cfgInputField("f04",  0, 40 );
                 cfg.setValidate(4,4);
                 cfg.setValidateFunction(this.validate04);
                 cfg.setCaption('Campul 4');
@@ -130,7 +130,7 @@
                 return cfg;
             },
             cfg05: function(){
-                let cfg = this.$app.cfgInputField("f05", 3);
+                let cfg = this.$app.cfgInputField("f05",  0, 40 );
                 cfg.setValidate(4,4);
                 cfg.setValidateFunction(this.validate05);
                 cfg.setCaption('Campul 5');
@@ -139,7 +139,7 @@
                 return cfg;
             },
             cfg06: function(){
-                let cfg = this.$app.cfgInputField("f06", 3);
+                let cfg = this.$app.cfgInputField("f06",  0, 40 );
                 cfg.setValidate(4,4);
                 cfg.setValidateFunction(this.validate06);
                 cfg.setCaption('Campul 6');

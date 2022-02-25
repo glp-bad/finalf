@@ -396,7 +396,7 @@
                 this.privateSetPostAccount(obj, value);
             },
             cfgBanca: function(){
-                let cfg = this.$app.cfgInputField("banca", 50);
+                let cfg = this.$app.cfgInputField("banca", 0, 350);
                 cfg.setValidate(1,30);
                 cfg.setValidateFunction(this.validateBanca);
                 cfg.setCaption("Banca");
@@ -405,7 +405,7 @@
                 return cfg;
             },
             cfgSucursala: function(){
-                let cfg = this.$app.cfgInputField("sucursala", 60);
+                let cfg = this.$app.cfgInputField("sucursala", 0, 400);
                 cfg.setValidate(1,30);
                 cfg.setValidateFunction(this.validateSucursala);
                 cfg.setCaption("Sucursala");

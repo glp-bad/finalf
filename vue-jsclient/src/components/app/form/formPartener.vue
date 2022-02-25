@@ -279,7 +279,7 @@
                 return cfg;
             },
             cfgNume: function(){
-                let cfg = this.$app.cfgInputField("nume", 120);
+                let cfg = this.$app.cfgInputField("nume", 0, 660);
                 cfg.setValidate(3,150);
                 cfg.setValidateFunction(this.validateNume);
                 cfg.setCaption("Nume");
