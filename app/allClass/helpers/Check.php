@@ -13,6 +13,21 @@ namespace App\allClass\helpers;
 class Check {
 
 
+    /**
+     * @param $nr
+     * @param $nr1
+     * @param $nr2
+     * @return bool
+     */
+    public static function betweenInterval ($nr, $nr1, $nr2) {
+
+        if($nr < $nr1 || $nr > $nr2){
+            return false;
+        }
+
+        return true;
+    }
+
     public static function iban ($iban) {
         if(strlen($iban) != 24){
             return false;

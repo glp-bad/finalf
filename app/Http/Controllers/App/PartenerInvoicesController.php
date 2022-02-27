@@ -269,7 +269,8 @@ class PartenerInvoicesController extends Controller
         $errorMsg = [];
 
         // ----------------------------------------------------------------------------------
-        $invoiceDate = MyHelp::getSqlDateFormat($field['name_invoiceDate'], null);
+        $dataFormat = MyHelp::getSqlDateFormat($field['name_invoiceDate'], null);
+        $invoiceDate = $dataFormat['dataFormat'];
         $param['name_invoiceDate']      = $invoiceDate;
 
         // ----------------------------------------------------------------------------------

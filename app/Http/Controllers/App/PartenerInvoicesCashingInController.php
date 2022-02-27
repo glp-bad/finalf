@@ -2,16 +2,63 @@
 
 namespace App\Http\Controllers\App;
 
+use App\allClass\helpers\param\SaveIncoming;
 use App\Http\Controllers\Controller;
+use App\Models\app\ModelInvoiceIncasari;
 use App\Models\bussines\BussinesInvoice;
 use App\Models\nomenclatoare\ModelNomTipDocument;
+use App\Models\app\ModelnvoiceNumber;
 use App\MyAppConstants;
 use \Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 
 class PartenerInvoicesCashingInController extends Controller
 {
     public function __construct(){}
+
+
+    public function saveIncoming(Request $request) {
+        $msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false );
+        $idNrDocument = null;
+
+        $paramSaveIncoming = new SaveIncoming();
+        $paramSaveIncoming->setIncomingInvoice($request['id_factura'], $idNrDocument  ,$request['field']);
+
+        $validateParam = $paramSaveIncoming->validate();
+
+        if(!$validateParam->succes){
+            $msg->succes = $validateParam->succes;
+            $msg->lastId = -1;
+            $msg->messages= $validateParam->messages;
+            return $msg->toJson();
+        }
+
+         try {
+            $msg->succes = true;
+            $modelInvoiceNumber = new ModelnvoiceNumber($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+
+            DB::beginTransaction();
+
+                if($paramSaveIncoming->name_manualNumber){
+                    $invoiceNumber = $modelInvoiceNumber->insertCustomNumber(MyAppConstants::BUSS_NR_CHITANTA_DANA, $paramSaveIncoming->name_nrDoc);
+                }else{
+                    $invoiceNumber = $modelInvoiceNumber->getNumber(MyAppConstants::BUSS_NR_CHITANTA_DANA);
+                }
+                $paramSaveIncoming->id_nr_invoice = $invoiceNumber['id'];
+                $modelInvoiceIncasari = new ModelInvoiceIncasari($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+
+                $modelInvoiceIncasari->saveIncoming($paramSaveIncoming);
+            DB::commit();
+        }catch (\Exception $e){
+            DB::rollBack();
+
+            $msg->messages= 'Server error. Numarul de chitanta exista deja in baza de date !!!';
+            $msg->errorMsg = $e->getMessage();
+            $msg->succes = false;
+        }
+
+        return $msg->toJson();
+    }
 
 	public function nomDocumentTipe(Request $request) {
 		$msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false );

@@ -3,6 +3,7 @@
 namespace App\Models\app;
 use App\allClass\helpers\MyHelp;
 use App\allClass\helpers\MyModel;
+use App\MyAppConstants;
 use Illuminate\Support\Facades\DB;
 
 class ModelnvoiceNumber extends MyModel {
@@ -24,6 +25,17 @@ class ModelnvoiceNumber extends MyModel {
 
     set @cZero = replicate('0',8-@nLung)
     */
+
+
+    public function insertCustomNumber(array $bussinesNumber, $numberString){
+        $rezult = DB::insert(
+            "insert into t_facturi_numar (id_avocat, nTip, nNr, cNr, folosit, manual, id_user, created) values (:idAvocat, :nTip, :nNr, :cNr, :folosit, :manual, :idUser, :created);",
+            ['idAvocat'=>$this->idAvocat, 'nTip'=>$bussinesNumber['nTip'], 'nNr'=> 0, 'cNr'=>$numberString, 'folosit'=> 1, 'manual'=> 1, 'idUser'=>$this->idUser, 'created'=>MyHelp::getCarbonDateNow()]
+        );
+        $returnId = intval( DB::getPdo()->lastInsertId() );
+
+        return ['id'=>$returnId];
+    }
 
     public function getNumber(array $bussinesNumber){
 
@@ -50,9 +62,16 @@ class ModelnvoiceNumber extends MyModel {
                 $invoiceNumber = $lastNumber[0]->number+1;
                 $invoiceNumberString = $this->getInvoiceNumber($invoiceNumber, $bussinesNumber);
 
+                $folosit = 0;
+
+                if($bussinesNumber['nTip'] == MyAppConstants::BUSS_NR_CHITANTA_DANA['nTip']){
+                    // chitanta se inregistreaza folosita
+                    $folosit = 1;
+                }
+
                 $rezult = DB::insert(
                     "insert into t_facturi_numar (id_avocat, nTip, nNr, cNr, folosit, manual, id_user, created) values (:idAvocat, :nTip, :nNr, :cNr, :folosit, :manual, :idUser, :created);",
-                    ['idAvocat'=>$this->idAvocat, 'nTip'=>$bussinesNumber['nTip'], 'nNr'=>$invoiceNumber, 'cNr'=>$invoiceNumberString, 'folosit'=> 0, 'manual'=> 0, 'idUser'=>$this->idUser, 'created'=>MyHelp::getCarbonDateNow()]
+                    ['idAvocat'=>$this->idAvocat, 'nTip'=>$bussinesNumber['nTip'], 'nNr'=>$invoiceNumber, 'cNr'=>$invoiceNumberString, 'folosit'=> $folosit, 'manual'=> 0, 'idUser'=>$this->idUser, 'created'=>MyHelp::getCarbonDateNow()]
                 );
                 $returnId = intval( DB::getPdo()->lastInsertId() );
              }

@@ -3,8 +3,6 @@
 
 namespace App\allClass\helpers;
 
-use App\MyAppConstants;
-
 abstract class MyModel
 {
     protected $id;

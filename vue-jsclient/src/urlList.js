@@ -45,7 +45,10 @@ export default [
     {name: "saveInvoice",               url: "public/app/invoice/saveInvoice"},
 
 	{name: "listaUnpaidInvoices", url: "public/app/cashing/listaUnpaidInvoices"},
-	{name: "nomDocumentTipe", url: "public/app/cashing/nomDocumentTipe"}
+	{name: "nomDocumentTipe", url: "public/app/cashing/nomDocumentTipe"},
+    {name: "saveIncoming", url: "public/app/cashing/saveIncoming"},
+
+
 
 
 ]

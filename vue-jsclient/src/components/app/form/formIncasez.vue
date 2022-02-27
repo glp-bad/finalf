@@ -171,21 +171,21 @@
                 mode: this.$constFROM.MODE_EDIT,
                 sendDataToServer: false,
 	            message: [],
-                postRecordData:{
-                    id_factura: 0
-                }
+                postRecordData:{}
             };
             this.cfgtime = {
                 REF_BUTTON_SAVE: 'refButtonSave',
                 REF_FIELD_NR_FACTURA_SELECTATA: 'refNrFactura',
 	            TIP_INCASARE: {
+                    id: 'refTipIncasare',
 	            	ref: 'refTipIncasare',
+                    caption: 'Tip incasare',
 		            alignment: this.$constRadioButton.ALIGNMENT_H,
                     name: 'tipIncasare',
                     emit: 'emitClickTipIncasare',
                     buttons:[
-                        {id: 1, value: '1p', caption: 'Numerar', check: false, disableOption: false },
-	                    {id: 2, value: '2p', caption: 'Banca', check: false, disableOption: false }
+                        {id: 1, value: '1', caption: 'Numerar', check: false, disableOption: false },
+	                    {id: 2, value: '2', caption: 'Banca', check: false, disableOption: false }
 
                     ]
                 },
@@ -194,6 +194,7 @@
 	            CHECK_MANUAL_NUMBER: this.cfgCheckManualNumber(),
 	            DOCUMENT_DATA: this.cfgDocumentDate(),
                 DOCUMENT_TYPE: this.cfgDocumentType(),
+                URL_SAVE_INCASARE: this.$url.getUrl('saveIncoming'),
                 CFG_INVOICE_LIST : {
                     ref: 'refDetailList',
                     header: [
@@ -224,6 +225,8 @@
         },
         emits: ['emitNewRecord'],
         mounted () {
+            this.privateResetPost();
+
             this.$refs[this.cfgtime.REF_BUTTON_SAVE].disable(true);
             this.$refs[this.cfgtime.NR_DOCUMENT.ref].setReadOnly(true);
             this.$refs[this.cfgtime.REF_FIELD_NR_FACTURA_SELECTATA].style.minWidth = '150px';
@@ -231,8 +234,53 @@
         },
         methods: {
             saveData: function (){
+                if(this.validateForm()){
+                    this.$refs.validateWindowRef.show();
+                    return false;
+                }
+
+                if(!this.runtime.sendDataToServer){
+                    this.$refs.refYesNo.setCaption("Incasez");
+                    this.$refs.refYesNo.setMessage('Incasez factura selectata? Suma este corecta ?');
+                    this.$refs.refYesNo.show();
+                }
+
+                if(this.runtime.sendDataToServer){
+                    this.runtime.sendDataToServer = false;
+
+                    this.$refs[this.REF_FORM].showModal(true);
+
+                    this.axios
+                        .post(this.cfgtime.URL_SAVE_INCASARE , this.runtime.postRecordData)
+                        .then(response => {
+                            if (response.data.succes){
+                            }
+                            else {
+                                this.$refs.validateWindowRef.setCaption("Datele nu pot fi inregistrate");
+                                this.$refs.validateWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+                                this.$refs.validateWindowRef.show();
+                            }
+
+                        })
+                        .catch(error => console.log(error))
+                        .finally(() => {
+                            this.refreshListaFacturiNeincasate();
+                            this.$refs[this.REF_FORM].showModal(false);
+                        });
+
+                }
+            },
+            refreshListaFacturiNeincasate: function(){
+                this.privateResetPost();
+                this.$refs[this.cfgtime.REF_BUTTON_SAVE].disable(true);
+                this.numar_factura = '...';
+                this.$refs[this.cfgtime.AMOUNT_RECIVED.ref].setValue(0);
+
+                this.$refs[this.cfgtime.CFG_INVOICE_LIST.ref].showList();
             },
             emitListRowSelection: function(dataSelect){
+                this.privateResetPost();
+
                 this.$refs[this.cfgtime.REF_BUTTON_SAVE].disable(false);
                 let tr = dataSelect.closest('tr');
 
@@ -241,11 +289,12 @@
                         this.numar_factura = tr.children[i].firstChild.innerHTML;
                     }
                     if(tr.children[i].getAttribute('field') == 'rest_de_incasat'){
-                        this.$refs[this.cfgtime.AMOUNT_RECIVED.ref].setValue(tr.children[i].firstChild.innerHTML);
+                        let suma = tr.children[i].firstChild.innerHTML;
+                        this.$refs[this.cfgtime.AMOUNT_RECIVED.ref].setValue(suma);
+                        this.runtime.postRecordData.rest_de_incasat = suma;
                     }
                 }
                 this.runtime.postRecordData.id_factura = tr.getAttribute('idpk');
-                console.log(this.runtime.postRecordData);
             },
             emitListResumData: function (dataResume){
                 this.dataRezumat.totalFacturat = dataResume.total_facturat;
@@ -269,12 +318,99 @@
 	        emitClickTipIncasare: function(event){
 	            // console.log(this.$refs[this.cfgtime.TIP_INCASARE.ref].getValue());
             },
-	        emitYesNo: function(){
+	        emitYesNo: function(yes){
+                if(yes == 1){
+                    this.runtime.sendDataToServer = true;
+                    this.saveData();
+                }else{
+                    this.runtime.sendDataToServer = false;
+                }
+
+            },
+            validateForm: function(){
+                let returnMessage = false;
+                this.runtime.message = [];
+                this.$check.validateForm(this.$refs);
+
+                if( this.runtime.message.length>0 ){
+                    this.$refs.validateWindowRef.setCaption("Factura nu poate fi incasata");
+                    this.$refs.validateWindowRef.setMessage(this.$app.getHtmlFormatMessage(this.runtime.message));
+                    returnMessage = true;
+                }
+                return returnMessage;
+            },
+            validateManualNumber: function () {
+                // include si validateDocumentDate
+                let objNrDoc = this.cfgtime.NR_DOCUMENT;
+                let objCheck = this.cfgtime.CHECK_MANUAL_NUMBER;
+                let checkManualNUmber = this.$refs[objCheck.ref].getValue();
+                let valueManualNumber = this.$refs[objNrDoc.ref].getValue();
+
+                if(checkManualNUmber){
+                    if(!this.$check.lenghtMinMax(valueManualNumber, objNrDoc.minLength, objNrDoc.maxLength)){
+                        this.runtime.message.push(this.$app.getFormMessageClass(objNrDoc.id, objNrDoc.caption,
+                            'trebuie sa aiba minim ' + objNrDoc.minLength + " si maxim " + objNrDoc.maxLength + " caractere"));
+                    }
+                }
+
+                this.privateSetPost(objCheck, checkManualNUmber);
+                this.privateSetPost(objNrDoc, valueManualNumber);
+            },
+            validateDocumentDate : function (){
+                let control = this.cfgtime.DOCUMENT_DATA;
+                let value = this.$refs[control.ref].getValue();
+                let splitDate = this.$refs[control.ref].getSplitValue();
+
+                if(!this.$check.isExistDate(splitDate, true)){
+                    this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+                        "Data este gresita!"));
+                }
+
+                this.privateSetPost(control, value);
+            },
+            validateInvoiceType: function () {
+                let control = this.cfgtime.DOCUMENT_TYPE;
+                let value = this.$refs[control.ref].getValue();
+                let id = -1;
+
+                if (this.$check.isUndef(value) || parseInt(value.id) < 1) {
+                    this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+                        "Trebuie sa alegi tipul de document cu care incasezi."));
+                } else {
+                    id = value.id;
+                }
+                this.privateSetPost(control, id);
+            },
+            validateAmountRecived: function (){
+                let control = this.cfgtime.AMOUNT_RECIVED;
+                let value = parseFloat(this.$refs[control.ref].getValue());
+
+                if(value <= 0){
+                    this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+                        "Suma incasata trebuie sa fie mai mare ca zero"));
+                }else{
+                    if(value > parseFloat(this.runtime.postRecordData.rest_de_incasat)){
+                        this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+                            "Suma incasata nu poate fi mai mare ca suma ramasa de incasat! "));
+                    }
+                }
+
+
+                let control01 = this.cfgtime.TIP_INCASARE;
+                let valueTipincasare = this.$refs[control01.ref].getValue();
+
+                if(this.$check.isUndef(valueTipincasare)){
+                    this.runtime.message.push(this.$app.getFormMessageClass(control.id, control01.caption,
+                        "Trebuie sa alegi tipul de incasare"));
+                }
+
+               this.privateSetPost(control, value);
+               this.privateSetPost(control01, valueTipincasare);
 
             },
 	        cfgNrDoc: function(){
 		        let cfg = this.$app.cfgInputField("nrDoc", null, 120);
-		        cfg.setValidate(2,100);
+		        cfg.setValidate(2,15);
 		        cfg.setValidateFunction(this.validateNrDoc);
 		        cfg.setCaption("Numar document manual");
 		        cfg.setMandatory(true);
@@ -301,7 +437,7 @@
 		        cfg.setCaption("Tip document");
 		        cfg.setMandatory(true);
 		        cfg.setPlaceHolder('... (tip document)');
-		        cfg.setDefaultValue({id: 1, text: 'venit profesional'});
+		        cfg.setDefaultValue({id: 0, text: 'venit profesional'});
 		        return cfg;
 	        },
 	        cfgAmountRecived: function(){
@@ -311,7 +447,18 @@
 		        cfg.setMandatory(true);
 		        cfg.setMaska("");
 		        return cfg;
-	        }
+	        },
+            privateSetPost: function (component, value){
+                this.runtime.postRecordData['field'][component.name] = value;
+            },
+            privateResetPost: function () {
+                this.runtime.postRecordData = {
+                    id_factura: 0,
+                        rest_de_incasat: 0, // for check sum when send to server
+                        field: {},
+                    sqlAction: null
+                }
+            }
         },
         data () {
             return {

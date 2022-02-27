@@ -53,8 +53,11 @@ Route::post('app/invoice/deleteItemDetailInvoice', [PartenerInvoicesController::
 Route::post('app/invoice/saveInvoice',          [PartenerInvoicesController::class,  'saveInvoice'])->middleware('auth');
 
 // incasari
-Route::post('app/cashing/listaUnpaidInvoices',          [PartenerInvoicesCashingInController::class,  'listaUnpaidInvoices'])->middleware('auth');
-Route::post('app/cashing/nomDocumentTipe',          [PartenerInvoicesCashingInController::class,  'nomDocumentTipe'])->middleware('auth');
+Route::post('app/cashing/listaUnpaidInvoices', [PartenerInvoicesCashingInController::class,  'listaUnpaidInvoices'])->middleware('auth');
+Route::post('app/cashing/nomDocumentTipe',     [PartenerInvoicesCashingInController::class,  'nomDocumentTipe'])->middleware('auth');
+Route::post('app/cashing/saveIncoming',        [PartenerInvoicesCashingInController::class,  'saveIncoming'])->middleware('auth');
+
+
 
 
 

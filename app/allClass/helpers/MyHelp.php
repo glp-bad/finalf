@@ -47,11 +47,11 @@ class MyHelp {
 		return new MessageResponse($succes, $message);
 	}
 
-	/**
-	 * @param      $dataString      "d/m/Y"
-	 * @param      null $time
-	 * @return     string
-	 */
+    /**
+     * @param $dataString
+     * @param null $time
+     * @return array
+     */
 	public static function getSqlDateFormat($dataString, $time = null){
 		$date = DateTime::createFromFormat('d/m/Y', $dataString);
 
@@ -62,7 +62,7 @@ class MyHelp {
 
 		}
 
-		return $date->format($frm);
+		return ['dataFormat'=>$date->format($frm), 'objDate'=>$date];
 	}
 
     /**
