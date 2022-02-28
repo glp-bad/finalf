@@ -13,7 +13,7 @@
               <thead class="theadClass">
                 <tr>
                     <template v-for="ph in pConfig.header">
-                        <th v-if="ph.type === this.$constList.HEADER.CAPTION_TYPE_FIELD" class="thClass">{{ph.caption}}</th>
+                        <th v-if="ph.type === this.$constList.HEADER.CAPTION_TYPE_FIELD" class="thClass" :style="this.privateCfsTDStyle(ph)">{{ph.caption}}</th>
                         <th v-if="ph.type === this.$constList.HEADER.CAPTION_TYPE_ACTION" class="thClass">{{ph.caption}}</th>
                     </template>
                 </tr>
@@ -25,13 +25,13 @@
                   <template v-for="(tr, index) in this.dataList">
                         <tr class="trClass" :idPk="tr.id" @click="this.privateCfgEmitRowSelection($event, this.pConfig.cfg.emitListRowSelection)">
                             <template v-for="(td, index) in tr" v-bind:key="index">
-                                <td class="tdClass" v-if="privateCfgFieldShow(index, tr)" :field=index>
-                                        <div :na="privateCgfTDStyle(index)" :class="{tdDivRightAlign, tdDivLeftAlign, tdDivCenterAlign}">{{td}}</div>
+                                <td class="tdClass" v-if="privateCfgFieldShow(index, tr)" :field=index >
+                                        <div :na="this.privateCfgTDAlign(index)" :class="{tdDivRightAlign, tdDivLeftAlign, tdDivCenterAlign}">{{td}}</div>
                                 </td>
                             </template>
 
                             <!-- -------------------------------------------------------------------- -->
-                            <td class="tdClass">
+                            <td class="tdClass" v-if="this.privateCfgHaveButton()">
                                 <div  class="tdDivCenterAlign">
                                     <div class="toolbar-icon-inline" >
                                         <template v-for="ph in pConfig.recordActionButon">
@@ -65,8 +65,8 @@
 </template>
 <script>
 
-    import Button       from "@/components/base/Button";
-    import CheckBox       from "@/components/base/CheckBox";
+    import Button   from "@/components/base/Button";
+    import CheckBox from "@/components/base/CheckBox";
 
 	export default {
 		name: "my-lista",
@@ -164,6 +164,15 @@
 
 		        return returnVal;
             },
+            privateCfgHaveButton: function (){
+
+                console.log(this.pConfig.recordActionButon.length);
+
+                 if(this.pConfig.recordActionButon.length > 0){
+                     return true;
+                 }
+                 return false;
+            },
             privateCfgFieldShow(fieldName, tr) {
 		        this.idPk = tr.id;
 		        if(this.pConfig.cfg.filedNameForCheckBox == fieldName){
@@ -173,9 +182,7 @@
                         this.cfgTime.checkBoxValue = false;
                     }
                 }
-
 	            return this.cfgTime.fieldArray.includes(fieldName);
-
             },
 	        privateCfgSetData() {
 	            this.pConfig.header.forEach(h => {
@@ -183,7 +190,15 @@
 		            this.cfgTime.headerArrayObject[h.fieldName] = h;
 	            });
             },
-	        privateCgfTDStyle: function (fieldName) {
+            privateCfsTDStyle: function (cf) {
+		        if(!this.$check.isUndef(this.pConfig.cfg.headerLenghtActivate) && this.pConfig.cfg.headerLenghtActivate){
+                    return {
+                        width: cf.width + 'px'
+                    }
+                }
+
+            },
+	        privateCfgTDAlign: function (fieldName) {
                 let align = this.cfgTime.headerArrayObject[fieldName].alignText;
 
 		        this.tdDivRightAlign= false;
@@ -198,6 +213,7 @@
 			        this.tdDivCenterAlign = true;
 		        }
 
+		        // console.log(event);
 
 	        },
             privateCfgList(){

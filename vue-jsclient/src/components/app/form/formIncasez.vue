@@ -198,15 +198,15 @@
                 CFG_INVOICE_LIST : {
                     ref: 'refDetailList',
                     header: [
-	                    this.$constList.getHeader(1, 'Tip factura',     70, 'tip_factura',       this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-                        this.$constList.getHeader(2, 'Nr. factura',     70, 'nr_factura',        this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-	                    this.$constList.getHeader(3, 'Data factura',    70, 'data_f_view',       this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-	                    this.$constList.getHeader(4, 'Client',          70, 'client_name',       this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-	                    this.$constList.getHeader(5, 'Org.',            70, 'client_tip_firma',  this.$constList.HEADER.CAPTION_TYPE_FIELD ),
+	                    this.$constList.getHeader(1, 'Tip factura',     110, 'tip_factura',       this.$constList.HEADER.CAPTION_TYPE_FIELD ),
+                        this.$constList.getHeader(2, 'Nr. factura',     110, 'nr_factura',        this.$constList.HEADER.CAPTION_TYPE_FIELD , this.$constComponent.ALIGN_TEXT_CENTER ),
+	                    this.$constList.getHeader(3, 'Data factura',    90, 'data_f_view',       this.$constList.HEADER.CAPTION_TYPE_FIELD , this.$constComponent.ALIGN_TEXT_CENTER ),
+	                    this.$constList.getHeader(4, 'Client',          490, 'client_name',       this.$constList.HEADER.CAPTION_TYPE_FIELD ),
+	                    this.$constList.getHeader(5, 'Org.',            50, 'client_tip_firma',  this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER  ),
 	                    this.$constList.getHeader(6, 'CUI',             70, 'client_cod_fiscal', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-	                    this.$constList.getHeader(7, 'Suma factura',    70, 'total_factura',     this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT),
-	                    this.$constList.getHeader(8, 'Suma incasata',   70, 'total_incasat',     this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT),
-	                    this.$constList.getHeader(9, '... de incasat',  70, 'rest_de_incasat',   this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT)
+	                    this.$constList.getHeader(7, 'Suma factura',    90, 'total_factura',     this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT),
+	                    this.$constList.getHeader(8, 'Suma incasata',   90, 'total_incasat',     this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT),
+	                    this.$constList.getHeader(9, '... de incasat',  90, 'rest_de_incasat',   this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT)
 
                         // this.$constList.getHeader(5, 'Action', 100, 'null', this.$constList.HEADER.CAPTION_TYPE_ACTION)
                     ],
@@ -217,6 +217,7 @@
                     ],
                     cfg: {  urlData: 'listaUnpaidInvoices', loadOnCreate: true,
                             filedNameForCheckBox: 'activ',
+                            headerLenghtActivate: true,                         // tine cont de lungimea coloanelor setate in header
                             emitListRowSelection: 'emitListRowSelection',
                             heightList: 310
                     }

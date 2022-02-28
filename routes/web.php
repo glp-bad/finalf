@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\App\ParteneriController;
 use App\Http\Controllers\App\PartenerInvoicesController;
 use App\Http\Controllers\App\PartenerInvoicesCashingInController;
+use App\Http\Controllers\App\AvocatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,12 @@ Route::post('app/invoice/saveInvoice',          [PartenerInvoicesController::cla
 Route::post('app/cashing/listaUnpaidInvoices', [PartenerInvoicesCashingInController::class,  'listaUnpaidInvoices'])->middleware('auth');
 Route::post('app/cashing/nomDocumentTipe',     [PartenerInvoicesCashingInController::class,  'nomDocumentTipe'])->middleware('auth');
 Route::post('app/cashing/saveIncoming',        [PartenerInvoicesCashingInController::class,  'saveIncoming'])->middleware('auth');
+
+
+// avocat
+Route::post('app/avocat/monthList', [AvocatController::class,  'monthList'])->middleware('auth');
+
+
 
 
 

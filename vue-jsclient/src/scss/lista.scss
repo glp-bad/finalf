@@ -1,4 +1,7 @@
 .ff-lista {
+
+    width: fit-content;
+
     .container {
 	    display: grid;
 	    // background: yellow;
@@ -55,7 +58,8 @@
 				        // cursor: pointer;
 			        }
 		            .tdClass {
-			            .tdDiv{
+			            .tdDiv {
+                            // border: 1px solid blue;
 				            white-space: nowrap;
 				            overflow: hidden;
 				            text-overflow: ellipsis;
