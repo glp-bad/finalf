@@ -2,7 +2,7 @@
     <div class="ff-workbench" ref="refWorkBench">
 
         <my-tab ref="refTab"
-            :pConfig=this.gridConfig
+            :pConfig=this.cfgtime.gridConfig
             @emitClickTab="emitClickTab"
         >
             <template v-slot:tabs>
@@ -18,7 +18,7 @@
                         sunt in tab 3</div>
                     <div class="tab" :id="this.$constTab.getIdTab('4')">
                         <div class="up-line"></div>
-                        <form-luni></form-luni>
+                        <form-luni :ref="this.cfgtime.REF_FORM_LUNI_INCHISE"></form-luni>
                     </div>
             </template>
         </my-tab>
@@ -41,22 +41,30 @@
         },
 		name: "view-avocat",
 		created() {
-            this.gridConfig = {
-                header: [
-                    this.$constTab.getHeader(1,'Date avocat'),
-                    this.$constTab.getHeader(2,'Tab 02'),
-                    this.$constTab.getHeader(3,'Tab 03'),
-                    this.$constTab.getHeader(4,'Luni in lucru')
-                ],
-                defaultTabId: 3,
-                tabsWidth: '700px'
+			this.cfgtime = {
+				REF_FORM_LUNI_INCHISE: 'refFormLuniInchise',
+				gridConfig : {
+					header: [
+						this.$constTab.getHeader(1,'Date avocat'),
+						this.$constTab.getHeader(2,'Tab 02'),
+						this.$constTab.getHeader(3,'Tab 03'),
+						this.$constTab.getHeader(4,'Luni in lucru')
+					],
+					defaultTabId: 1,
+					tabsWidth: '700px'
+				}
+            },
+            this.runtime = {
             }
 		},
         mounted () {
-		    this.$refs.refTab.goToTab(this.gridConfig.defaultTabId);
+		    this.$refs.refTab.goToTab(this.cfgtime.gridConfig.defaultTabId);
         },
 		methods: {
 		    emitClickTab: function (idTab) {
+		    	if(idTab == 4){
+                    this.$refs[this.cfgtime.REF_FORM_LUNI_INCHISE].refreshListLuniInchise();
+                }
             }
 		},
 		data () {
