@@ -121,16 +121,19 @@
             this.ICON_ADD_PARTENER =  this.$constComponent.ICON_PLUS_SQUARE("blue");
             this.cfgListaAdresaConfig = {
                 header: [
-                    this.$constList.getHeader(1, 'Adresa', 200, 'cAdresa', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-                    this.$constList.getHeader(2, 'Localitate', 200, 'localitate', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-                    this.$constList.getHeader(3, 'Adresa implicita', 100, 'null', this.$constList.HEADER.CAPTION_TYPE_ACTION)
+                    this.$constList.getHeader(1, 'Adresa', 700, 'cAdresa', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
+                    this.$constList.getHeader(2, 'Localitate', 180, 'localitate', this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER  ),
+                    this.$constList.getHeader(3, 'Adresa implicita', 110, 'null', this.$constList.HEADER.CAPTION_TYPE_ACTION)
                 ],
                 recordActionButon: [
                     // this.$constList.getActionButton(4, 'adresa implicita', 'emitButton', this.$constGrid.getIcon('fas','skull', '#adad00'), this.$constList.ACTION_BUTTON.TYPE_BUTTON, null),
                     this.$constList.getActionButton(5, 'adresa implicita', 'emitAdresaImplicita', null, this.$constList.ACTION_BUTTON.TYPE_CHECKBOX, this.$app.cfgCheckBox('ro', false))   // poate fi un singur checkbox pe linie, trebuie setat si filedNameForCheckBox, campul poate fi doar 1 si 0
                     // this.$constList.getActionButton(4, 'adresa implicita', 'emitCheckBox', this.$constGrid.getIcon('fas','skull', '#adad00')),
                 ],
-                cfg: { urlData: 'partenerAdressList', loadOnCreate: false, filedNameForCheckBox: 'activ', emitListRowSelection: 'emitListRowSelection'}
+                cfg: { urlData: 'partenerAdressList', loadOnCreate: false, filedNameForCheckBox: 'activ',
+	                   headerLenghtActivate: true,                         // tine cont de lungimea coloanelor setate in header
+                       emitListRowSelection: 'emitListRowSelection'
+                    }
             },
             this.runtime = {
                 mode: this.$constFROM.MODE_EDIT,

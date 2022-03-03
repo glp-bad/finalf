@@ -17,8 +17,10 @@ class AvocatController extends Controller
         $modelLuni =  new ModelLuniInchise($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
 
         $msg->succes = true;
-        // $request->year
-        $msg->records  = $modelLuni->selectMonthList(2019);
+
+	    $request->yearList = 2020;
+
+        $msg->records  = $modelLuni->selectMonthList($request->yearList);
 
         return $msg->toJson();
     }

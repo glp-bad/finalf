@@ -165,9 +165,6 @@
 		        return returnVal;
             },
             privateCfgHaveButton: function (){
-
-                console.log(this.pConfig.recordActionButon.length);
-
                  if(this.pConfig.recordActionButon.length > 0){
                      return true;
                  }

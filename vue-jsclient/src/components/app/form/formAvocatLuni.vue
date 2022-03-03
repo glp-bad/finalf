@@ -33,14 +33,25 @@
                 <tr>
                     <td class="label-left bold">
                         <label :for=this.cfgtime.FIELD_YEAR.id>{{this.cfgtime.FIELD_YEAR.caption}}</label></td>
+
                     <td class="control">
                         <input-field
                                 :ref = this.cfgtime.FIELD_YEAR.ref
                                 :pConfig = this.cfgtime.FIELD_YEAR
                         ></input-field>
                     </td>
+                    <td class="control">
+                        <div class="prime-button last-button">
+                            &nbsp;
+                            <my-button  :ref=this.cfgtime.REF_BUTTON_REFRESH @click="this.clickRefresMonthList" :heightButton=22 :buttonType=2 title="refresh lista" :style="this.cfgtime.ICON_REFRESH.colorStyle">
+                                <font-awesome-icon :icon=this.$constComponent.cfgIconPicture(this.cfgtime.ICON_REFRESH) size="1x" />
+                            </my-button>
+                        </div>
+                    </td>
                 </tr>
             </table>
+
+            <br>
 
 
             <my-list
@@ -90,6 +101,8 @@
                 yearList: 2022
             };
             this.cfgtime = {
+            	REF_BUTTON_REFRESH: 'refButtonRefresh',
+	            ICON_REFRESH: this.$constComponent.ICON_REFRESH("green"),
             	FIELD_YEAR: this.cfgYearField(),
                 LIST_MONTH : {
                     ref: 'refMonthList',
@@ -119,8 +132,12 @@
 	        this.$refs[this.cfgtime.FIELD_YEAR.ref].setValue(this.runtime.yearList);
         },
         methods: {
+	        clickRefresMonthList: function(){
+		        this.runtime.yearList = this.$refs[this.cfgtime.FIELD_YEAR.ref].getValue();
+		        this.refreshListLuniInchise();
+            },
         	refreshListLuniInchise: function(){
-        	    this.$refs[this.cfgtime.LIST_MONTH.ref].showList({'yearList': this.runtime.yearList});
+        	    this.$refs[this.cfgtime.LIST_MONTH.ref].showList(this.privateParamMonthList());
             },
             editPartener: function (){
             },
@@ -157,6 +174,9 @@
             },
             setPost: function (component, value){
                 this.post['field'][component.name] = value;
+            },
+            privateParamMonthList: function (){
+	            return {'yearList': this.runtime.yearList};
             },
 	        cfgYearField: function(){
 		        let cfg = this.$app.cfgInputField("year", 70, 40);

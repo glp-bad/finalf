@@ -248,10 +248,10 @@
                 CFG_INVOICE_DETAIL_LIST : {
                     ref: 'refDetailList',
                     header: [
-                        this.$constList.getHeader(1, 'Nr.', 10, 'row_num', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-                        this.$constList.getHeader(2, 'Servicii', 200, 'cText', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-                        this.$constList.getHeader(3, 'Valoare', 100, 'nSumaFaraTva', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-                        this.$constList.getHeader(4, 'Valoare TVA', 100, 'nSumaTva', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
+                        this.$constList.getHeader(1, 'Nr.', 20, 'row_num', this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER  ),
+                        this.$constList.getHeader(2, 'Servicii', 750, 'cText', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
+                        this.$constList.getHeader(3, 'Valoare', 100, 'nSumaFaraTva', this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT  ),
+                        this.$constList.getHeader(4, 'Valoare TVA', 100, 'nSumaTva', this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT  ),
                         this.$constList.getHeader(5, 'Action', 100, 'null', this.$constList.HEADER.CAPTION_TYPE_ACTION)
                     ],
                     recordActionButon: [
@@ -259,7 +259,10 @@
                         //this.$constList.getActionButton(5, 'adresa implicita', 'emitAdresaImplicita', null, this.$constList.ACTION_BUTTON.TYPE_CHECKBOX, this.$app.cfgCheckBox('ro', false)),   // poate fi un singur checkbox pe linie, trebuie setat si filedNameForCheckBox, campul poate fi doar 1 si 0
                         // this.$constList.getActionButton(6, 'adresa implicita', 'emitCheckBox', this.$constGrid.getIcon('fas','skull', '#adad00'))
                     ],
-                    cfg: { urlData: 'detailInvoiceList', loadOnCreate: false, filedNameForCheckBox: 'activ', emitListRowSelection: 'emitListRowSelection'}
+                    cfg: { urlData: 'detailInvoiceList', loadOnCreate: false,
+                           filedNameForCheckBox: 'activ',
+	                       headerLenghtActivate: true,                         // tine cont de lungimea coloanelor setate in header
+                           emitListRowSelection: 'emitListRowSelection'}
                 },
             };
         },

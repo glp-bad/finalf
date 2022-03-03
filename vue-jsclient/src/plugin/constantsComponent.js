@@ -22,6 +22,9 @@ const constantsComponent = {
 			ALIGN_TEXT_LEFT: 'alignLeft',
 			ALIGN_TEXT_RIGHT: 'alignRight',
 			ALIGN_TEXT_CENTER: 'alignCenter',
+			ICON_REFRESH: function (color){
+				return {fawIcon:'fas', icon: 'sync', color: color, colorStyle: {color: color }};
+			},
 			ICON_PLUS_SQUARE: function (color){
 				return {fawIcon:'fas', icon: 'plus-square', color: color, colorStyle: {color: color }};
 			},
@@ -31,8 +34,8 @@ const constantsComponent = {
             ICON_ADD_PERSON: function (color){
                 return {fawIcon:'fas', icon: 'user-plus', color: color, colorStyle: {color: color }};
             },
-            cfgIconPicture: function (ICON_ADD_PERSON) {
-                return [ICON_ADD_PERSON.fawIcon, ICON_ADD_PERSON.icon];
+            cfgIconPicture: function (icon) {
+                return [icon.fawIcon, icon.icon];
             }
 		},
         app.config.globalProperties.$constTab = {

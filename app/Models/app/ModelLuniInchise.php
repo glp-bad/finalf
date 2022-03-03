@@ -12,10 +12,8 @@ class ModelLuniInchise extends MyModel {
         $this->tableName = 't_s_luni_inchise';
     }
 
-
-
     public function selectMonthList($year){
-        $rezult = DB::select(
+	    $rezult = DB::select(
             "select id, nLuna, inchisa
                         from
                             t_s_luni_inchise
@@ -26,8 +24,6 @@ class ModelLuniInchise extends MyModel {
 
         return $rezult;
     }
-
-
 
     public function selectEntity($id){
         $rezult = DB::select(

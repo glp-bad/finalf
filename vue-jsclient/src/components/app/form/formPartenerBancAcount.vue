@@ -143,17 +143,19 @@
                 INPUT_IBAN: this.cfgInputIBAN(),
                 cfgListaBank: {
                     header: [
-                        this.$constList.getHeader(1, 'Banca', 500, 'cBanca', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-                        this.$constList.getHeader(2, 'Sucursala', 500, 'cSucursala', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-                        this.$constList.getHeader(3, 'IBAN', 10, 'cIBAN', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-                        this.$constList.getHeader(4, 'Adresa implicita', 10, 'null', this.$constList.HEADER.CAPTION_TYPE_ACTION)
+                        this.$constList.getHeader(1, 'Banca', 300, 'cBanca', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
+                        this.$constList.getHeader(2, 'Sucursala', 370, 'cSucursala', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
+                        this.$constList.getHeader(3, 'IBAN', 200, 'cIBAN', this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER  ),
+                        this.$constList.getHeader(4, 'Adresa implicita', 110, 'null', this.$constList.HEADER.CAPTION_TYPE_ACTION)
                     ],
                     recordActionButon: [
                         // this.$constList.getActionButton(4, 'adresa implicita', 'emitButton', this.$constGrid.getIcon('fas','skull', '#adad00'), this.$constList.ACTION_BUTTON.TYPE_BUTTON, null),
                         this.$constList.getActionButton(5, 'cont implicit', 'emitContImplicit', null, this.$constList.ACTION_BUTTON.TYPE_CHECKBOX, this.$app.cfgCheckBox('contActiv', false))   // poate fi un singur checkbox pe linie, trebuie setat si filedNameForCheckBox, campul poate fi doar 1 si 0
                         // this.$constList.getActionButton(4, 'adresa implicita', 'emitCheckBox', this.$constGrid.getIcon('fas','skull', '#adad00')),
                     ],
-                    cfg: { urlData: 'partenerListBancCont', loadOnCreate: false, filedNameForCheckBox: 'activ', emitListRowSelection: 'emitListRowSelection'}
+                    cfg: {  urlData: 'partenerListBancCont', loadOnCreate: false, filedNameForCheckBox: 'activ',
+	                        headerLenghtActivate: true,                         // tine cont de lungimea coloanelor setate in header
+                            emitListRowSelection: 'emitListRowSelection'}
                 },
             };
         },
