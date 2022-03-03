@@ -12,6 +12,11 @@ class ModelLuniInchise extends MyModel {
         $this->tableName = 't_s_luni_inchise';
     }
 
+
+	public function checkMonthList($idPk, $check){
+
+	}
+
     public function selectMonthList($year){
 	    $rezult = DB::select(
             "select id, nLuna, inchisa

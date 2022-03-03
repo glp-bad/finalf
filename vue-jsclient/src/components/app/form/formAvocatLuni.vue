@@ -66,7 +66,7 @@
         </template>
         <template v-slot:slotButton>
             <div class="buttons">
-                <my-button @click="this.editPartener" :heightButton=22 :buttonType=0 title="modific date partener">{{this.captionButton}}</my-button>
+                <my-button @click="this.addMonth" :heightButton=22 :buttonType=0 title="modific date partener">{{this.captionButton}}</my-button>
             </div>
         </template>
 
@@ -132,6 +132,34 @@
 	        this.$refs[this.cfgtime.FIELD_YEAR.ref].setValue(this.runtime.yearList);
         },
         methods: {
+        	privateServerCheckMonth(){
+
+                let msg = '';
+
+        		if(this.runtime.post.field.checkValue){
+			        msg = 'Blochez luna selectata ?'
+                }else{
+			        msg = 'Deblochez luna selectata ?'
+                }
+
+
+		        if(!this.runtime.sendDataToServer) {
+			        this.$refs.refYesNo.setCaption("Luna in lucru");
+			        this.$refs.refYesNo.setMessage(msg);
+			        this.$refs.refYesNo.show();
+		        }
+
+		        if(this.runtime.sendDataToServer) {
+			        this.runtime.sendDataToServer = false;
+
+			        console.log(this.runtime.post);
+		        }
+
+
+
+
+
+            },
 	        clickRefresMonthList: function(){
 		        this.runtime.yearList = this.$refs[this.cfgtime.FIELD_YEAR.ref].getValue();
 		        this.refreshListLuniInchise();
@@ -139,7 +167,7 @@
         	refreshListLuniInchise: function(){
         	    this.$refs[this.cfgtime.LIST_MONTH.ref].showList(this.privateParamMonthList());
             },
-            editPartener: function (){
+            addMonth: function (){
             },
             validateForm: function () {
             },
@@ -150,30 +178,35 @@
 
 		        this.runtime.post.idPk = checkBoxControl.getAttribute("idPk");
 
-		        /*
-		        if(!checkBoxControl.checked){
-			        // este deja bifat, nu fac nimic, refac bifa;
-			        checkBoxControl.checked = true;
-		        } else {
-			        checkBoxControl.checked = false;
-			        // this.serverCheckAdress();
-		        }
-		        */
 
 
-		        console.log(checkBoxControl.checked);
+		        this.setPost({name: 'checkValue' }, checkBoxControl.checked);
+		        this.setPost({name: 'control' }, checkBoxControl);          // only for rebuild control is no action
 
+		        this.privateServerCheckMonth();
 	        },
             emitYesNoButton: function (yes) {
                 if(yes == 1){
+
+	                this.runtime.post.field.control = null;     // nu mai avem nevoie de control checkbox
+
                     this.runtime.sendDataToServer = true;
-                    // this.editServerDatePartener();
+                    this.privateServerCheckMonth();
                 }else{
                     this.runtime.sendDataToServer = false;
+
+                    //refac bifa
+	                if(this.runtime.post.field.checkValue){
+		                this.runtime.post.field.control.checked = false;
+	                } else {
+		                this.runtime.post.field.control.checked = true;
+	                }
+
+	                this.runtime.post.field.control = null;     // nu mai avem nevoie de control checkbox
                 }
             },
             setPost: function (component, value){
-                this.post['field'][component.name] = value;
+                this.runtime.post['field'][component.name] = value;
             },
             privateParamMonthList: function (){
 	            return {'yearList': this.runtime.yearList};

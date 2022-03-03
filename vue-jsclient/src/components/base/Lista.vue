@@ -122,6 +122,7 @@
             getDataFromServer: function () {
                 this.showModalLoadingDiv = true;
                 this.runtime.responseCustom = null;
+	            this.dataList = null;                   // reset list
 
                 let uri = this.$url.getUrl(this.pConfig.cfg.urlData);
                 this.axios
