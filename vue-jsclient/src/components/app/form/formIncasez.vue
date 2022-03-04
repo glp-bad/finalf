@@ -215,7 +215,7 @@
                         // this.$constList.getActionButton(5, 'adresa implicita', 'emitAdresaImplicita', null, this.$constList.ACTION_BUTTON.TYPE_CHECKBOX, this.$app.cfgCheckBox('ro', false)),   // poate fi un singur checkbox pe linie, trebuie setat si filedNameForCheckBox, campul poate fi doar 1 si 0
                         // this.$constList.getActionButton(6, 'adresa implicita', 'emitCheckBox', this.$constGrid.getIcon('fas','skull', '#adad00'))
                     ],
-                    cfg: {  urlData: 'listaUnpaidInvoices', loadOnCreate: true,
+                    cfg: {  urlData: 'listaUnpaidInvoices', loadOnCreate: false,
                             filedNameForCheckBox: 'activ',
                             headerLenghtActivate: true,                         // tine cont de lungimea coloanelor setate in header
                             emitListRowSelection: 'emitListRowSelection',
@@ -232,6 +232,8 @@
             this.$refs[this.cfgtime.NR_DOCUMENT.ref].setReadOnly(true);
             this.$refs[this.cfgtime.REF_FIELD_NR_FACTURA_SELECTATA].style.minWidth = '150px';
             this.$refs[this.cfgtime.REF_FIELD_NR_FACTURA_SELECTATA].closest('td').style.backgroundColor = '#d9d9d9';
+
+            this.refreshListaFacturiNeincasate();
         },
         methods: {
             saveData: function (){

@@ -248,11 +248,11 @@
                 CFG_INVOICE_DETAIL_LIST : {
                     ref: 'refDetailList',
                     header: [
-                        this.$constList.getHeader(1, 'Nr.', 20, 'row_num', this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER  ),
-                        this.$constList.getHeader(2, 'Servicii', 750, 'cText', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
-                        this.$constList.getHeader(3, 'Valoare', 100, 'nSumaFaraTva', this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT  ),
+                        this.$constList.getHeader(1, 'Nr.',         20, 'row_num', this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER  ),
+                        this.$constList.getHeader(2, 'Servicii',    750, 'cText', this.$constList.HEADER.CAPTION_TYPE_FIELD ),
+                        this.$constList.getHeader(3, 'Valoare',     100, 'nSumaFaraTva', this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT  ),
                         this.$constList.getHeader(4, 'Valoare TVA', 100, 'nSumaTva', this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT  ),
-                        this.$constList.getHeader(5, 'Action', 100, 'null', this.$constList.HEADER.CAPTION_TYPE_ACTION)
+                        this.$constList.getHeader(5, 'Action',      100, 'null', this.$constList.HEADER.CAPTION_TYPE_ACTION)
                     ],
                     recordActionButon: [
                         this.$constList.getActionButton(4, 'sterg articol', 'emitStergArticol', this.$constGrid.ICON_DELETE, this.$constList.ACTION_BUTTON.TYPE_BUTTON, null)

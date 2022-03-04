@@ -12,6 +12,15 @@ class ModelInvoiceIncasari extends MyModel {
         $this->tableName = 't_incasari_facturi';
     }
 
+    public function deleteIncoming($id){
+        $rezult = DB::delete(
+            "delete from t_incasari_facturi where id = :id;",
+            ['id'=>$id]
+        );
+
+        return $rezult;
+    }
+
     public function saveIncoming(SaveIncoming $d){
         $rezult = DB::insert(
             "insert into t_incasari_facturi (id_factura,id_nr,id_tipd,id_incas,data_incas,nSuma,id_user,created) values (:idf, :idnr, :idtipd, :idincas, :dataincas, :suma, :idUser, :created);",

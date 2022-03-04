@@ -5,6 +5,7 @@ namespace App\allClass\helpers\param;
 use App\allClass\helpers\response\ValidateParam;
 use App\allClass\helpers\Check;
 use App\allClass\helpers\MyHelp;
+use App\Models\app\ModelLuniInchise;
 
 class WokingMonth
 {
@@ -23,23 +24,26 @@ class WokingMonth
 	/**
 	 * @param $data '01/01/2000'
 	 */
-	public function setYearAndMonth($data){
+	private function setYearAndMonth($data){
 		$dataFormat = MyHelp::getSqlDateFormat($data, null);
 		$this->month = intval($dataFormat['month']);
 		$this->year = intval($dataFormat['year']);
 
 	}
 
-	public function checkOpenMonth($record){
+	public function checkOpenMonth($year, $month, ModelLuniInchise  $modelLuniInchise){
+        $this->year = $year;
+        $this->month = $month;
+        $closeMonth = $modelLuniInchise->selectWorkingMonth($this);
 
 		$open = false;
-		$msg = 'Luna pentru cate vrei sa prelucrezi date nu este inregistrata in baza de date!';
+		$msg = '<b>Luna</b> pentru care vrei sa prelucrezi date <b>nu este inregistrata</b> in baza de date !';
 
-		if(count($record) > 0){
-			if($record[0]->inchisa == 0){
+		if(count($closeMonth) > 0){
+			if($closeMonth[0]->inchisa == 0){
 				$open = true;
 			}else{
-				$msg = 'Luna pentru cate vrei sa prelucrezi date este inchisa!';
+				$msg = '<b>Luna</b> pentru care vrei sa prelucrezi date este <b>inchisa</b> !';
 			}
 		}
 

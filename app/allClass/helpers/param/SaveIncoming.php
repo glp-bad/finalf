@@ -19,9 +19,15 @@ class SaveIncoming
     public $name_amountRecived      =null;
     public $tipIncasare             =null;
 
+    public $invoiceYear             =null;
+    public $invoiceMonth             =null;
+
+
     public function setIncomingInvoice($idInvoice, $idNrInvoice, array $f) {
         $sqlDateFormat = MyHelp::getSqlDateFormat($f["name_invoiceDate"], null);
         $this->name_invoiceDate = $sqlDateFormat['dataFormat'];
+        $this->invoiceYear = intval($sqlDateFormat['year']);
+        $this->invoiceMonth =  intval($sqlDateFormat['month']);
 
         $this->name_nomDocumentType    =$f["name_nomDocumentType"];
         $this->name_amountRecived      =$f["name_amountRecived"];

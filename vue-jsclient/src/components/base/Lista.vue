@@ -36,7 +36,7 @@
                                     <div class="toolbar-icon-inline" >
                                         <template v-for="ph in pConfig.recordActionButon">
                                             <div v-if="ph.typeButton === this.$constList.ACTION_BUTTON.TYPE_BUTTON" class="divButton">
-                                                <my-button @click="this.privateCfgEmitAction($event, ph.emitAction)" :heightButton=22 :buttonType=1 :title="ph.tooltip" :style=privateCfgIconColor(ph.icon.color)>
+                                                <my-button @click.prevent="this.privateCfgEmitAction($event, ph.emitAction)" :heightButton=22 :buttonType=1 :title="ph.tooltip" :style=privateCfgIconColor(ph.icon.color)>
                                                     <font-awesome-icon :icon=this.privateCfgIconPictureAction(ph.icon) size="1x"/>
                                                 </my-button>
                                             </div>

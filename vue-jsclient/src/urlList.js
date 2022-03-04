@@ -47,6 +47,12 @@ export default [
 	{name: "listaUnpaidInvoices", url: "public/app/cashing/listaUnpaidInvoices"},
 	{name: "nomDocumentTipe", url: "public/app/cashing/nomDocumentTipe"},
     {name: "saveIncoming", url: "public/app/cashing/saveIncoming"},
+    {name: "incomingList", url: "public/app/cashing/incomingList"},
+    {name: "deleteIncomingDoc", url: "public/app/cashing/deleteIncomingDoc"},
+
+
+
+
 
     {name: "monthList", url: "public/app/avocat/monthList"},
 	{name: "checkMonth", url: "public/app/avocat/checkMonth"},

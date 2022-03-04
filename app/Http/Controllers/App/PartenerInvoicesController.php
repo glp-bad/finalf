@@ -135,10 +135,22 @@ class PartenerInvoicesController extends Controller
     public function deleteInvoiceAntet(Request $request) {
         $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
         $modelnvoice = new Modelnvoice($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
-        $modelnvoiceDetail = new ModelnvoiceDetail($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
-        // dd($request->idPk);
-
         $id = $request->idPk;
+
+        // --- check mounth
+            $entity = $modelnvoice->selectEntity($id);
+            $invoiceDate = MyHelp::getCarbonDate('Y-m-d', $entity[0]->data_f);
+            $wokingMonth = new WokingMonth(0,0,0,0);
+            $openMonth = $wokingMonth->checkOpenMonth($invoiceDate->year, $invoiceDate->month, new ModelLuniInchise($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED)));
+            if(!$openMonth['open']){
+                $msg->succes = false;
+                $msg->lastId = -1;
+                $msg->messages= $openMonth['msg'];
+                return $msg->toJson();
+            }
+
+        $modelnvoiceDetail = new ModelnvoiceDetail($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+
 
         try {
             DB::beginTransaction();
@@ -169,6 +181,18 @@ class PartenerInvoicesController extends Controller
 
         $modelnvoice = new Modelnvoice($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
         $idInvoice = $request->id;
+
+        // --- check mounth
+        $entity = $modelnvoice->selectEntity($idInvoice);
+        $invoiceDate = MyHelp::getCarbonDate('Y-m-d', $entity[0]->data_f);
+        $wokingMonth = new WokingMonth(0,0,0,0);
+        $openMonth = $wokingMonth->checkOpenMonth($invoiceDate->year, $invoiceDate->month, new ModelLuniInchise($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED)));
+        if(!$openMonth['open']){
+            $msg->succes = false;
+            $msg->lastId = -1;
+            $msg->messages= $openMonth['msg'];
+            return $msg->toJson();
+        }
 
         try {
             $saveAntet = $modelnvoice->saveInvoice($idInvoice);
@@ -217,21 +241,22 @@ class PartenerInvoicesController extends Controller
     public function insertInvoiceAntet(Request $request) {
         $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
 
-
-
-	    $wokingMonth = new WokingMonth(0,0,0,0);
-	    $wokingMonth->setYearAndMonth($request->field['name_invoiceDate']);
-	    $modelLuni = new ModelLuniInchise($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
-	    $closeMonth = $modelLuni->selectWorkingMonth($wokingMonth);
-	    dd($closeMonth);
-
-
         $param = $this->checkFieldInvoiceAntet($request->field);
         if( count($param['errorMsg']) > 0){
             $msg->succes = false;
             $msg->lastId = -1;
             $msg->messages= $param['errorMsg'];
 
+            return $msg->toJson();
+        }
+
+        $wokingMonth = new WokingMonth(0,0,0,0);
+        $dataInvoice = MyHelp::getSqlDateFormat($request->field['name_invoiceDate'], null);
+        $openMonth = $wokingMonth->checkOpenMonth(intval($dataInvoice['year']), intval($dataInvoice['month']), new ModelLuniInchise($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED)));
+        if(!$openMonth['open']){
+            $msg->succes = false;
+            $msg->lastId = -1;
+            $msg->messages= $openMonth['msg'];
             return $msg->toJson();
         }
 

@@ -12,7 +12,7 @@
                 </div>
                 <div class="tab" :id="this.$constTab.getIdTab(this.cfgtime.tabConfig.TAB_LIST.id)">
                     <div class="up-line"></div>
-                    sunt in tab 2
+                    <my-lista-incasari :ref = "this.cfgtime.REF_FORM_LISTA_INCASARI"></my-lista-incasari>
                 </div>
             </template>
         </my-tab>
@@ -24,16 +24,19 @@
 
 import Tab from "@/components/base/Tab";
 import formIncasez from "@/components/app/form/formIncasez";
+import formIncasezListaIncasari from "@/components/app/form/formIncasezListaIncasari";
 
 export default {
     components: {
         'my-tab': Tab,
-	    'my-incasez': formIncasez
+	    'my-incasez': formIncasez,
+        'my-lista-incasari': formIncasezListaIncasari
     },
     name: "view-incasari",
     created() {
         this.cfgtime = {
         	REF_FORM_INCASEZ: 'refFormIncasez',
+            REF_FORM_LISTA_INCASARI: 'refFormListaIncasari',
             tabConfig: {
                 TAB_NEW: {id: '1t'},
                 TAB_LIST: {id: '2t'},
@@ -55,9 +58,11 @@ export default {
      methods: {
          emitClickTab: function (idTab) {
              if(idTab == this.cfgtime.tabConfig.TAB_NEW.id) {
-	             console.log('click 1 tab');
+                 this.$refs[this.cfgtime.REF_FORM_INCASEZ].refreshListaFacturiNeincasate();
+
              } else if(idTab == this.cfgtime.tabConfig.TAB_LIST.id) {
-                 console.log('click 2 tab');
+                 this.$refs[this.cfgtime.REF_FORM_LISTA_INCASARI].refreshInvoiceList();
+
              }
          },
      },

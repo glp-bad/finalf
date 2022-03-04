@@ -5,12 +5,46 @@ use App\allClass\helpers\GridPaginateOrderFilter;
 use App\allClass\helpers\MyModel;
 use App\allClass\helpers\response\PaginateResponse;
 use Illuminate\Support\Facades\DB;
+use App\allClass\helpers\param\IncomingList;
 
 class BussinesInvoice extends MyModel {
     public function __construct($idAvocat, $idUser)
     {
         parent::__construct($idAvocat, $idUser);
         $this->tableName = null;
+    }
+
+
+    public function selectIncasari(IncomingList $incomingList){
+
+
+        //DB::enableQueryLog(); // Enable query log
+        $rezult = DB::select(
+            "select t_incasari_facturi.id,
+		                concat('( ', t_tip_document.abrev, ' ) ', t_tip_document.tipc) as tip_document,
+                        t_tip_incasare.cIncas as tip_incasare,
+		                DATE_FORMAT(t_incasari_facturi.data_incas, '%d/%m/%Y') as data_i,
+                        t_facturi_numar.cNr as numar_chitanta, t_incasari_facturi.nSuma as suma,
+                        t_parteneri.cNume as nume_client,
+                        facturi_nr.cNr as numar_factura
+                    from 
+		                t_incasari_facturi
+                        inner join t_facturi_numar on t_facturi_numar.id = t_incasari_facturi.id_nr
+                        inner join t_tip_document on t_tip_document.id = t_incasari_facturi.id_tipd
+                        inner join t_tip_incasare on t_tip_incasare.id = t_incasari_facturi.id_incas
+                        inner join t_factura on t_factura.id = t_incasari_facturi.id_factura
+                        inner join t_parteneri on t_parteneri.id = t_factura.id_part
+                        inner join t_facturi_numar as facturi_nr on facturi_nr.id = t_factura.id_nr
+                    where t_factura.id_avocat = :idAvocat and (t_incasari_facturi.data_incas between :dataIn and :dataSf)
+			                and (t_parteneri.id = :idPartner OR 0 = :filterActive)
+		            order by t_incasari_facturi.data_incas desc;"
+            , ['idAvocat'=>$this->idAvocat, 'dataIn'=>$incomingList->data_in, 'dataSf'=>$incomingList->data_sf, 'idPartner'=>$incomingList->partner_id, 'filterActive'=>$incomingList->filterActiv]
+        );
+
+
+        //dd(DB::getQueryLog()); // Show results of log
+
+        return $rezult;
     }
 
     public function selectFacturiNeincasate(){
@@ -40,7 +74,7 @@ class BussinesInvoice extends MyModel {
                         inner join t_parteneri on t_parteneri.id = t_factura.id_part
                         inner join t_tip_organizare_juridica on t_tip_organizare_juridica.id = t_parteneri.id_tip
                         inner join t_tip_factura on  t_tip_factura.id = t_factura.id_tipfactura
-                    order by t_factura.data_f asc;"
+                    order by t_factura.data_f desc;"
             , ['idAvocat'=>$this->idAvocat]
         );
 
