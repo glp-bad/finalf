@@ -237,7 +237,7 @@ const appHelper = {
             let curDate = new Date();
             let dataIn  = startOfMonth(curDate);
             let dataSf  = endOfMonth(curDate);
-            return {monthIn: format(dataIn, formatString)  , monthSf: format(dataSf, formatString), currentDate: format(curDate, formatString)};
+            return {monthIn: format(dataIn, formatString)  , monthSf: format(dataSf, formatString), currentDate: format(curDate, formatString), year: format(curDate, 'yyyy'), month: format(curDate, 'M')};
         }
 
         app.config.globalProperties.$datetime = {
@@ -277,6 +277,12 @@ const appHelper = {
             isUndef (v) {
                 return v === undefined || v === null
             },
+	        intervalCheck(number, min, max){
+		        if(number >= min && number <= max){
+			        return true;
+		        }
+		        return false;
+	        },
             lenghtMinMax(string, min, max){
 
                 let sstring = 0;

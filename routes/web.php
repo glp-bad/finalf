@@ -39,7 +39,6 @@ Route::post('app/partener/editAccountPartener', [ParteneriController::class, 'ed
 Route::post('app/partener/setActivAdress',     [ParteneriController::class, 'setActivAdress'])->middleware('auth');
 Route::post('app/partener/editAdressPartener', [ParteneriController::class, 'editAdressPartener'])->middleware('auth');
 
-
 // invoice
 Route::post('app/listPartener',                 [PartenerInvoicesController::class,  'listPartener'])->middleware('auth');
 Route::post('app/nomInvoiceType',               [PartenerInvoicesController::class,  'nomInvoiceType'])->middleware('auth');
@@ -58,9 +57,12 @@ Route::post('app/cashing/listaUnpaidInvoices', [PartenerInvoicesCashingInControl
 Route::post('app/cashing/nomDocumentTipe',     [PartenerInvoicesCashingInController::class,  'nomDocumentTipe'])->middleware('auth');
 Route::post('app/cashing/saveIncoming',        [PartenerInvoicesCashingInController::class,  'saveIncoming'])->middleware('auth');
 
-
 // avocat
 Route::post('app/avocat/monthList', [AvocatController::class,  'monthList'])->middleware('auth');
+Route::post('app/avocat/checkMonth', [AvocatController::class,  'checkMonth'])->middleware('auth');
+Route::post('app/avocat/insertMonth', [AvocatController::class,  'insertMonth'])->middleware('auth');
+
+
 
 
 

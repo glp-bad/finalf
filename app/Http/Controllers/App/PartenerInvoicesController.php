@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Models\app\ModelInvoiceTemplate;
 use App\Models\app\ModelnvoiceDetail;
 use App\Models\app\ModelnvoiceNumber;
+use App\Models\app\ModelLuniInchise;
+use App\allClass\helpers\param\WokingMonth;
 use App\Models\bussines\BussinesInvoice;
 use App\Models\app\ModelParteneri;
 use App\Models\app\Modelnvoice;
@@ -214,6 +216,15 @@ class PartenerInvoicesController extends Controller
 
     public function insertInvoiceAntet(Request $request) {
         $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
+
+
+
+	    $wokingMonth = new WokingMonth(0,0,0,0);
+	    $wokingMonth->setYearAndMonth($request->field['name_invoiceDate']);
+	    $modelLuni = new ModelLuniInchise($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+	    $closeMonth = $modelLuni->selectWorkingMonth($wokingMonth);
+	    dd($closeMonth);
+
 
         $param = $this->checkFieldInvoiceAntet($request->field);
         if( count($param['errorMsg']) > 0){

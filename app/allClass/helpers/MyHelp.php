@@ -62,7 +62,7 @@ class MyHelp {
 
 		}
 
-		return ['dataFormat'=>$date->format($frm), 'objDate'=>$date];
+		return ['dataFormat'=>$date->format($frm), 'objDate'=>$date, 'year'=>$date->format('Y'), 'month'=>$date->format('n')];
 	}
 
     /**

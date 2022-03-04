@@ -48,7 +48,11 @@ export default [
 	{name: "nomDocumentTipe", url: "public/app/cashing/nomDocumentTipe"},
     {name: "saveIncoming", url: "public/app/cashing/saveIncoming"},
 
-    {name: "monthList", url: "public/app/avocat/monthList"}
+    {name: "monthList", url: "public/app/avocat/monthList"},
+	{name: "checkMonth", url: "public/app/avocat/checkMonth"},
+	{name: "insertMonth", url: "public/app/avocat/insertMonth"}
+
+
 
 
 
