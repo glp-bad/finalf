@@ -219,7 +219,7 @@
                             filedNameForCheckBox: 'activ',
                             headerLenghtActivate: true,                         // tine cont de lungimea coloanelor setate in header
                             emitListRowSelection: 'emitListRowSelection',
-                            heightList: 310
+                            heightList: 610
                     }
                 },
             };
