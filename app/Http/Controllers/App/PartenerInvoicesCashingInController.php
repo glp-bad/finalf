@@ -22,11 +22,10 @@ class PartenerInvoicesCashingInController extends Controller
 
 
 
-    public function deleteIncomingDoc(Request $request){
+    public function deleteIncomingDoc(Request $request) {
         $msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false );
         $modelInvoiceIncasari = new ModelInvoiceIncasari($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
         $id = $request->idPk;
-
 
         // --- check mounth
         $wokingMonth = new WokingMonth(0,0,0,0);
@@ -40,21 +39,30 @@ class PartenerInvoicesCashingInController extends Controller
             return $msg->toJson();
         }
 
+        $idNumber = $entity[0]->id_nr;
+        $modelnvoiceNumber = new ModelnvoiceNumber($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
 
         try {
-            $deletedCount = $modelInvoiceIncasari->deleteIncoming($id);
-            if($deletedCount != 1){
-                throw new \Exception("APP ERROR . Nu am putut sa sterg incasarea!");
-            }
 
-            $msg->succes = true;
+            DB::beginTransaction();
+                $deletedCount = $modelInvoiceIncasari->deleteIncoming($id);
+                if($deletedCount != 1){
+                    throw new \Exception("APP ERROR . Nu am putut sa sterg incasarea!");
+                }
 
-        }catch (\Exception $e){
+                $updateCount = $modelnvoiceNumber->updateUseNumber($idNumber,0);
+                if($updateCount != 1){
+                    throw new \Exception("Incasare nu poate fi stearsa, nu se poate face update la numarul de incasare!");
+                }
+
+                $msg->succes = true;
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollBack();
             $msg->messages= 'App error. -- incasari.';
             $msg->errorMsg = $e->getMessage();
             $msg->succes = false;
         }
-
 
         return $msg->toJson();
     }

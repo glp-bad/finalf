@@ -12,6 +12,7 @@ class Modelnvoice extends MyModel {
         $this->tableName = 't_factura';
     }
 
+    // daca exista factura in lucru
     public function checkWorkingInvoice(){
         $rezult = DB::select(
             " 
@@ -28,6 +29,15 @@ class Modelnvoice extends MyModel {
         return $rezult;
     }
 
+    // delete antet cand factura este salvata
+    public function deleteAntetSave($idPk){
+        $rezult = DB::delete(
+            "delete from t_factura where id = :id and id_avocat = :idAvocat and salvata = :salvata;",
+            ['id'=>$idPk, 'idAvocat'=>$this->idAvocat, 'salvata'=>1]
+        );
+
+        return $rezult;
+    }
 
     public function deleteAntet($idPk){
         $rezult = DB::delete(

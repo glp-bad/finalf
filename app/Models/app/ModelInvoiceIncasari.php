@@ -29,6 +29,14 @@ class ModelInvoiceIncasari extends MyModel {
         $returnId = intval( DB::getPdo()->lastInsertId() );
     }
 
+    public function selectCountIncoming($idInvoice) {
+        $rezult = DB::select(
+            " 
+                  select count(*) as incasariCount from t_incasari_facturi where id_factura = :idInvoice;",['idInvoice'=>$idInvoice]
+        );
+        return $rezult;
+    }
+
     public function selectEntity($id) {
          $rezult = DB::select(
              " 

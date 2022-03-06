@@ -12,7 +12,8 @@
                 </div>
                 <div class="tab" :id="this.$constTab.getIdTab(this.cfgtime.tabConfig.TAB_LIST.id)">
                     <div class="up-line"></div>
-                    sunt in tab 2</div>
+                    <invoice-list :ref="this.cfgtime.REF_INVOICE_LIST"></invoice-list>
+                </div>
             </template>
         </my-tab>
 
@@ -23,16 +24,19 @@
 
 import Tab from "@/components/base/Tab";
 import formInvoiceMake from "@/components/app/form/formInvoiceMake";
+import formInvoiceList from "@/components/app/form/formInvoiceList";
 
 export default {
     components: {
         'my-tab': Tab,
-        'invoice-make': formInvoiceMake
+        'invoice-make': formInvoiceMake,
+        'invoice-list': formInvoiceList
     },
     name: "view-invoices",
     created() {
         this.cfgtime = {
             REF_CREATE_INVOICE: 'refCreateInvoice',
+            REF_INVOICE_LIST: 'refInvoiceList',
             tabConfig: {
                 TAB_NEW: {id: '1t'},
                 TAB_LIST: {id: '2t'},
@@ -41,7 +45,7 @@ export default {
                     this.$constTab.getHeader('2t', 'Lista facturi')
                 ],
                 defaultTabId: '1t',
-                tabsWidth: '1100px'
+                tabsWidth: '1400px'
             }
         }
      },
@@ -54,7 +58,7 @@ export default {
                  this.$refs[this.cfgtime.REF_CREATE_INVOICE].checkWorkingInvoice();
 
              } else if(idTab == this.cfgtime.tabConfig.TAB_LIST.id) {
-                 console.log('click 2 tab');
+                 this.$refs[this.cfgtime.REF_INVOICE_LIST].refreshInvoiceList();
              }
          },
      },

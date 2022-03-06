@@ -19,6 +19,10 @@ https://date-fns.org/
 
 maska: https://github.com/beholdr/maska
 
+PDF
+    https://github.com/dompdf/dompdf/wiki/Requirements
+    composer require dompdf/dompdf
+
 
 
 -- header

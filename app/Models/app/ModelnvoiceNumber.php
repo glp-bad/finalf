@@ -26,6 +26,24 @@ class ModelnvoiceNumber extends MyModel {
     set @cZero = replicate('0',8-@nLung)
     */
 
+    public function updateUseNumber($idPk, $use){
+        $rezult = DB::update(
+            "update t_facturi_numar
+                        set folosit = :useNumber,
+                            id_user = :idUser,
+                            last_update = :lastUpdate
+                    where id = :id   
+	                    and id_avocat = :idAvocat;",
+            [   'id'=> $idPk,
+                'useNumber'=> $use,
+                'lastUpdate' => MyHelp::getCarbonDateNow(),
+                'idUser'=> $this->idUser,
+                'idAvocat'=>$this->idAvocat]
+        );
+
+        return $rezult;
+    }
+
 
     public function insertCustomNumber(array $bussinesNumber, $numberString){
         $rezult = DB::insert(
