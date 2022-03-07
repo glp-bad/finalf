@@ -6,6 +6,8 @@ import viewAvocat       from '../views/app/viewAvocat'
 import viewParteneri    from '../views/app/viewParteneri'
 import viewInvoices     from '../views/app/viewInvoices'
 import viewIncasari     from '../views/app/viewIncasari'
+import viewCheltuieli     from '../views/app/viewCheltuieli'
+
 
 const routes = [
   {
@@ -17,6 +19,7 @@ const routes = [
    {     name: 'Parteneri',        path: '/viewParteneri', component: viewParteneri   },
    {     name: 'Facturez',         path: '/viewInvoices',  component: viewInvoices   },
    {     name: 'Incasari',         path: '/viewIncasari',  component: viewIncasari   },
+   {     name: 'Cheltuieli',       path: '/viewCheltuieli',  component: viewCheltuieli   },
 
    {     name: 'TestControale',    path: '/testControale', component: Controale   },
    {     name: 'Gridul',           path: '/viewGridul',    component: viewGridul  },

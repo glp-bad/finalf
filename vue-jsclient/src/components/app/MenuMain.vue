@@ -9,6 +9,8 @@
                 <router-link to="/viewInvoices"  @click="this.headerLink($event)">Facturez</router-link></div></li>
             <li :idPk="4"><div class="divShow">
                 <router-link to="/viewIncasari"  @click="this.headerLink($event)">Incasari</router-link></div></li>
+            <li :idPk="5"><div class="divShow">
+                <router-link to="/viewCheltuieli"  @click="this.headerLink($event)">Cheltuieli</router-link></div></li>
             <!--
             <li><router-link to="/viewGridul">Gridul</router-link></li>
             <li><router-link to="/testControale">Test controale</router-link></li>
