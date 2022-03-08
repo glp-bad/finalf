@@ -6,7 +6,7 @@ use App\Http\Controllers\App\ParteneriController;
 use App\Http\Controllers\App\PartenerInvoicesController;
 use App\Http\Controllers\App\PartenerInvoicesCashingInController;
 use App\Http\Controllers\App\AvocatController;
-
+use App\Http\Controllers\App\CheltuieliController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -56,15 +56,16 @@ Route::post('app/invoice/deleteInvoice'            , [PartenerInvoicesController
 Route::post('app/invoice/invoicePrint'             , [PartenerInvoicesController::class,  'invoicePrint'])->middleware('auth');
 
 
-
-
-
 // incasari
 Route::post('app/cashing/listaUnpaidInvoices', [PartenerInvoicesCashingInController::class,  'listaUnpaidInvoices'])->middleware('auth');
 Route::post('app/cashing/nomDocumentTipe',     [PartenerInvoicesCashingInController::class,  'nomDocumentTipe'])->middleware('auth');
 Route::post('app/cashing/saveIncoming',        [PartenerInvoicesCashingInController::class,  'saveIncoming'])->middleware('auth');
 Route::post('app/cashing/incomingList',        [PartenerInvoicesCashingInController::class,  'incomingList'])->middleware('auth');
 Route::post('app/cashing/deleteIncomingDoc',   [PartenerInvoicesCashingInController::class,  'deleteIncomingDoc'])->middleware('auth');
+
+// cheltuieli
+Route::post('app/cheltuieli/nomTipCheltuieli',     [CheltuieliController::class,  'nomTipCheltuieli'])->middleware('auth');
+
 
 
 

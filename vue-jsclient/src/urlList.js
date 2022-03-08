@@ -53,6 +53,10 @@ export default [
     {name: "incomingList"       ,url: "public/app/cashing/incomingList"},
     {name: "deleteIncomingDoc"  ,url: "public/app/cashing/deleteIncomingDoc"},
 
+	{name: "nomTipCheltuieli"  ,url: "public/app/cheltuieli/nomTipCheltuieli"},
+
+
+
     {name: "monthList"  ,url: "public/app/avocat/monthList"},
     {name: "checkMonth" ,url: "public/app/avocat/checkMonth"},
     {name: "insertMonth",url: "public/app/avocat/insertMonth"}

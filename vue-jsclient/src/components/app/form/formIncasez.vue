@@ -440,7 +440,7 @@
 		        cfg.setCaption("Tip document");
 		        cfg.setMandatory(true);
 		        cfg.setPlaceHolder('... (tip document)');
-		        cfg.setDefaultValue({id: 0, text: 'venit profesional'});
+		        cfg.setDefaultValue({id: 0, text: '... (tip document)'});
 		        return cfg;
 	        },
 	        cfgAmountRecived: function(){
