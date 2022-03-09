@@ -81,6 +81,24 @@
                                             :pConfig = this.cfgtime.CTR_PARTNER_LIST
                         ></my-dropdown-search>
                     </td>
+
+                    <td class="control">
+                        <div class="toolbar-icon-inline">
+                            <div class="divButton">
+                                &nbsp;&nbsp;
+                                <my-button  :ref=this.cfgtime.REF_BUTTON_ADD_CHELT @click="this.addNewChelt" :heightButton=22 :buttonType=2 title="adauga factura" :style="this.cfgtime.ICON_ADD_CHELT.colorStyle">
+                                    <font-awesome-icon :icon=this.$constComponent.cfgIconPicture(this.cfgtime.ICON_ADD_CHELT) size="1x" />
+                                </my-button>
+                            </div>
+
+                            <div class="divButton">
+                                <my-button  :ref=this.cfgtime.REF_BUTTON_REMOVE_CHELT @click="this.deleteChelt" :heightButton=22 :buttonType=2 title="sterg factura" :style="this.cfgtime.ICON_REMOVE_CHELT.colorStyle">
+                                    <font-awesome-icon :icon=this.$constComponent.cfgIconPicture(this.cfgtime.ICON_REMOVE_CHELT) size="1x" />
+                                </my-button>
+                            </div>
+
+                        </div>
+                    </td>
                 </tr>
             </table>
         </template>
@@ -96,7 +114,8 @@
     import InputDateTime    from "@/components/base/InputDateTime.vue";
     import InputField       from "@/components/base/InputField.vue";
     import DropDownSimple   from "@/components/base/DropDownSimple.vue";
-    import DropDownSearch from "@/components/base/DropDownSearch.vue";
+    import DropDownSearch   from "@/components/base/DropDownSearch.vue"
+    import Button           from "@/components/base/Button";
 
     export default {
         components: {
@@ -106,12 +125,15 @@
 	        'my-datetime': InputDateTime,
 	        'input-field': InputField,
 	        'my-dropdown-simple': DropDownSimple,
-	        'my-dropdown-search': DropDownSearch
+	        'my-dropdown-search': DropDownSearch,
+            'my-button': Button
         },
         name: "form-chletuiala-new",
         created() {
             this.REF_FORM = 'refCheltuialaNew';
             this.cfgtime = {
+                REF_BUTTON_ADD_CHELT:     'refAddChelt',
+                REF_BUTTON_REMOVE_CHELT:  'refRemoveChelt',
 	            TIP_PLATA: {
 		            id: 'refTipPlata',
 		            ref: 'refTipPlata',
@@ -129,8 +151,11 @@
 	            CTR_DOCUMENT_TYPE: this.cfgDocumentType(),
 	            CTR_TIP_CHELTUIELI: this.cfgCheltuieliType(),
 	            CTR_PARTNER_LIST: this.cfgDropDownPartner(),
+                ICON_ADD_CHELT:            this.$constComponent.ICON_PLUS_SQUARE("blue"),
+                ICON_REMOVE_CHELT:        this.$constComponent.ICON_MINUS_SQUARE("red")
             },
             this.runtime = {
+                mode: this.$constFROM.MODE_EDIT,
                 sendDataToServer: false,
                 yesNoMethod: 'methodName',
                 post: { idPk: null, field: {}, sqlAction: null}
@@ -140,8 +165,17 @@
         mounted () {
         },
         methods: {
+            addNewChelt: function (){
+            },
+            deleteChelt: function (){
+            },
 	        emitClickTipPlata: function (){
+            },
+            setModeForm: function (mode) {
+                this.runtime.mode = mode;
+                if(this.runtime.mode == this.$constFROM.MODE_EDIT) {}
 
+                if(this.runtime.mode == this.$constFROM.MODE_NEW) {}
             },
             emitYesNoButton: function (yes) {
                 if(yes == 1){
