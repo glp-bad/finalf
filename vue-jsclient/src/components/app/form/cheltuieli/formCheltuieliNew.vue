@@ -152,7 +152,8 @@
 	            CTR_TIP_CHELTUIELI: this.cfgCheltuieliType(),
 	            CTR_PARTNER_LIST: this.cfgDropDownPartner(),
                 ICON_ADD_CHELT:            this.$constComponent.ICON_PLUS_SQUARE("blue"),
-                ICON_REMOVE_CHELT:        this.$constComponent.ICON_MINUS_SQUARE("red")
+                ICON_REMOVE_CHELT:        this.$constComponent.ICON_MINUS_SQUARE("red"),
+                URL_INSERT_ANTET: this.$url.getUrl('insertExpenseAntet')
             },
             this.runtime = {
                 mode: this.$constFROM.MODE_EDIT,
@@ -166,6 +167,36 @@
         },
         methods: {
             addNewChelt: function (){
+	            if(this.validateNewDoc()){
+		            this.$refs.validateWindowRef.show();
+		            return false;
+	            }
+
+	            this.$refs[this.REF_FORM].showModal(true);
+
+	            this.axios
+		            .post(this.cfgtime.URL_INSERT_ANTET, this.runtime.post)
+		            .then(response => {
+			            if (response.data.succes){
+
+				            //this.getDataPartener(this.post.idPk);
+				            //this.$refs.infoWindowRef.setCaption("Succes");
+				            //this.$refs.infoWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+				            //this.$refs.infoWindowRef.show();
+			            }
+			            else {
+				            this.$refs.validateWindowRef.setCaption("Antetul nu poate fi inregistrat");
+				            this.$refs.validateWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+				            this.$refs.validateWindowRef.show();
+			            }
+
+		            })
+		            .catch(error => console.log(error))
+		            .finally(() => {
+			            this.$refs[this.REF_FORM].showModal(false);
+
+		            });
+
             },
             deleteChelt: function (){
             },
@@ -188,6 +219,107 @@
             setPost: function (component, value){
                 this.runtime.post['field'][component.name] = value;
             },
+	        validateNewDoc: function (){
+		        let returnMessage = false;
+		        this.runtime.message = [];
+
+		        let validateArray = [this.$refs[this.cfgtime.TIP_PLATA.ref],
+                                     this.$refs[this.cfgtime.CTR_DATA_CHELTUIALA.ref],
+                                     this.$refs[this.cfgtime.CTR_NR_DOCUMENT.ref],
+			                         this.$refs[this.cfgtime.CTR_DOCUMENT_TYPE.ref],
+                                     this.$refs[this.cfgtime.CTR_TIP_CHELTUIELI.ref],
+			                         this.$refs[this.cfgtime.CTR_PARTNER_LIST.ref]
+                                    ];
+
+		        this.$check.validateForm(validateArray);
+
+		        if( this.runtime.message.length>0 ){
+			        this.$refs.validateWindowRef.setCaption("Datele nu pot fi inregistrate");
+			        this.$refs.validateWindowRef.setMessage(this.$app.getHtmlFormatMessage(this.runtime.message));
+			        returnMessage = true;
+		        }
+
+		        return returnMessage;
+            },
+	        validateDocumentDate : function (){
+		        let control = this.cfgtime.CTR_DATA_CHELTUIALA;
+		        let value = this.$refs[control.ref].getValue();
+		        let splitDate = this.$refs[control.ref].getSplitValue();
+
+		        if(!this.$check.isExistDate(splitDate, true)){
+			        this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+				        "Data documentului este gresita!"));
+		        }
+
+
+		        let control01 = this.cfgtime.TIP_PLATA;
+		        let valueTipincasare = this.$refs[control01.ref].getValue();
+
+		        if(this.$check.isUndef(valueTipincasare)){
+			        this.runtime.message.push(this.$app.getFormMessageClass(control.id, control01.caption,
+				        "Trebuie sa alegi tipul de incasare"));
+		        }
+
+		        this.setPost(control01, valueTipincasare);
+		        this.setPost(control, value);
+
+            },
+	        validateNrDoc: function (){
+		        // include si validateDocumentDate
+		        let objNrDoc = this.cfgtime.CTR_NR_DOCUMENT;
+		        let valueManualNumber = this.$refs[objNrDoc.ref].getValue();
+
+                if(!this.$check.lenghtMinMax(valueManualNumber, objNrDoc.minLength, objNrDoc.maxLength)){
+                    this.runtime.message.push(this.$app.getFormMessageClass(objNrDoc.id, objNrDoc.caption,
+                        'trebuie sa aiba minim ' + objNrDoc.minLength + " si maxim " + objNrDoc.maxLength + " caractere"));
+                }
+
+		        this.setPost(objNrDoc, valueManualNumber);
+
+            },
+	        validateCheltuieliType: function (){
+		        let control = this.cfgtime.CTR_TIP_CHELTUIELI;
+		        let value = this.$refs[control.ref].getValue();
+		        let id = -1;
+
+		        if (this.$check.isUndef(value) || parseInt(value.id) < 1) {
+			        this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+				        "Trebuie sa alegi tipul de cheltuiala."));
+		        } else {
+			        id = value.id;
+		        }
+
+		        this.setPost(control, id);
+            },
+	        validateInvoiceType: function (){
+		        let control = this.cfgtime.CTR_DOCUMENT_TYPE;
+		        let value = this.$refs[control.ref].getValue();
+		        let id = -1;
+
+		        if (this.$check.isUndef(value) || parseInt(value.id) < 1) {
+			        this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+				        "Trebuie sa alegi tipul de document."));
+		        } else {
+			        id = value.id;
+		        }
+
+		        this.setPost(control, id);
+            },
+	        validatePartner: function (){
+		        let control = this.cfgtime.CTR_PARTNER_LIST;
+		        let value = this.$refs[control.ref].getValue();
+		        let id = -1;
+
+		        if( this.$check.isUndef(value) || parseInt(value.id) < 1){
+			        this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+				        "Trebuie sa alegi un partener"));
+		        }else{
+			        id = value.id;
+		        }
+
+		        this.setPost(control, id);
+
+            },
 	        cfgDataCheltuiala: function(){
 		        let cfg = this.$app.cfgInputDateTimeField("dataCheltuiala", 11, 80);
 		        cfg.setValidateFunction(this.validateDocumentDate);
@@ -197,7 +329,7 @@
 	        },
 	        cfgNrDoc: function(){
 		        let cfg = this.$app.cfgInputField("nrDoc", null, 120);
-		        cfg.setValidate(2,15);
+		        cfg.setValidate(2,20);
 		        cfg.setValidateFunction(this.validateNrDoc);
 		        cfg.setCaption("Nr. document");
 		        cfg.setMandatory(true);

@@ -54,6 +54,9 @@ export default [
     {name: "deleteIncomingDoc"  ,url: "public/app/cashing/deleteIncomingDoc"},
 
 	{name: "nomTipCheltuieli"  ,url: "public/app/cheltuieli/nomTipCheltuieli"},
+	{name: "insertExpenseAntet"  ,url: "public/app/cheltuieli/insertExpenseAntet"},
+
+
 
 
 
