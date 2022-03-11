@@ -29,7 +29,7 @@ class Expense
 		$this->id_tip_expense   = intval($f["name_nomTypeCheltuieli"]);
 		$this->id_tip_doc       = intval($f["name_nomDocumentType"]);
 		$this->id_tip_plata     = intval($f["tipPlata"]);
-		$this->nr_doc           = $f["tipPlata"];
+		$this->nr_doc           = $f["name_nrDoc"];
 
     }
 

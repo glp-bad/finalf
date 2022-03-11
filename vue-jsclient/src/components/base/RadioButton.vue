@@ -1,7 +1,7 @@
 
 <template>
     <div class="ff-radio-button" :ref=this.REF_DIV_CONTAINER>
-        <template v-for="ph in pConfig.buttons">
+        <template v-for="ph in this.buttonsCfg">
             <input class="inputClass" type="radio"
                     :id=ph.id :name=this.pConfig.name :value=ph.value
                     :checked=ph.check
@@ -33,6 +33,7 @@
             }
         },
 		mounted() {
+			this.buttonsCfg = this.pConfig.buttons;
 			this.privateConfig();
         },
         methods: {
@@ -49,6 +50,25 @@
 
                 return valueReturn;
 	        },
+            setCheck: function (value){
+	            for(let i=0; i< this.buttonsCfg.length; i++){
+		            if(this.buttonsCfg[i].value == value){
+			            this.buttonsCfg[i].check = true;
+                    }else{
+			            this.buttonsCfg[i].check = false;
+                    }
+	            }
+            },
+	        resetSelection: function(){
+		        for(let i=0; i< this.buttonsCfg.length; i++){
+			        this.buttonsCfg[i].check = false;
+		        }
+	        },
+            disabledAll: function(disabled){
+	            for(let i=0; i< this.buttonsCfg.length; i++){
+		            this.buttonsCfg[i].disableOption = disabled;
+                }
+            },
 	        privateEmitButtonClick: function(event, action){
 		        this.$emit(action, event.target);
 	        },
@@ -69,6 +89,7 @@
         },
 		data () {
 			return {
+				buttonsCfg:[]
             }
 		}
 	}

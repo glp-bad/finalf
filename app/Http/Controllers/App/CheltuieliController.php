@@ -18,6 +18,18 @@ class CheltuieliController extends Controller
 
 
 
+
+	public function checkWorkingExpense(){
+		$modeExpense = new ModelCheltuieli($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+
+		$succes = true;
+		$lastId = -1;
+		$messages = null;
+		$records  = $modeExpense->checkWorkingExpense();
+
+		return json_encode(new SqlMessageResponse($succes, $lastId, $messages, $records));
+	}
+
 	public function insertExpenseAntet(Request $request) {
 		$msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
 		$paramExpense = new Expense();
@@ -32,7 +44,16 @@ class CheltuieliController extends Controller
 
 		}
 
-		$modelCheltuieli =  new ModelCheltuieli();
+		try {
+			$msg->succes = true;
+			$modelCheltuieli =  new ModelCheltuieli($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+			$msg->lastId = $modelCheltuieli->insertAntet($paramExpense);
+
+		}catch (\Exception $e){
+			$msg->messages= 'Server error.';
+			$msg->errorMsg = $e->getMessage();
+			$msg->succes = false;
+		}
 
 
 		return $msg->toJson();

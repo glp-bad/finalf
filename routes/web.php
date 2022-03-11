@@ -66,6 +66,8 @@ Route::post('app/cashing/deleteIncomingDoc',   [PartenerInvoicesCashingInControl
 // cheltuieli
 Route::post('app/cheltuieli/nomTipCheltuieli',     [CheltuieliController::class,  'nomTipCheltuieli'])->middleware('auth');
 Route::post('app/cheltuieli/insertExpenseAntet',     [CheltuieliController::class,  'insertExpenseAntet'])->middleware('auth');
+Route::post('app/cheltuieli/checkWorkingExpense',     [CheltuieliController::class,  'checkWorkingExpense'])->middleware('auth');
+
 
 
 

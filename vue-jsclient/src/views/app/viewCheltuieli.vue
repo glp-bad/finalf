@@ -36,10 +36,10 @@ export default {
     name: "view-invoices",
     created() {
         this.cfgtime = {
+	        REF_CHELTUIALA_NEW: 'refCheltuialaNew',
             tabConfig: {
                 TAB_NEW: {id: '1t'},
                 TAB_LIST: {id: '2t'},
-                REF_CHELTUIALA_NEW: 'refCheltuialaNew',
                 header: [
                     this.$constTab.getHeader('1t', 'Cheltuiala noua'),
                     this.$constTab.getHeader('2t', 'Lista cheltuieli')
@@ -55,7 +55,7 @@ export default {
      methods: {
          emitClickTab: function (idTab) {
              if(idTab == this.cfgtime.tabConfig.TAB_NEW.id) {
-                 //this.$refs[this.cfgtime.REF_CREATE_INVOICE].checkWorkingInvoice();
+	             this.$refs[this.cfgtime.REF_CHELTUIALA_NEW].serverCheckWorkingExpense();
 
              } else if(idTab == this.cfgtime.tabConfig.TAB_LIST.id) {
                  //this.$refs[this.cfgtime.REF_INVOICE_LIST].refreshInvoiceList();

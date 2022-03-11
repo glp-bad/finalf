@@ -86,13 +86,13 @@
                         <div class="toolbar-icon-inline">
                             <div class="divButton">
                                 &nbsp;&nbsp;
-                                <my-button  :ref=this.cfgtime.REF_BUTTON_ADD_CHELT @click="this.addNewChelt" :heightButton=22 :buttonType=2 title="adauga factura" :style="this.cfgtime.ICON_ADD_CHELT.colorStyle">
+                                <my-button  :ref=this.cfgtime.REF_BUTTON_ADD_CHELT @click="this.serverAddNewChelt" :heightButton=22 :buttonType=2 title="adauga factura" :style="this.cfgtime.ICON_ADD_CHELT.colorStyle">
                                     <font-awesome-icon :icon=this.$constComponent.cfgIconPicture(this.cfgtime.ICON_ADD_CHELT) size="1x" />
                                 </my-button>
                             </div>
 
                             <div class="divButton">
-                                <my-button  :ref=this.cfgtime.REF_BUTTON_REMOVE_CHELT @click="this.deleteChelt" :heightButton=22 :buttonType=2 title="sterg factura" :style="this.cfgtime.ICON_REMOVE_CHELT.colorStyle">
+                                <my-button  :ref=this.cfgtime.REF_BUTTON_REMOVE_CHELT @click="this.serverDeleteAntet" :heightButton=22 :buttonType=2 title="sterg factura" :style="this.cfgtime.ICON_REMOVE_CHELT.colorStyle">
                                     <font-awesome-icon :icon=this.$constComponent.cfgIconPicture(this.cfgtime.ICON_REMOVE_CHELT) size="1x" />
                                 </my-button>
                             </div>
@@ -153,11 +153,13 @@
 	            CTR_PARTNER_LIST: this.cfgDropDownPartner(),
                 ICON_ADD_CHELT:            this.$constComponent.ICON_PLUS_SQUARE("blue"),
                 ICON_REMOVE_CHELT:        this.$constComponent.ICON_MINUS_SQUARE("red"),
-                URL_INSERT_ANTET: this.$url.getUrl('insertExpenseAntet')
+                URL_INSERT_ANTET: this.$url.getUrl('insertExpenseAntet'),
+                URL_CHECK_WORKING_EXPENSE: this.$url.getUrl('checkWorkingExpense')
             },
             this.runtime = {
                 mode: this.$constFROM.MODE_EDIT,
                 sendDataToServer: false,
+	            antetData: null,
                 yesNoMethod: 'methodName',
                 post: { idPk: null, field: {}, sqlAction: null}
             }
@@ -166,7 +168,7 @@
         mounted () {
         },
         methods: {
-            addNewChelt: function (){
+            serverAddNewChelt: function (){
 	            if(this.validateNewDoc()){
 		            this.$refs.validateWindowRef.show();
 		            return false;
@@ -193,20 +195,109 @@
 		            })
 		            .catch(error => console.log(error))
 		            .finally(() => {
+			            this.serverCheckWorkingExpense();
 			            this.$refs[this.REF_FORM].showModal(false);
-
-		            });
+    	            });
 
             },
+            serverDeleteAntet: function () {
+	            if(!this.runtime.sendDataToServer){
+	            	this.runtime.yesNoMethod = 'serverDeleteAntet';
+		            this.$refs.refYesNo.setCaption("Sterg cheltuiala?");
+		            this.$refs.refYesNo.setMessage("Datele sterse nu mai pot fi recuperate.");
+		            this.$refs.refYesNo.show();
+	            }
+
+	            if(this.runtime.sendDataToServer){
+		            this.runtime.sendDataToServer = false;
+                }
+
+            },
+	        serverCheckWorkingExpense: function() {
+		        this.$refs[this.REF_FORM].showModal(true);
+		        this.axios
+			        .post(this.cfgtime.URL_CHECK_WORKING_EXPENSE)
+			        .then(response => {
+				        if (response.data.succes) {
+					        // console.log(response.data.records.length);
+					        if(response.data.records.length > 0){
+						        this.runtime.antetData = response.data.records[0];
+					        }else{
+						        this.runtime.antetData = null;
+					        }
+				        }
+				        else {
+
+				        }
+			        })
+			        .catch(error => console.log(error))
+			        .finally(() => {
+				        this.fillAFormAntet();
+				        //this.showListItems();
+                        //console.log(this.runtime.antetData);
+				        this.$refs[this.REF_FORM].showModal(false);
+			        });
+	        },
             deleteChelt: function (){
             },
 	        emitClickTipPlata: function (){
             },
+	        fillAFormAntet: function (){
+		        if(this.$check.isUndef(this.runtime.antetData)){
+			        this.setModeForm(this.$constFROM.MODE_NEW);
+			        this.runtime.post.idPk = null;
+
+			        this.$refs[this.cfgtime.TIP_PLATA.ref].resetSelection();
+			        // this.$refs[this.cfgtime.CTR_DATA_CHELTUIALA.ref].resetDataSelected();
+                    this.$refs[this.cfgtime.CTR_NR_DOCUMENT.ref].setValue('');
+
+			        this.$refs[this.cfgtime.CTR_DOCUMENT_TYPE.ref].setValue(this.cfgtime.CTR_DOCUMENT_TYPE.getDefaultValue().id);
+			        this.$refs[this.cfgtime.CTR_TIP_CHELTUIELI.ref].setValue(this.cfgtime.CTR_TIP_CHELTUIELI.getDefaultValue().id);
+
+			        this.$refs[this.cfgtime.CTR_PARTNER_LIST.ref].resetDataSelected();
+			        this.$refs[this.cfgtime.CTR_PARTNER_LIST.ref].clearWordSearch();
+
+		        }else{
+			        this.setModeForm(this.$constFROM.MODE_EDIT);
+
+			        this.runtime.post.idPk = this.runtime.antetData.id;
+
+			        this.$refs[this.cfgtime.TIP_PLATA.ref].setCheck(this.runtime.antetData.id_tipplata);
+			        this.$refs[this.cfgtime.CTR_DATA_CHELTUIALA.ref].setValueFromSqlFormat(this.runtime.antetData.datac);
+			        this.$refs[this.cfgtime.CTR_NR_DOCUMENT.ref].setValue(this.runtime.antetData.cNrDoc);
+			        this.$refs[this.cfgtime.CTR_PARTNER_LIST.ref].setDataSelected( {id: this.runtime.antetData.id_part, caption: this.runtime.antetData.partner_name} );
+			        this.$refs[this.cfgtime.CTR_DOCUMENT_TYPE.ref].setValue(this.runtime.antetData.id_tipd);
+			        this.$refs[this.cfgtime.CTR_TIP_CHELTUIELI.ref].setValue(this.runtime.antetData.id_tipc);
+
+
+		        }
+	        },
             setModeForm: function (mode) {
                 this.runtime.mode = mode;
-                if(this.runtime.mode == this.$constFROM.MODE_EDIT) {}
+	            let readOnly = true;
 
-                if(this.runtime.mode == this.$constFROM.MODE_NEW) {}
+                if(this.runtime.mode == this.$constFROM.MODE_EDIT) {
+	                readOnly = true;
+	                this.$refs[this.cfgtime.REF_BUTTON_ADD_CHELT].disable(readOnly);
+	                this.$refs[this.cfgtime.REF_BUTTON_REMOVE_CHELT].disable(false);
+                }
+
+                if(this.runtime.mode == this.$constFROM.MODE_NEW) {
+	                readOnly = false;
+	                this.$refs[this.cfgtime.REF_BUTTON_ADD_CHELT].disable(readOnly);
+	                this.$refs[this.cfgtime.REF_BUTTON_REMOVE_CHELT].disable(true);
+                }
+
+
+                console.log(mode, readOnly);
+	            this.$refs[this.cfgtime.CTR_TIP_CHELTUIELI.ref].setReadOnly(readOnly);
+	            this.$refs[this.cfgtime.TIP_PLATA.ref].disabledAll(readOnly);
+	            this.$refs[this.cfgtime.CTR_DATA_CHELTUIALA.ref].setReadOnly(readOnly);
+	            this.$refs[this.cfgtime.CTR_NR_DOCUMENT.ref].setReadOnly(readOnly);
+	            this.$refs[this.cfgtime.CTR_PARTNER_LIST.ref].setReadOnly(readOnly);
+	            this.$refs[this.cfgtime.CTR_DOCUMENT_TYPE.ref].setReadOnly(readOnly);
+	            this.$refs[this.cfgtime.CTR_TIP_CHELTUIELI.ref].setReadOnly(readOnly);
+
             },
             emitYesNoButton: function (yes) {
                 if(yes == 1){
