@@ -2,22 +2,63 @@
 
 namespace App\Http\Controllers\App;
 
+use App\allClass\helpers\MyHelp;
 use App\allClass\helpers\param\Expense;
 use App\Http\Controllers\Controller;
 use App\allClass\helpers\response\SqlMessageResponse;
 use App\Models\app\ModelCheltuieli;
+use App\Models\app\ModelCheltuieliDetail;
 use App\Models\nomenclatoare\ModelNomTipCheltuieli;
 use App\MyAppConstants;
 use \Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 
 
 class CheltuieliController extends Controller
 {
     public function __construct(){}
 
+    public function deleteAntetExpense (Request $request){
+        $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
+        $modelExpense = new ModelCheltuieli($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        $id = $request->idPk;
 
+        // --- check mounth
+        $entity = $modelExpense->selectEntity($id);
+        $dataDocument = MyHelp::getCarbonDate('Y-m-d H:i:s.u', $entity[0]->datac);
 
+        $openMonth = $this->isOpenMonth($dataDocument->year, $dataDocument->month);
+        if(!$openMonth['open']){
+            $msg->succes = false;
+            $msg->lastId = -1;
+            $msg->messages= $openMonth['msg'];
+            return $msg->toJson();
+        }
+
+        $modelExpenseDetail =  new ModelCheltuieliDetail($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+
+        try {
+            DB::beginTransaction();
+
+            $modelExpenseDetail->deleteDetailExpense($id);
+            $deleteAntet = $modelExpense->deleteAntet($id);
+            if($deleteAntet != 1){
+                throw new \Exception("Cheltuiala nu poate fi stearsa, nu se poate sterge antetul!");
+            }
+
+            DB::commit();
+
+            $msg->succes = true;
+
+        }catch (\Exception $e){
+            DB::rollBack();
+
+            $msg->messages= 'App error. Nu se poate sterge antetul. Incercati relogarea in aplicatie.';
+            $msg->errorMsg = $e->getMessage();
+            $msg->succes = false;
+        }
+        return $msg->toJson();
+    }
 
 	public function checkWorkingExpense(){
 		$modeExpense = new ModelCheltuieli($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));

@@ -56,6 +56,9 @@ export default [
 	{name: "nomTipCheltuieli"       , url: "public/app/cheltuieli/nomTipCheltuieli"},
 	{name: "insertExpenseAntet"     , url: "public/app/cheltuieli/insertExpenseAntet"},
 	{name: "checkWorkingExpense"    , url: "public/app/cheltuieli/checkWorkingExpense"},
+    {name: "deleteAntetExpense"    , url: "public/app/cheltuieli/deleteAntetExpense"},
+
+
 
 
 

@@ -12,6 +12,14 @@ class ModelCheltuieliDetail extends MyModel {
         $this->tableName = 't_cheltuieli_d';
     }
 
+    public function deleteDetailExpense($idExpense){
+        $rezult = DB::delete(
+            "delete from t_cheltuieli_d where id_chlet = :idExpense;",
+            ['idExpense'=>$idExpense]
+        );
+        return $rezult;
+    }
+
     public function selectEntity($id){
         $rezult = DB::select(
             " 

@@ -147,14 +147,16 @@
 		            ]
 	            },
                 CTR_DATA_CHELTUIALA: this.cfgDataCheltuiala(),
-	            CTR_NR_DOCUMENT: this.cfgNrDoc(),
-	            CTR_DOCUMENT_TYPE: this.cfgDocumentType(),
+	            CTR_NR_DOCUMENT:    this.cfgNrDoc(),
+	            CTR_DOCUMENT_TYPE:  this.cfgDocumentType(),
 	            CTR_TIP_CHELTUIELI: this.cfgCheltuieliType(),
-	            CTR_PARTNER_LIST: this.cfgDropDownPartner(),
-                ICON_ADD_CHELT:            this.$constComponent.ICON_PLUS_SQUARE("blue"),
-                ICON_REMOVE_CHELT:        this.$constComponent.ICON_MINUS_SQUARE("red"),
-                URL_INSERT_ANTET: this.$url.getUrl('insertExpenseAntet'),
-                URL_CHECK_WORKING_EXPENSE: this.$url.getUrl('checkWorkingExpense')
+	            CTR_PARTNER_LIST:   this.cfgDropDownPartner(),
+                ICON_ADD_CHELT:     this.$constComponent.ICON_PLUS_SQUARE("blue"),
+                ICON_REMOVE_CHELT:  this.$constComponent.ICON_MINUS_SQUARE("red"),
+                URL_INSERT_ANTET:   this.$url.getUrl('insertExpenseAntet'),
+                URL_CHECK_WORKING_EXPENSE: this.$url.getUrl('checkWorkingExpense'),
+                URL_DELETE_EXPENSE: this.$url.getUrl('deleteAntetExpense')
+
             },
             this.runtime = {
                 mode: this.$constFROM.MODE_EDIT,
@@ -210,6 +212,28 @@
 
 	            if(this.runtime.sendDataToServer){
 		            this.runtime.sendDataToServer = false;
+
+                    this.runtime.post.idPk = this.runtime.antetData.id;
+
+                    this.$refs[this.REF_FORM].showModal(true);
+
+                    this.axios
+                        .post(this.cfgtime.URL_DELETE_EXPENSE, this.runtime.post)
+                        .then(response => {
+                            if (response.data.succes){
+                            }
+                            else {
+                                this.$refs.validateWindowRef.setCaption("Nu se poate sterge documentul");
+                                this.$refs.validateWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+                                this.$refs.validateWindowRef.show();
+                            }
+
+                        })
+                        .catch(error => console.log(error))
+                        .finally(() => {
+                            this.serverCheckWorkingExpense();
+                            this.$refs[this.REF_FORM].showModal(false);
+                        });
                 }
 
             },

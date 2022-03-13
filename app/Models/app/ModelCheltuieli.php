@@ -13,6 +13,16 @@ class ModelCheltuieli extends MyModel {
         $this->tableName = 't_cheltuieli';
     }
 
+
+    public function deleteAntet($idPk){
+        $rezult = DB::delete(
+            "delete from t_cheltuieli where id = :id and id_avocat = :idAvocat and salvata = :salvata;",
+            ['id'=>$idPk, 'idAvocat'=>$this->idAvocat, 'salvata'=>0]
+        );
+
+        return $rezult;
+    }
+
 	// daca exista document in lucru
 	public function checkWorkingExpense(){
 		$rezult = DB::select(
