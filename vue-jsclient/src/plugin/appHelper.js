@@ -49,6 +49,32 @@ const appHelper = {
                     return objFind;
                 }
             },
+            app.config.globalProperties.$calulate = {
+                tva: function(tipSuma, suma, percentTVA, cantitate){
+
+                    let percent =(percentTVA/100) + 1;
+
+                    let sumaTVA = 0;
+                    let sumaCuTVA = 0;
+                    let sumaFaraTVA = 0;
+
+                    if(tipSuma == 1){
+                        // suma fara tva
+                        sumaFaraTVA = suma;
+                        sumaTVA = +( (suma * percent) - suma ).toFixed(2);
+                        sumaCuTVA = +(suma * percent).toFixed(2);
+                    }else{
+                        // suma cu tva
+                        sumaFaraTVA = +(suma/percent).toFixed(2);
+                        sumaTVA = +(suma - sumaFaraTVA).toFixed(2);
+                        sumaCuTVA = suma;
+                    }
+
+                    let pretUnitarFaraTva = +(sumaFaraTVA / cantitate).toFixed(4);
+
+                    return {sumaFaraTVA: sumaFaraTVA, sumaTVA: sumaTVA, sumaCuTVA: sumaCuTVA, pretUnitarFaraTva: pretUnitarFaraTva};
+                }
+            },
             app.config.globalProperties.$vanilla = {
 	            displayDivOnOff: function(div, dispaly){
 

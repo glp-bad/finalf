@@ -53,16 +53,13 @@ export default [
     {name: "incomingList"       ,url: "public/app/cashing/incomingList"},
     {name: "deleteIncomingDoc"  ,url: "public/app/cashing/deleteIncomingDoc"},
 
-	{name: "nomTipCheltuieli"       , url: "public/app/cheltuieli/nomTipCheltuieli"},
-	{name: "insertExpenseAntet"     , url: "public/app/cheltuieli/insertExpenseAntet"},
-	{name: "checkWorkingExpense"    , url: "public/app/cheltuieli/checkWorkingExpense"},
-    {name: "deleteAntetExpense"    , url: "public/app/cheltuieli/deleteAntetExpense"},
-
-
-
-
-
-
+	{name: "nomTipCheltuieli"           ,url: "public/app/cheltuieli/nomTipCheltuieli"},
+	{name: "insertExpenseAntet"         ,url: "public/app/cheltuieli/insertExpenseAntet"},
+	{name: "checkWorkingExpense"        ,url: "public/app/cheltuieli/checkWorkingExpense"},
+    {name: "deleteAntetExpense"         ,url: "public/app/cheltuieli/deleteAntetExpense"},
+    {name: "nomCategoriCheltuieli"      ,url: "public/app/cheltuieli/nomCategoriCheltuieli"},
+    {name: "listProducts"               ,url: "public/app/cheltuieli/listProducts"},
+    {name: "nomTipUm"                   ,url: "public/app/cheltuieli/nomTipUm"},
 
     {name: "monthList"  ,url: "public/app/avocat/monthList"},
     {name: "checkMonth" ,url: "public/app/avocat/checkMonth"},

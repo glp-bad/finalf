@@ -11,6 +11,20 @@ class ModelNomProduse extends MyModel {
         $this->tableName = 't_produse';
     }
 
+    public function selectForSearchDropDown($wordSearch){
+        $rezult = DB::select("
+	                    SELECT t_produse.id,
+	                            t_produse.cProd as caption
+						from t_produse 
+	                    where t_produse.id_avocat= :idAvocat
+	                        and t_produse.cProd like '%$wordSearch%'
+	                    order by t_produse.cProd",
+            ['idAvocat'=> $this->idAvocat]
+        );
+
+        return $rezult;
+    }
+
     public function selectEntity($id){
         $rezult = DB::select(
             "SELECT id, id_avocat, cProd,

@@ -9,6 +9,8 @@ class ConfigControl {
     defaultValue= null;
     disabled= false;
     width= null;               // replace sizeField
+    readOnly = false;
+    emit = null;
 
     setBaseConfig(id, sizeField, width) {
         this.id = id;
@@ -22,8 +24,6 @@ class ConfigControl {
 		    this.sizeField = 0;
 		    this.width = width + 'px';
 	    }
-
-
     }
     setCaption(caption) {
         this.caption = caption;
@@ -44,15 +44,15 @@ class ConfigControl {
         this.disabled = disable;
     }
 
+    setEmit(emit){
+        this.emit = emit;
+    }
+
 }
 
 
 
 class CheckBox extends ConfigControl{
-    emit = 'emitClick';
-    setEmit(emit){
-        this.emit = emit;
-    }
 }
 class InputIBAN extends ConfigControl{}
 
@@ -89,6 +89,16 @@ class InputField extends ConfigControl
     maxLength= 0;
     maska= "";
     placeHolder = "...";
+    emitKeyUp = null;
+    emitKeyDown = null;
+
+    setEmitKeyUp(emit) {
+        this.emitKeyUp = emit;
+    }
+
+    setEmitKeyDown(emit) {
+        this.emitKeyDown = emit;
+    }
 
     setMaska(maska) {
         this.maska = maska;

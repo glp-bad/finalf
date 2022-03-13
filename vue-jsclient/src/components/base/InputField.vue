@@ -8,6 +8,7 @@
                v-model = "dataModel"
                v-maska= this.pConfig.maska
                v-bind:class="{'disable-background': this.readOnly }"
+               v-on:keyup="this.keyupPress"
         >
     </div>
 </template>
@@ -34,9 +35,13 @@
             if(!this.$check.isUndef(this.pConfig.width)) {
 	            this.$refs[this.REF_DIV_CONTAINER].style.width = this.pConfig.width;
             }
-
+            if(this.pConfig.readOnly){
+                this.readOnly = this.pConfig.readOnly;
+                this.$refs.refInput.setAttribute('readonly', this.pConfig.readOnly);
+            }
 			// document.addEventListener('keydown', this.keydownPress);
-			// document.addEventListener('keyup', this.keydownPress);
+
+            // if(!this.$check.isUndef(this.pConfig.emitKeyUp)) {                document.addEventListener('keyup', this.keyupPress);            }
         },
         methods: {
 			getValue: function () {
@@ -56,6 +61,17 @@
                 }
 
                 this.readOnly = readOnly;
+            },
+            keyupPress: function (){
+                if(!this.$check.isUndef(this.pConfig.emitKeyUp)) {
+                    this.$emit(this.pConfig.emitKeyUp, this.dataModel);
+                }
+                /*
+                if(!this.$check.isUndef(this.pConfig.emitKeyUp)) {
+                    this.$emit("thispConfigemitKeyUp");
+                }
+                */
+
             },
 	        keydownPress: function () {
 			    /*

@@ -8,7 +8,10 @@ use App\Http\Controllers\Controller;
 use App\allClass\helpers\response\SqlMessageResponse;
 use App\Models\app\ModelCheltuieli;
 use App\Models\app\ModelCheltuieliDetail;
+use App\Models\nomenclatoare\ModelNomCategoriCheltuilei;
+use App\Models\nomenclatoare\ModelNomProduse;
 use App\Models\nomenclatoare\ModelNomTipCheltuieli;
+use App\Models\nomenclatoare\ModelNomTipUm;
 use App\MyAppConstants;
 use \Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -109,5 +112,43 @@ class CheltuieliController extends Controller
 
 		return json_encode(new SqlMessageResponse($succes, $lastId, $messages, $records));
 	}
+
+    public function nomCategoriCheltuieli(Request $request) {
+        $nom = new ModelNomCategoriCheltuilei($this->getSession()->get(MyAppConstants::ID_AVOCAT), null);
+        $succes = true;
+        $lastId = -1;
+        $messages = null;
+        $records  = $nom->selectForSimpleDropDown();
+
+        return json_encode(new SqlMessageResponse($succes, $lastId, $messages, $records));
+    }
+
+
+    /**
+     * @param Request $request
+     * @return false|string
+     * for dropdown list
+     */
+    public function listProducts(Request $request) {
+        $nom = new ModelNomProduse($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        $succes = true;
+        $lastId = -1;
+        $messages = null;
+        $records  = $nom->selectForSearchDropDown($request->wordSearch);
+
+        return json_encode(new SqlMessageResponse($succes, $lastId, $messages, $records));
+    }
+
+
+    public function nomTipUm(Request $request) {
+        $nom = new ModelNomTipUm($this->getSession()->get(MyAppConstants::ID_AVOCAT), null);
+        $succes = true;
+        $lastId = -1;
+        $messages = null;
+        $records  = $nom->selectForSimpleDropDown();
+
+        return json_encode(new SqlMessageResponse($succes, $lastId, $messages, $records));
+    }
+
 
 }

@@ -28,61 +28,78 @@
         <template v-slot:slotTitle>
         </template>
         <template v-slot:slotContent>
-            <table class="ff-form-table">
-                <tr>
-                    <td class="control">
+            <!-- antet cheltuiei ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+            <div class="ff-flex-form-center-align">
+                <div class="item-column">
+                    <div class="control">
                         <my-radio-button
-                                :ref = this.cfgtime.TIP_PLATA.ref
-                                :pConfig = this.cfgtime.TIP_PLATA
-                                @emitClickTipPlata = 'emitClickTipPlata'
+                            :ref = this.cfgtime.TIP_PLATA.ref
+                            :pConfig = this.cfgtime.TIP_PLATA
+                            @emitClickTipPlata = 'emitClickTipPlata'
                         ></my-radio-button>
-                    </td>
-                    <td class="label-left bold" colspan="1">
-                        &nbsp;&nbsp;&nbsp;
-                        <label :for=this.cfgtime.CTR_DATA_CHELTUIALA.id>{{this.cfgtime.CTR_DATA_CHELTUIALA.caption}} &nbsp;</label>
+                    </div>
+                </div>
+                <div class="item-inline">
+                    <div class="label">
+                        <label :for=this.cfgtime.CTR_DATA_CHELTUIALA.id>{{this.cfgtime.CTR_DATA_CHELTUIALA.caption}}</label>
+                    </div>
+                    <div class="control">
                         <my-datetime
-                                :ref = this.cfgtime.CTR_DATA_CHELTUIALA.ref
-                                :pConfig = this.cfgtime.CTR_DATA_CHELTUIALA
+                            :ref = this.cfgtime.CTR_DATA_CHELTUIALA.ref
+                            :pConfig = this.cfgtime.CTR_DATA_CHELTUIALA
                         ></my-datetime>
-                    </td>
-
-                    <td class="label-left bold">
-                        &nbsp;
-                        <label :for=this.cfgtime.CTR_NR_DOCUMENT.id>{{this.cfgtime.CTR_NR_DOCUMENT.caption}}</label></td>
-                    <td>
+                    </div>
+                </div>
+                <div class="item-inline">
+                    <div class="label">
+                        <label :for=this.cfgtime.CTR_NR_DOCUMENT.id>{{this.cfgtime.CTR_NR_DOCUMENT.caption}}</label>
+                    </div>
+                    <div class="control">
                         <input-field
-                                :ref = this.cfgtime.CTR_NR_DOCUMENT.ref
-                                :pConfig = this.cfgtime.CTR_NR_DOCUMENT
+                            :ref = this.cfgtime.CTR_NR_DOCUMENT.ref
+                            :pConfig = this.cfgtime.CTR_NR_DOCUMENT
                         ></input-field>
-                        &nbsp;
-                        &nbsp;
-                    </td>
-                    <td class="label-left bold" colspan="2">
-                        <my-dropdown-simple
-                                :pConfig = this.cfgtime.CTR_DOCUMENT_TYPE
-                                :ref = this.cfgtime.CTR_DOCUMENT_TYPE.ref
-                        ></my-dropdown-simple>
-                    </td>
-                    <td class="label-left bold" colspan="2">
-                        <my-dropdown-simple
-                                :pConfig = this.cfgtime.CTR_TIP_CHELTUIELI
-                                :ref = this.cfgtime.CTR_TIP_CHELTUIELI.ref
-                        ></my-dropdown-simple>
-                    </td>
-                </tr>
-                <tr>
+                    </div>
+                </div>
+            </div>
 
-                    <td class="label-right bold">
-                        &nbsp;
-                        <label :for=this.cfgtime.CTR_PARTNER_LIST.id>{{this.cfgtime.CTR_PARTNER_LIST.caption}}</label></td>
-
-                    <td class="control" colspan="4">
+            <div class="ff-flex-form-end-align">
+                <div class="item-column">
+                    <div class="label">
+                        <label :for=this.cfgtime.CTR_DOCUMENT_TYPE.id>{{this.cfgtime.CTR_DOCUMENT_TYPE.caption}}</label>
+                    </div>
+                    <div class="control">
+                        <my-dropdown-simple
+                            :pConfig = this.cfgtime.CTR_DOCUMENT_TYPE
+                            :ref = this.cfgtime.CTR_DOCUMENT_TYPE.ref
+                        ></my-dropdown-simple>
+                    </div>
+                </div>
+                <div class="item-column">
+                    <div class="label">
+                        <label :for=this.cfgtime.CTR_TIP_CHELTUIELI.id>{{this.cfgtime.CTR_TIP_CHELTUIELI.caption}}</label>
+                    </div>
+                    <div class="control">
+                        <my-dropdown-simple
+                            :pConfig = this.cfgtime.CTR_TIP_CHELTUIELI
+                            :ref = this.cfgtime.CTR_TIP_CHELTUIELI.ref
+                        ></my-dropdown-simple>
+                    </div>
+                </div>
+                <div class="item-column">
+                    <div class="label">
+                        <label :for=this.cfgtime.CTR_PARTNER_LIST.id>{{this.cfgtime.CTR_PARTNER_LIST.caption}}</label>
+                    </div>
+                    <div class="control">
                         <my-dropdown-search :ref = this.cfgtime.CTR_PARTNER_LIST.ref
                                             :pConfig = this.cfgtime.CTR_PARTNER_LIST
                         ></my-dropdown-search>
-                    </td>
+                    </div>
+                </div>
 
-                    <td class="control">
+                <div class="item-column">
+                    <div class="control">
                         <div class="toolbar-icon-inline">
                             <div class="divButton">
                                 &nbsp;&nbsp;
@@ -98,9 +115,162 @@
                             </div>
 
                         </div>
-                    </td>
-                </tr>
-            </table>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class = 'line'></div>
+            <br>
+
+
+            <!-- detaliu cheltuiei ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+            <div class="ff-flex-form">
+                <div class="item-inline">
+                    <div class="control">
+                        <my-radio-button
+                            :ref = this.cfgtime.CTR_TIP_SUMA.ref
+                            :pConfig = this.cfgtime.CTR_TIP_SUMA
+                            @emitClickTipSumaTva = 'emitClickTipSumaTva'
+                        ></my-radio-button>
+                    </div>
+                </div>
+
+
+                <div class="item-inline">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <div class="control">
+                        <check-box
+                            :pConfig = this.cfgtime.CTR_SUMA_TVA_MANUALA
+                            :ref= this.cfgtime.CTR_SUMA_TVA_MANUALA.ref
+                            @emitSumaTvaManuala = 'emitSumaTvaManuala'
+                        ></check-box>
+                        <label class="label-bold" :for=this.cfgtime.CTR_SUMA_TVA_MANUALA.id>{{this.cfgtime.CTR_SUMA_TVA_MANUALA.caption}}</label>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class="ff-flex-form">
+                <div class="item-column">
+                    <div class="label">
+                        <label :for=this.cfgtime.CTR_CATEGORIE_CHELTUIALA.id>{{this.cfgtime.CTR_CATEGORIE_CHELTUIALA.caption}}</label>
+                    </div>
+                    <div class="control">
+                        <my-dropdown-simple
+                            :pConfig = this.cfgtime.CTR_CATEGORIE_CHELTUIALA
+                            :ref = this.cfgtime.CTR_CATEGORIE_CHELTUIALA.ref
+                        ></my-dropdown-simple>
+                    </div>
+                </div>
+                <div class="item-column">
+                    <div class="label">
+                        <label :for=this.cfgtime.CTR_PRODUCT_LIST.id>{{this.cfgtime.CTR_PRODUCT_LIST.caption}}</label>
+                    </div>
+                    <div class="control">
+                        <my-dropdown-search :ref = this.cfgtime.CTR_PRODUCT_LIST.ref
+                                            :pConfig = this.cfgtime.CTR_PRODUCT_LIST
+                        ></my-dropdown-search>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ------------------------------------------------------------------------------------------------------------------------------- -->
+
+            <div class="ff-flex-form">
+
+                <div class="item-inline">
+                    <div class="label">
+                        <label :for=this.cfgtime.CTR_UM.id>{{this.cfgtime.CTR_UM.caption}}</label>
+                    </div>
+                    <div class="control">
+                        <my-dropdown-simple
+                            :pConfig = this.cfgtime.CTR_UM
+                            :ref = this.cfgtime.CTR_UM.ref
+                        ></my-dropdown-simple>
+                    </div>
+                </div>
+
+                <div class="item-inline">
+                    <div class="label">
+                        <label :for=this.cfgtime.CTR_CANTITATE.id>{{this.cfgtime.CTR_CANTITATE.caption}}</label>
+                    </div>
+                    <div class="control">
+                        <input-field
+                            :ref = this.cfgtime.CTR_CANTITATE.ref
+                            :pConfig = this.cfgtime.CTR_CANTITATE
+                            @emitKeyUpCantitate = 'emitKeyUpCantitate'
+                        ></input-field>
+                    </div>
+                </div>
+
+                <div class="item-inline">
+                    <div class="label">
+                        <label :for=this.cfgtime.CTR_SUMA_UNITARA.id>{{this.cfgtime.CTR_SUMA_UNITARA.caption}}</label>
+                    </div>
+                    <div class="control">
+                        <input-field
+                            :ref = this.cfgtime.CTR_SUMA_UNITARA.ref
+                            :pConfig = this.cfgtime.CTR_SUMA_UNITARA
+                            @emitKeyUpSuma = 'emitKeyUpSuma'
+                        ></input-field>
+                    </div>
+                </div>
+
+                <div class="item-inline">
+                    <div class="label">
+                        <label :for=this.cfgtime.CTR_SUMA_TOTAL_TVA.id>{{this.cfgtime.CTR_SUMA_TOTAL_TVA.caption}}</label>
+                    </div>
+                    <div class="control">
+                        <input-field
+                            :ref = this.cfgtime.CTR_SUMA_TOTAL_TVA.ref
+                            :pConfig = this.cfgtime.CTR_SUMA_TOTAL_TVA
+                        ></input-field>
+                    </div>
+                </div>
+
+                <div class="item-inline">
+                    <div class="label">
+                        <label :for=this.cfgtime.CTR_SUMA_PRETUNITAR_FARA_TVA.id>{{this.cfgtime.CTR_SUMA_PRETUNITAR_FARA_TVA.caption}}</label>
+                    </div>
+                    <div class="control">
+                        <input-field
+                            :ref = this.cfgtime.CTR_SUMA_PRETUNITAR_FARA_TVA.ref
+                            :pConfig = this.cfgtime.CTR_SUMA_PRETUNITAR_FARA_TVA
+                        ></input-field>
+                    </div>
+                </div>
+
+                <div class="item-inline">
+                    <div class="label">
+                        <label :for=this.cfgtime.CTR_PROCENT_TVA.id>{{this.cfgtime.CTR_PROCENT_TVA.caption}}</label>
+                    </div>
+                    <div class="control">
+                        <input-field
+                            :ref = this.cfgtime.CTR_PROCENT_TVA.ref
+                            :pConfig = this.cfgtime.CTR_PROCENT_TVA
+                            @emitKeyUpPercenTVA = 'emitKeyUpPercenTVA'
+                        ></input-field>
+                    </div>
+                </div>
+
+
+                <div class="item-inline">
+                    <div class="control">
+                        <div class="buttons">
+                            <my-button :ref=this.cfgtime.REF_BUTTON_ADD_ITEM @click="this.serverAddArticol" :heightButton=22 :buttonType=0 title="adaug articol in factura">Adaug</my-button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+
         </template>
         <template v-slot:slotButton>
         </template>
@@ -116,6 +286,7 @@
     import DropDownSimple   from "@/components/base/DropDownSimple.vue";
     import DropDownSearch   from "@/components/base/DropDownSearch.vue"
     import Button           from "@/components/base/Button";
+    import CheckBox         from "@/components/base/CheckBox.vue";
 
     export default {
         components: {
@@ -126,7 +297,8 @@
 	        'input-field': InputField,
 	        'my-dropdown-simple': DropDownSimple,
 	        'my-dropdown-search': DropDownSearch,
-            'my-button': Button
+            'my-button': Button,
+            'check-box': CheckBox
         },
         name: "form-chletuiala-new",
         created() {
@@ -134,6 +306,7 @@
             this.cfgtime = {
                 REF_BUTTON_ADD_CHELT:     'refAddChelt',
                 REF_BUTTON_REMOVE_CHELT:  'refRemoveChelt',
+                REF_BUTTON_ADD_ITEM:        'refAddItem',
 	            TIP_PLATA: {
 		            id: 'refTipPlata',
 		            ref: 'refTipPlata',
@@ -155,7 +328,30 @@
                 ICON_REMOVE_CHELT:  this.$constComponent.ICON_MINUS_SQUARE("red"),
                 URL_INSERT_ANTET:   this.$url.getUrl('insertExpenseAntet'),
                 URL_CHECK_WORKING_EXPENSE: this.$url.getUrl('checkWorkingExpense'),
-                URL_DELETE_EXPENSE: this.$url.getUrl('deleteAntetExpense')
+                URL_DELETE_EXPENSE: this.$url.getUrl('deleteAntetExpense'),
+                CTR_TIP_SUMA: {
+                    id:         'refTipSuma',
+                    ref:        'refTipSuma',
+                    caption:    'Suma',
+                    alignment: this.$constRadioButton.ALIGNMENT_H,
+                    name:       'tipSumaTva',
+                    emit:       'emitClickTipSumaTva',
+                    buttons:[
+                        {id: 1, value: '1', caption: 'Suma totala fara TVA', check: true, disableOption: false },
+                        {id: 2, value: '2', caption: 'Suma totala cu TVA', check: false, disableOption: false }
+                    ]
+                },
+                CTR_CATEGORIE_CHELTUIALA:  this.cfgCategoriiCheltuieli(),
+                CTR_PRODUCT_LIST:   this.cfgDropDownProducts(),
+                CTR_UM:  this.cfgUm(),
+                CTR_CANTITATE: this.cfgCantitate(),
+                CTR_SUMA_UNITARA: this.cfgSumaUnitara(),
+                CTR_SUMA_TOTAL_TVA: this.cfgSumaTVA(),
+                CTR_SUMA_PRETUNITAR_FARA_TVA: this.cfgPretUnitarFaraTva(),
+                CTR_PROCENT_TVA: this.cfgTva(),
+                CTR_SUMA_TVA_MANUALA: this.cfgSumaTvaManuala(),
+                TVA: 19
+
 
             },
             this.runtime = {
@@ -168,8 +364,12 @@
         },
         emits: ['emitModel'],
         mounted () {
+            this.$refs[this.cfgtime.CTR_PROCENT_TVA.ref].setValue(this.cfgtime.TVA);
         },
         methods: {
+            serverAddArticol: function (){
+
+            },
             serverAddNewChelt: function (){
 	            if(this.validateNewDoc()){
 		            this.$refs.validateWindowRef.show();
@@ -264,6 +464,43 @@
 	        },
             deleteChelt: function (){
             },
+            emitKeyUpPercenTVA: function (value){
+                this.privateCalculateTVA('emitKeyUpPercenTVA');
+            },
+            emitKeyUpSuma: function (value){
+                this.privateCalculateTVA('emitKeyUpSuma');
+            },
+            emitKeyUpCantitate: function (value){
+                // console.log(value);
+                this.privateCalculateTVA('from KeyUpCantitate');
+            },
+            emitClickTipSumaTva: function (){
+                this.privateCalculateTVA('from emitClickTipSumaTva');
+            },
+            emitSumaTvaManuala: function (checkBoxControl){
+
+                this.$refs[this.cfgtime.CTR_SUMA_TOTAL_TVA.ref].setReadOnly(!checkBoxControl.checked);
+
+                if(checkBoxControl.checked){
+                    this.$refs[this.cfgtime.CTR_SUMA_TOTAL_TVA.ref].setValue(0);
+                }
+
+
+                console.log(this.$calulate.tva(1,16.64,19,12));
+                console.log(this.$calulate.tva(2,860.76,19,3));
+
+
+                this.privateCalculateTVA('from emitSumaTvaManuala');
+            },
+            privateCalculateTVA: function (sourceClick){
+                console.log(sourceClick); // for debug
+
+                let sumaFaraTva = true;
+                let suma = 100.00;
+                let cantitate = 1;
+                let tva = 19;
+
+            },
 	        emitClickTipPlata: function (){
             },
 	        fillAFormAntet: function (){
@@ -304,16 +541,17 @@
 	                readOnly = true;
 	                this.$refs[this.cfgtime.REF_BUTTON_ADD_CHELT].disable(readOnly);
 	                this.$refs[this.cfgtime.REF_BUTTON_REMOVE_CHELT].disable(false);
+                    this.$refs[this.cfgtime.REF_BUTTON_ADD_ITEM].disable(false);
                 }
 
                 if(this.runtime.mode == this.$constFROM.MODE_NEW) {
 	                readOnly = false;
 	                this.$refs[this.cfgtime.REF_BUTTON_ADD_CHELT].disable(readOnly);
 	                this.$refs[this.cfgtime.REF_BUTTON_REMOVE_CHELT].disable(true);
+                    this.$refs[this.cfgtime.REF_BUTTON_ADD_ITEM].disable(true);
+
                 }
 
-
-                console.log(mode, readOnly);
 	            this.$refs[this.cfgtime.CTR_TIP_CHELTUIELI.ref].setReadOnly(readOnly);
 	            this.$refs[this.cfgtime.TIP_PLATA.ref].disabledAll(readOnly);
 	            this.$refs[this.cfgtime.CTR_DATA_CHELTUIALA.ref].setReadOnly(readOnly);
@@ -476,6 +714,87 @@
 		        cfg.setMandatory(true);
 		        return cfg;
 	        },
+            cfgCategoriiCheltuieli: function(){
+                let cfg = this.$app.cfgSelectSimple('nomCategoriCheltuieli', this.$url.getUrl('nomCategoriCheltuieli'), 270);
+                cfg.setValidateFunction(this.validateCategoriCheltuieli);
+                cfg.setCaption("Categorie cheltuiala");
+                cfg.setMandatory(true);
+                cfg.setPlaceHolder('... (cat. cheltuiala)');
+                cfg.setDefaultValue({id: 0, text: '... (cat. cheltuiala)'});
+                return cfg;
+            },
+            cfgDropDownProducts: function(){
+                let cfg = this.$app.cfgSelectSearch('nomProducts', this.$url.getUrl('listProducts'), 450);
+                cfg.setValidateFunction(this.validateProduct);
+                cfg.setCaption("Produse");
+                cfg.setMandatory(true);
+                return cfg;
+            },
+            cfgUm: function(){
+                let cfg = this.$app.cfgSelectSimple('nomUm', this.$url.getUrl('nomTipUm'), 170);
+                cfg.setValidateFunction(this.validateUm);
+                cfg.setCaption("Unitate de masura");
+                cfg.setMandatory(true);
+                cfg.setPlaceHolder('... (unitate de masura)');
+                cfg.setDefaultValue({id: 0, text: '... (unitate de masura)'});
+                return cfg;
+            },
+            cfgCantitate: function(){
+                let cfg = this.$app.cfgInputField("cantitate", null, 65);
+                cfg.setValidate(2,20);
+                cfg.setValidateFunction(this.validateCantitate);
+                cfg.setCaption("Cantitate");
+                cfg.setMandatory(true);
+                cfg.setMaska("");
+                cfg.setEmitKeyUp('emitKeyUpCantitate');
+                return cfg;
+            },
+            cfgSumaUnitara: function(){
+                let cfg = this.$app.cfgInputField("sumaUnitara", null, 50);
+                cfg.setValidate(2,20);
+                cfg.setValidateFunction(this.validateSumaUnitara);
+                cfg.setCaption("Suma totala fara TVA");
+                cfg.setMandatory(true);
+                cfg.setMaska("");
+                cfg.setEmitKeyUp('emitKeyUpSuma');
+                return cfg;
+            },
+            cfgSumaTVA: function(){
+                let cfg = this.$app.cfgInputField("sumaTva", null, 50);
+                cfg.setValidate(2,20);
+                cfg.setValidateFunction(this.validateSumaTVA);
+                cfg.setCaption("Total TVA");
+                cfg.setMandatory(true);
+                cfg.setMaska("");
+                cfg.readOnly = true;
+                return cfg;
+            },
+            cfgPretUnitarFaraTva: function(){
+                let cfg = this.$app.cfgInputField("sumaPretUnitarFaraTva", null, 50);
+                cfg.setValidate(2,20);
+                cfg.setValidateFunction(this.validateSumaPretUnitarFaraTva);
+                cfg.setCaption("Pret unitar fara tva");
+                cfg.setMandatory(true);
+                cfg.setMaska("");
+                cfg.readOnly = true;
+                return cfg;
+            },
+            cfgTva: function(){
+                let cfg = this.$app.cfgInputField("tva", null, 35);
+                cfg.setValidateFunction(this.validateTVA);
+                cfg.setCaption("TVA");
+                cfg.setMandatory(true);
+                cfg.setMaska("");
+                cfg.setEmitKeyUp('emitKeyUpPercenTVA');
+                return cfg;
+            },
+            cfgSumaTvaManuala: function (){
+                let cfg = this.$app.cfgCheckBox('sumaTvaManuala', false);
+                cfg.setEmit('emitSumaTvaManuala');
+                cfg.setCaption('Calculez tva manual');
+                cfg.setValidateFunction(this.validateTvaManual);
+                return cfg;
+            },
         },
         data () {
             return {
