@@ -208,8 +208,8 @@
                 </div>
 
                 <div class="item-inline">
-                    <div class="label">
-                        <label :for=this.cfgtime.CTR_SUMA_UNITARA.id>{{this.cfgtime.CTR_SUMA_UNITARA.caption}}</label>
+                    <div class="label" style="width: 135px">
+                        <label :ref=this.cfgtime.REF_LABEL_SUMA :for=this.cfgtime.CTR_SUMA_UNITARA.id>{{this.cfgtime.CTR_SUMA_UNITARA.caption}}</label>
                     </div>
                     <div class="control">
                         <input-field
@@ -303,7 +303,8 @@
         name: "form-chletuiala-new",
         created() {
             this.REF_FORM = 'refCheltuialaNew';
-            this.cfgtime = {
+            this.cfgtime ={
+                REF_LABEL_SUMA: 'refLabelSuma',
                 REF_BUTTON_ADD_CHELT:     'refAddChelt',
                 REF_BUTTON_REMOVE_CHELT:  'refRemoveChelt',
                 REF_BUTTON_ADD_ITEM:        'refAddItem',
@@ -327,6 +328,7 @@
                 ICON_ADD_CHELT:     this.$constComponent.ICON_PLUS_SQUARE("blue"),
                 ICON_REMOVE_CHELT:  this.$constComponent.ICON_MINUS_SQUARE("red"),
                 URL_INSERT_ANTET:   this.$url.getUrl('insertExpenseAntet'),
+                URL_INSERT_ARTICOL:   this.$url.getUrl('insertExpenseArticol'),
                 URL_CHECK_WORKING_EXPENSE: this.$url.getUrl('checkWorkingExpense'),
                 URL_DELETE_EXPENSE: this.$url.getUrl('deleteAntetExpense'),
                 CTR_TIP_SUMA: {
@@ -349,26 +351,41 @@
                 CTR_SUMA_TOTAL_TVA: this.cfgSumaTVA(),
                 CTR_SUMA_PRETUNITAR_FARA_TVA: this.cfgPretUnitarFaraTva(),
                 CTR_PROCENT_TVA: this.cfgTva(),
-                CTR_SUMA_TVA_MANUALA: this.cfgSumaTvaManuala(),
-                TVA: 19
-
-
+                CTR_SUMA_TVA_MANUALA: this.cfgSumaTvaManuala()
             },
             this.runtime = {
                 mode: this.$constFROM.MODE_EDIT,
                 sendDataToServer: false,
 	            antetData: null,
                 yesNoMethod: 'methodName',
-                post: { idPk: null, field: {}, sqlAction: null}
+                calculezTvaManual: false,
+                post: { idPk: null, field: {}, sqlAction: null},
+                postArticol: { idPk: null, idExpense: null, field: {}, sqlAction: null}
             }
         },
         emits: ['emitModel'],
         mounted () {
-            this.$refs[this.cfgtime.CTR_PROCENT_TVA.ref].setValue(this.cfgtime.TVA);
         },
         methods: {
             serverAddArticol: function (){
+                if(this.validateNewArticol()){
+                    this.$refs.validateWindowRef.show();
+                    return false;
+                }
 
+                this.$refs[this.REF_FORM].showModal(true);
+                this.axios
+                    .post(this.cfgtime.URL_INSERT_ARTICOL, this.runtime.postArticol)
+                    .then(response => {
+                        if (response.data.succes) {
+                        }
+                        else {
+                        }
+                    })
+                    .catch(error => console.log(error))
+                    .finally(() => {
+                        this.$refs[this.REF_FORM].showModal(false);
+                    });
             },
             serverAddNewChelt: function (){
 	            if(this.validateNewDoc()){
@@ -465,41 +482,57 @@
             deleteChelt: function (){
             },
             emitKeyUpPercenTVA: function (value){
-                this.privateCalculateTVA('emitKeyUpPercenTVA');
+                this.privateCalculateTVA('from emitKeyUpPercenTVA');
             },
             emitKeyUpSuma: function (value){
-                this.privateCalculateTVA('emitKeyUpSuma');
+                this.privateCalculateTVA('from emitKeyUpSuma');
             },
             emitKeyUpCantitate: function (value){
                 // console.log(value);
                 this.privateCalculateTVA('from KeyUpCantitate');
             },
             emitClickTipSumaTva: function (){
+
+                let tipSuma = this.$refs[this.cfgtime.CTR_TIP_SUMA.ref].getValue();
+
+                for(let i=0;i < this.cfgtime.CTR_TIP_SUMA.buttons.length; i++){
+                    if(tipSuma == this.cfgtime.CTR_TIP_SUMA.buttons[i].id){
+                        this.$refs[this.cfgtime.REF_LABEL_SUMA].innerHTML = this.cfgtime.CTR_TIP_SUMA.buttons[i].caption;
+                    }
+                }
+
+
+
                 this.privateCalculateTVA('from emitClickTipSumaTva');
             },
             emitSumaTvaManuala: function (checkBoxControl){
 
-                this.$refs[this.cfgtime.CTR_SUMA_TOTAL_TVA.ref].setReadOnly(!checkBoxControl.checked);
+                this.runtime.calculezTvaManual = checkBoxControl.checked;
 
-                if(checkBoxControl.checked){
+                this.$refs[this.cfgtime.CTR_SUMA_TOTAL_TVA.ref].setReadOnly(!this.runtime.calculezTvaManual);
+
+                if(this.runtime.calculezTvaManual){
                     this.$refs[this.cfgtime.CTR_SUMA_TOTAL_TVA.ref].setValue(0);
                 }
-
-
-                console.log(this.$calulate.tva(1,16.64,19,12));
-                console.log(this.$calulate.tva(2,860.76,19,3));
-
 
                 this.privateCalculateTVA('from emitSumaTvaManuala');
             },
             privateCalculateTVA: function (sourceClick){
-                console.log(sourceClick); // for debug
+                //console.log(sourceClick); // for debug
 
-                let sumaFaraTva = true;
-                let suma = 100.00;
-                let cantitate = 1;
-                let tva = 19;
+                let tipSuma = this.$refs[this.cfgtime.CTR_TIP_SUMA.ref].getValue();
+                let suma = this.$refs[this.cfgtime.CTR_SUMA_UNITARA.ref].getValue();
+                let tva = this.$refs[this.cfgtime.CTR_PROCENT_TVA.ref].getValue();
+                let cantitate = this.$refs[this.cfgtime.CTR_CANTITATE.ref].getValue();
 
+                let calculRezult = this.$calculate.tva(tipSuma, suma, tva, cantitate);
+
+                if(!this.runtime.calculezTvaManual){
+                    this.$refs[this.cfgtime.CTR_SUMA_TOTAL_TVA.ref].setValue(calculRezult.sumaTVA);
+                }
+                this.$refs[this.cfgtime.CTR_SUMA_PRETUNITAR_FARA_TVA.ref].setValue(calculRezult.pretUnitarFaraTva);
+                // console.log(calculRezult);
+                // tva: function(tipSuma, suma, percentTVA, cantitate){
             },
 	        emitClickTipPlata: function (){
             },
@@ -522,6 +555,7 @@
 			        this.setModeForm(this.$constFROM.MODE_EDIT);
 
 			        this.runtime.post.idPk = this.runtime.antetData.id;
+			        this.runtime.postArticol.idExpense = this.runtime.antetData.id;
 
 			        this.$refs[this.cfgtime.TIP_PLATA.ref].setCheck(this.runtime.antetData.id_tipplata);
 			        this.$refs[this.cfgtime.CTR_DATA_CHELTUIALA.ref].setValueFromSqlFormat(this.runtime.antetData.datac);
@@ -572,6 +606,36 @@
             setPost: function (component, value){
                 this.runtime.post['field'][component.name] = value;
             },
+            setPostArticol: function (component, value){
+                this.runtime.postArticol['field'][component.name] = value;
+            },
+            validateNewArticol: function (){
+                let returnMessage = false;
+                this.runtime.message = [];
+
+                let validateArray = [
+                    this.$refs[this.cfgtime.CTR_CATEGORIE_CHELTUIALA.ref],
+                    this.$refs[this.cfgtime.CTR_PRODUCT_LIST.ref],
+                    this.$refs[this.cfgtime.CTR_UM.ref],
+                    this.$refs[this.cfgtime.CTR_CANTITATE.ref],
+                    this.$refs[this.cfgtime.CTR_SUMA_UNITARA.ref],
+                    this.$refs[this.cfgtime.CTR_SUMA_PRETUNITAR_FARA_TVA.ref],
+                    this.$refs[this.cfgtime.CTR_SUMA_TOTAL_TVA.ref],
+                    this.$refs[this.cfgtime.CTR_PROCENT_TVA.ref],
+
+
+                ];
+
+                this.$check.validateForm(validateArray);
+
+                if( this.runtime.message.length>0 ){
+                    this.$refs.validateWindowRef.setCaption("Articolul nu poate fi inregistrat");
+                    this.$refs.validateWindowRef.setMessage(this.$app.getHtmlFormatMessage(this.runtime.message));
+                    returnMessage = true;
+                }
+
+                return returnMessage;
+            },
 	        validateNewDoc: function (){
 		        let returnMessage = false;
 		        this.runtime.message = [];
@@ -593,6 +657,63 @@
 		        }
 
 		        return returnMessage;
+            },
+            validateSumaPretUnitarFaraTva: function (){
+                let control = this.cfgtime.CTR_SUMA_PRETUNITAR_FARA_TVA;
+                let value = +(this.$refs[control.ref].getValue());
+
+                if(!this.$check.isNumber(value)){
+                    this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+                        "Suma trebuie fie o valoare numerica!"));
+                }else if(value == 0){
+                    this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+                        "Pretul unitar trebuie sa fie mai mare ca zero!"));
+                }
+                this.setPostArticol(control, value);
+            },
+            validateSumaTVA: function (){
+                let control = this.cfgtime.CTR_SUMA_TOTAL_TVA;
+                let value = +(this.$refs[control.ref].getValue());
+
+                if(!this.$check.isNumber(value)){
+                    this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+                        "Suma trebuie fie o valoare numerica!"));
+                }
+                this.setPostArticol(control, value);
+            },
+            validateTVA: function (){
+                let control = this.cfgtime.CTR_PROCENT_TVA;
+                let value = +(this.$refs[control.ref].getValue());
+
+                if(!this.$check.isNumber(value)){
+                    this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+                        "Procentul trebuie fie o valoare numerica!"));
+                }
+                this.setPostArticol(control, value);
+            },
+            validateSumaUnitara: function (){
+                let control = this.cfgtime.CTR_SUMA_UNITARA;
+                let value = +(this.$refs[control.ref].getValue());
+
+                if(!this.$check.isNumber(value)){
+                    this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+                        "Suma trebuie sa fie o valoare numerica!"));
+                }
+                this.setPostArticol(control, value);
+            },
+            validateCantitate: function (){
+                let control = this.cfgtime.CTR_CANTITATE;
+                let value = +(this.$refs[control.ref].getValue());
+
+                if(!this.$check.isNumber(value)){
+                    this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+                        "Cantitatea trebuie sa fie o valoare numerica!"));
+                }else if(value == 0){
+                    this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+                        "Cantitatea trebuie sa fie diferita de ZERO!"));
+                }
+
+                this.setPostArticol(control, value);
             },
 	        validateDocumentDate : function (){
 		        let control = this.cfgtime.CTR_DATA_CHELTUIALA;
@@ -673,6 +794,50 @@
 		        this.setPost(control, id);
 
             },
+            validateUm: function (){
+                let control = this.cfgtime.CTR_UM;
+
+                let value = this.$refs[control.ref].getValue();
+                let id = -1;
+
+                if (this.$check.isUndef(value) || parseInt(value.id) < 1) {
+                    this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+                        "Trebuie sa alegi unitatea de masura."));
+                } else {
+                    id = value.id;
+                }
+
+                this.setPostArticol(control, id);
+            },
+            validateProduct: function (){
+                let control = this.cfgtime.CTR_PRODUCT_LIST;
+                let value = this.$refs[control.ref].getValue();
+                let id = -1;
+
+                if( this.$check.isUndef(value) || parseInt(value.id) < 1){
+                    this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+                        "Trebuie sa alegi un produs"));
+                }else{
+                    id = value.id;
+                }
+
+                this.setPostArticol(control, id);
+            },
+            validateCategoriCheltuieli: function(){
+                let control = this.cfgtime.CTR_CATEGORIE_CHELTUIALA;
+
+                let value = this.$refs[control.ref].getValue();
+                let id = -1;
+
+                if (this.$check.isUndef(value) || parseInt(value.id) < 1) {
+                    this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,
+                        "Trebuie sa alegi categoria de cheltuiala."));
+                } else {
+                    id = value.id;
+                }
+
+                this.setPostArticol(control, id);
+            },
 	        cfgDataCheltuiala: function(){
 		        let cfg = this.$app.cfgInputDateTimeField("dataCheltuiala", 11, 80);
 		        cfg.setValidateFunction(this.validateDocumentDate);
@@ -747,45 +912,50 @@
                 cfg.setMandatory(true);
                 cfg.setMaska("");
                 cfg.setEmitKeyUp('emitKeyUpCantitate');
+                cfg.setDefaultValue(1);
                 return cfg;
             },
             cfgSumaUnitara: function(){
-                let cfg = this.$app.cfgInputField("sumaUnitara", null, 50);
+                let cfg = this.$app.cfgInputField("sumaUnitara", null, 70);
                 cfg.setValidate(2,20);
                 cfg.setValidateFunction(this.validateSumaUnitara);
                 cfg.setCaption("Suma totala fara TVA");
                 cfg.setMandatory(true);
                 cfg.setMaska("");
                 cfg.setEmitKeyUp('emitKeyUpSuma');
+                cfg.setDefaultValue(0);
                 return cfg;
             },
             cfgSumaTVA: function(){
-                let cfg = this.$app.cfgInputField("sumaTva", null, 50);
+                let cfg = this.$app.cfgInputField("sumaTva", null, 70);
                 cfg.setValidate(2,20);
                 cfg.setValidateFunction(this.validateSumaTVA);
                 cfg.setCaption("Total TVA");
                 cfg.setMandatory(true);
                 cfg.setMaska("");
                 cfg.readOnly = true;
+                cfg.setDefaultValue(0);
                 return cfg;
             },
             cfgPretUnitarFaraTva: function(){
-                let cfg = this.$app.cfgInputField("sumaPretUnitarFaraTva", null, 50);
+                let cfg = this.$app.cfgInputField("sumaPretUnitarFaraTva", null, 70);
                 cfg.setValidate(2,20);
                 cfg.setValidateFunction(this.validateSumaPretUnitarFaraTva);
                 cfg.setCaption("Pret unitar fara tva");
                 cfg.setMandatory(true);
                 cfg.setMaska("");
                 cfg.readOnly = true;
+                cfg.setDefaultValue(0);
                 return cfg;
             },
             cfgTva: function(){
-                let cfg = this.$app.cfgInputField("tva", null, 35);
+                let cfg = this.$app.cfgInputField("tva", null, 40);
                 cfg.setValidateFunction(this.validateTVA);
                 cfg.setCaption("TVA");
                 cfg.setMandatory(true);
                 cfg.setMaska("");
                 cfg.setEmitKeyUp('emitKeyUpPercenTVA');
+                cfg.setDefaultValue(19);
                 return cfg;
             },
             cfgSumaTvaManuala: function (){
@@ -794,7 +964,7 @@
                 cfg.setCaption('Calculez tva manual');
                 cfg.setValidateFunction(this.validateTvaManual);
                 return cfg;
-            },
+            }
         },
         data () {
             return {

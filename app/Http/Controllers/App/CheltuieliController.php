@@ -4,6 +4,7 @@ namespace App\Http\Controllers\App;
 
 use App\allClass\helpers\MyHelp;
 use App\allClass\helpers\param\Expense;
+use App\allClass\helpers\param\ExpenseArticol;
 use App\Http\Controllers\Controller;
 use App\allClass\helpers\response\SqlMessageResponse;
 use App\Models\app\ModelCheltuieli;
@@ -20,6 +21,33 @@ use Illuminate\Support\Facades\DB;
 class CheltuieliController extends Controller
 {
     public function __construct(){}
+
+
+    public function insertExpenseArticol (Request $request) {
+        $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
+        $modelExpense = new ModelCheltuieli($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        $expenseAntet = $modelExpense->selectEntity($request->idExpense);
+
+        try {
+            if(count($expenseAntet) != 1){
+                throw new \Exception("Articolul nu se poate insera in baza de date. Lipseste cheltuiala!");
+            }
+
+            $param = new ExpenseArticol($request->idExpense);
+            $param->setNewExpense($request->field);
+            $modelExpenseDetail = new ModelCheltuieliDetail($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+            $modelExpenseDetail->insertDetailExpense($param);
+
+            $msg->succes = true;
+
+        }catch (\Exception $e){
+            $msg->messages= 'App error. Nu se poate inregistra articolul in baza de date.';
+            $msg->errorMsg = $e->getMessage();
+            $msg->succes = false;
+        }
+
+        return $msg->toJson();
+    }
 
     public function deleteAntetExpense (Request $request){
         $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );

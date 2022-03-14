@@ -10,7 +10,7 @@ class ConfigControl {
     disabled= false;
     width= null;               // replace sizeField
     readOnly = false;
-    emit = null;
+    emit = 'emitConfigDefault';
 
     setBaseConfig(id, sizeField, width) {
         this.id = id;

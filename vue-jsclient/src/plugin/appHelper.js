@@ -49,7 +49,15 @@ const appHelper = {
                     return objFind;
                 }
             },
-            app.config.globalProperties.$calulate = {
+            app.config.globalProperties.$calculate = {
+                /**
+                 *
+                 * @param tipSuma
+                 * @param suma
+                 * @param percentTVA
+                 * @param cantitate
+                 * @returns {{sumaTVA: *, sumaCuTVA: *, pretUnitarFaraTva: *, sumaFaraTVA: *}}
+                 */
                 tva: function(tipSuma, suma, percentTVA, cantitate){
 
                     let percent =(percentTVA/100) + 1;
@@ -279,6 +287,13 @@ const appHelper = {
         }
 
         app.config.globalProperties.$check = {
+            isNumber(nr){
+                if (typeof nr === 'number' && !isNaN(nr)) {
+                    return true;
+                }
+
+                return false;
+            },
             isExistDate(dataCheck, yearCheck){
                  let data = dataCheck.year + "," + dataCheck.month + ","  + dataCheck.day;
                  let dataJs = new Date(data);

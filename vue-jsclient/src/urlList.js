@@ -60,6 +60,9 @@ export default [
     {name: "nomCategoriCheltuieli"      ,url: "public/app/cheltuieli/nomCategoriCheltuieli"},
     {name: "listProducts"               ,url: "public/app/cheltuieli/listProducts"},
     {name: "nomTipUm"                   ,url: "public/app/cheltuieli/nomTipUm"},
+    {name: "insertExpenseArticol"       ,url: "public/app/cheltuieli/insertExpenseArticol"},
+
+
 
     {name: "monthList"  ,url: "public/app/avocat/monthList"},
     {name: "checkMonth" ,url: "public/app/avocat/checkMonth"},

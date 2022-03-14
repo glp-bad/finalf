@@ -364,7 +364,6 @@ class PartenerInvoicesController extends Controller
             $msg->succes = true;
 
         }catch (\Exception $e){
-            DB::rollBack();
             $msg->messages= 'App error. Nu se poate inregistra articolul in baza de date.';
             $msg->errorMsg = $e->getMessage();
             $msg->succes = false;
