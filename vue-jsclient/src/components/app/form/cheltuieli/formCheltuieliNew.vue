@@ -525,8 +525,8 @@
 		        this.runtime.post.idPk = tr.getAttribute('idPk');
 		        console.log(this.runtime.post.idPk);
 	        },
-	        emitListaSumary: function () {
-
+	        emitListaSumary: function (sumarInvoice) {
+                console.log(sumarInvoice);
 	        },
 	        emitDetailListRowSelection: function () {
                 // do nothing

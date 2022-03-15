@@ -39,16 +39,14 @@ class CheltuieliController extends Controller
 
 
 		$total = 0.00;
-		$sumaFaraTva = 0.00;
-		$sumaTva = 0.00;
+		$total_tva = 0.00;
 		foreach ($msg->records as $r){
-			//$total += floatval($r->nTotal);
-			//$sumaFaraTva += floatval($r->nSumaFaraTva);
-			//$sumaTva += floatval($r->nSumaTva);
+			$total += floatval($r->total);
+			$total_tva += floatval($r->total_tva);
+
 		}
 
-
-		// $msg->setCustomData(['total'=>round($total,2), 'sumaFaraTva'=>round($sumaFaraTva,2), 'sumaTva'=>round($sumaTva,2)]);
+		$msg->setCustomData(['total'=>round($total,2), 'total_tva'=>round($total_tva,2)]);
 
 		return $msg->toJson();
 	}
