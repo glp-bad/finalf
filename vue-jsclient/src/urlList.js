@@ -61,6 +61,8 @@ export default [
     {name: "listProducts"               ,url: "public/app/cheltuieli/listProducts"},
     {name: "nomTipUm"                   ,url: "public/app/cheltuieli/nomTipUm"},
     {name: "insertExpenseArticol"       ,url: "public/app/cheltuieli/insertExpenseArticol"},
+	{name: "detailExpenseList"          ,url: "public/app/cheltuieli/detailExpenseList"},
+
 
 
 

@@ -208,7 +208,7 @@
                 </div>
 
                 <div class="item-inline">
-                    <div class="label" style="width: 135px">
+                    <div class="label" style="width: 150px">
                         <label :ref=this.cfgtime.REF_LABEL_SUMA :for=this.cfgtime.CTR_SUMA_UNITARA.id>{{this.cfgtime.CTR_SUMA_UNITARA.caption}}</label>
                     </div>
                     <div class="control">
@@ -270,6 +270,15 @@
             </div>
 
 
+            <my-list
+                    :ref = this.cfgtime.CTR_EXPENSE_DETAIL_LIST.ref
+                    :pConfig=this.cfgtime.CTR_EXPENSE_DETAIL_LIST
+                    @emitListRowSelection = 'emitDetailListRowSelection'
+                    @emitStergArticol = 'emitStergArticol'
+                    @emitFinallyCustomResponse = 'emitListaSumary'
+            ></my-list>
+
+
 
         </template>
         <template v-slot:slotButton>
@@ -287,6 +296,7 @@
     import DropDownSearch   from "@/components/base/DropDownSearch.vue"
     import Button           from "@/components/base/Button";
     import CheckBox         from "@/components/base/CheckBox.vue";
+    import Lista            from "@/components/base/Lista";
 
     export default {
         components: {
@@ -298,7 +308,8 @@
 	        'my-dropdown-simple': DropDownSimple,
 	        'my-dropdown-search': DropDownSearch,
             'my-button': Button,
-            'check-box': CheckBox
+            'check-box': CheckBox,
+	        'my-list': Lista
         },
         name: "form-chletuiala-new",
         created() {
@@ -351,7 +362,33 @@
                 CTR_SUMA_TOTAL_TVA: this.cfgSumaTVA(),
                 CTR_SUMA_PRETUNITAR_FARA_TVA: this.cfgPretUnitarFaraTva(),
                 CTR_PROCENT_TVA: this.cfgTva(),
-                CTR_SUMA_TVA_MANUALA: this.cfgSumaTvaManuala()
+                CTR_SUMA_TVA_MANUALA: this.cfgSumaTvaManuala(),
+	            CTR_EXPENSE_DETAIL_LIST : {
+		            ref: 'refDetailList',
+		            header: [
+			            this.$constList.getHeader(1, 'Nr.'              ,20     ,'row_num'          , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER  ),
+			            this.$constList.getHeader(2, 'Cat'              ,100    ,'tip_cat'          , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER ),
+			            this.$constList.getHeader(3, 'Nume produs'      ,500    ,'produs'           , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_LEFT  ),
+			            this.$constList.getHeader(4, 'UM'               ,30     ,'um'               , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER  ),
+			            this.$constList.getHeader(5, 'Cantitate'        ,80     ,'cantitate'        , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER  ),
+			            this.$constList.getHeader(6, 'Pret unitar'      ,100    ,'pret_unitar'      , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT  ),
+			            this.$constList.getHeader(7, 'Valoare fara TVA' ,110    ,'total_fara_tva'   , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT  ),
+			            this.$constList.getHeader(8, 'Valoare TVA'      ,100    ,'total_tva'        , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT  ),
+			            this.$constList.getHeader(9, 'Total'            ,90     ,'total'            , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT  ),
+			            this.$constList.getHeader(10, '% TVA'           ,70     ,'procent_tva'      , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT  ),
+
+			            this.$constList.getHeader(20, 'Action'       ,100    ,'null', this.$constList.HEADER.CAPTION_TYPE_ACTION)
+		            ],
+		            recordActionButon: [
+			            this.$constList.getActionButton(4, 'sterg articol', 'emitStergArticol', this.$constGrid.ICON_DELETE, this.$constList.ACTION_BUTTON.TYPE_BUTTON, null)
+			            //this.$constList.getActionButton(5, 'adresa implicita', 'emitAdresaImplicita', null, this.$constList.ACTION_BUTTON.TYPE_CHECKBOX, this.$app.cfgCheckBox('ro', false)),   // poate fi un singur checkbox pe linie, trebuie setat si filedNameForCheckBox, campul poate fi doar 1 si 0
+			            // this.$constList.getActionButton(6, 'adresa implicita', 'emitCheckBox', this.$constGrid.getIcon('fas','skull', '#adad00'))
+		            ],
+		            cfg: { urlData: 'detailExpenseList', loadOnCreate: false,
+			            filedNameForCheckBox: 'activ',
+			            headerLenghtActivate: true,                         // tine cont de lungimea coloanelor setate in header
+			            emitListRowSelection: 'emitListRowSelection'}
+	            },
             },
             this.runtime = {
                 mode: this.$constFROM.MODE_EDIT,
@@ -360,7 +397,8 @@
                 yesNoMethod: 'methodName',
                 calculezTvaManual: false,
                 post: { idPk: null, field: {}, sqlAction: null},
-                postArticol: { idPk: null, idExpense: null, field: {}, sqlAction: null}
+                postArticol: { idPk: null, idExpense: null, field: {}, sqlAction: null},
+                sumaTotalaCuTva: 0                                                             // valoare la calcul interactiv
             }
         },
         emits: ['emitModel'],
@@ -384,6 +422,7 @@
                     })
                     .catch(error => console.log(error))
                     .finally(() => {
+                    	this.showListItems();
                         this.$refs[this.REF_FORM].showModal(false);
                     });
             },
@@ -481,6 +520,25 @@
 	        },
             deleteChelt: function (){
             },
+	        emitStergArticol: function (button){
+		        let tr = button.closest('tr');
+		        this.runtime.post.idPk = tr.getAttribute('idPk');
+		        console.log(this.runtime.post.idPk);
+	        },
+	        emitListaSumary: function () {
+
+	        },
+	        emitDetailListRowSelection: function () {
+                // do nothing
+	        },
+	        showListItems: function(){
+
+		        let $id = 0;
+		        if(!this.$check.isUndef(this.runtime.antetData)){
+			        $id = this.runtime.antetData.id;
+		        }
+		        this.$refs[this.cfgtime.CTR_EXPENSE_DETAIL_LIST.ref].showList({idExpense: $id});
+	        },
             emitKeyUpPercenTVA: function (value){
                 this.privateCalculateTVA('from emitKeyUpPercenTVA');
             },
@@ -531,8 +589,15 @@
                     this.$refs[this.cfgtime.CTR_SUMA_TOTAL_TVA.ref].setValue(calculRezult.sumaTVA);
                 }
                 this.$refs[this.cfgtime.CTR_SUMA_PRETUNITAR_FARA_TVA.ref].setValue(calculRezult.pretUnitarFaraTva);
+
+                // valoare cu TVA
+                // if(tipSuma == 2){this.$refs[this.cfgtime.CTR_SUMA_UNITARA.ref].setValue(calculRezult.sumaFaraTVA);}
+
                 // console.log(calculRezult);
                 // tva: function(tipSuma, suma, percentTVA, cantitate){
+
+                this.runtime.sumaTotalaCuTva = calculRezult.sumaFaraTVA;
+
             },
 	        emitClickTipPlata: function (){
             },
@@ -566,6 +631,8 @@
 
 
 		        }
+
+		        this.showListItems();
 	        },
             setModeForm: function (mode) {
                 this.runtime.mode = mode;
@@ -693,7 +760,7 @@
             },
             validateSumaUnitara: function (){
                 let control = this.cfgtime.CTR_SUMA_UNITARA;
-                let value = +(this.$refs[control.ref].getValue());
+                let value =  +(this.runtime.sumaTotalaCuTva); // suma calculata fara TVA// +(this.$refs[control.ref].getValue());
 
                 if(!this.$check.isNumber(value)){
                     this.runtime.message.push(this.$app.getFormMessageClass(control.id, control.caption,

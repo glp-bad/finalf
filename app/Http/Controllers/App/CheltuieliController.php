@@ -23,6 +23,36 @@ class CheltuieliController extends Controller
     public function __construct(){}
 
 
+
+
+	public function detailExpenseList(Request $request) {
+		$msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false );
+		$modelExpenseDetail = new ModelCheltuieliDetail($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+
+		$id = -1;
+
+		if(isset($request->idExpense)){
+			$id = $request->idExpense;
+		}
+
+		$msg->records  = $modelExpenseDetail->selectDetailList($id);
+
+
+		$total = 0.00;
+		$sumaFaraTva = 0.00;
+		$sumaTva = 0.00;
+		foreach ($msg->records as $r){
+			//$total += floatval($r->nTotal);
+			//$sumaFaraTva += floatval($r->nSumaFaraTva);
+			//$sumaTva += floatval($r->nSumaTva);
+		}
+
+
+		// $msg->setCustomData(['total'=>round($total,2), 'sumaFaraTva'=>round($sumaFaraTva,2), 'sumaTva'=>round($sumaTva,2)]);
+
+		return $msg->toJson();
+	}
+
     public function insertExpenseArticol (Request $request) {
         $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
         $modelExpense = new ModelCheltuieli($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));

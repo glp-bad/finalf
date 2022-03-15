@@ -32,6 +32,34 @@ class ModelCheltuieliDetail extends MyModel {
         return $returnId;
     }
 
+	public function selectDetailList($idExpense){
+		$rezult = DB::select(
+			" 
+			     select 
+			     	t_cheltuieli_d.id, 
+			     	@i:=@i+1 row_num,
+			     	t_tip_cheltuieli_categorii.cTipCat as tip_cat,
+					t_produse.cProd as produs, t_tip_um.cTipabr as um,
+					t_cheltuieli_d.nCant as cantitate,
+				    t_cheltuieli_d.nPretU as pret_unitar,
+				    t_cheltuieli_d.nTotalFaraTva as total_fara_tva,
+				    t_cheltuieli_d.nTotalTva as total_tva,
+				    t_cheltuieli_d.nTotalFaraTva + t_cheltuieli_d.nTotalTva as total,
+				    t_cheltuieli_d.nProcentTva as procent_tva
+				 from 
+					t_cheltuieli_d 
+				    inner join t_tip_cheltuieli_categorii on t_tip_cheltuieli_categorii.id = t_cheltuieli_d.id_tipcat 
+				    inner join t_produse on t_produse.id = t_cheltuieli_d.id_prod
+				    inner join t_tip_um on t_tip_um.id = t_cheltuieli_d.id_tipm,
+				     (SELECT @i:=0) AS R
+				   where id_chlet = :idExpense
+				   order by id asc;"
+			,["idExpense"=>$idExpense]
+		);
+
+		return $rezult;
+	}
+
     public function selectEntity($id){
         $rezult = DB::select(
             " 

@@ -69,9 +69,11 @@ Route::post('app/cheltuieli/insertExpenseAntet'         ,[CheltuieliController::
 Route::post('app/cheltuieli/checkWorkingExpense'        ,[CheltuieliController::class,  'checkWorkingExpense'])->middleware('auth');
 Route::post('app/cheltuieli/deleteAntetExpense'         ,[CheltuieliController::class,  'deleteAntetExpense'])->middleware('auth');
 Route::post('app/cheltuieli/nomCategoriCheltuieli'      ,[CheltuieliController::class,  'nomCategoriCheltuieli'])->middleware('auth');
-Route::post('app/cheltuieli/listProducts'      ,[CheltuieliController::class,  'listProducts'])->middleware('auth');
-Route::post('app/cheltuieli/nomTipUm'           ,[CheltuieliController::class,  'nomTipUm'])->middleware('auth');
-Route::post('app/cheltuieli/insertExpenseArticol'           ,[CheltuieliController::class,  'insertExpenseArticol'])->middleware('auth');
+Route::post('app/cheltuieli/listProducts'               ,[CheltuieliController::class,  'listProducts'])->middleware('auth');
+Route::post('app/cheltuieli/nomTipUm'                   ,[CheltuieliController::class,  'nomTipUm'])->middleware('auth');
+Route::post('app/cheltuieli/insertExpenseArticol'       ,[CheltuieliController::class,  'insertExpenseArticol'])->middleware('auth');
+Route::post('app/cheltuieli/detailExpenseList'          ,[CheltuieliController::class,  'detailExpenseList'])->middleware('auth');
+
 
 
 
