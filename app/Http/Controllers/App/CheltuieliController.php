@@ -23,9 +23,32 @@ class CheltuieliController extends Controller
     public function __construct(){}
 
 
+        public function deleteExpenseArticol (Request $request) {
+            $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
+            $modelExpenseDetail = new ModelCheltuieliDetail($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+
+            $id = $request->idPk;
+
+            try {
+                $deletedCount = $modelExpenseDetail->deleteExpenseArticle($id);
+                if($deletedCount != 1){
+                    throw new \Exception("Documentul este salvat. Articolul nu poate fi sters!");
+                }
+                $msg->succes = true;
+
+            }catch (\Exception $e){
+                $msg->messages= 'App error.';
+                $msg->errorMsg = $e->getMessage();
+                $msg->succes = false;
+            }
 
 
-	public function detailExpenseList(Request $request) {
+            return $msg->toJson();
+
+        }
+
+
+        public function detailExpenseList(Request $request) {
 		$msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false );
 		$modelExpenseDetail = new ModelCheltuieliDetail($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
 

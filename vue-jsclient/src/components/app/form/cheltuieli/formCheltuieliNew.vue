@@ -342,6 +342,7 @@
                 URL_INSERT_ARTICOL:   this.$url.getUrl('insertExpenseArticol'),
                 URL_CHECK_WORKING_EXPENSE: this.$url.getUrl('checkWorkingExpense'),
                 URL_DELETE_EXPENSE: this.$url.getUrl('deleteAntetExpense'),
+                URL_DELETE_ITEM_EXPENSE: this.$url.getUrl('deleteExpenseArticol'),
                 CTR_TIP_SUMA: {
                     id:         'refTipSuma',
                     ref:        'refTipSuma',
@@ -518,12 +519,41 @@
 				        this.$refs[this.REF_FORM].showModal(false);
 			        });
 	        },
-            deleteChelt: function (){
+            serverDeleteItemChelt: function (){
+                if(!this.runtime.sendDataToServer){
+                    this.runtime.yesNoMethod = 'serverDeleteItemChelt';
+                    this.$refs.refYesNo.setCaption("Sterg inregistrarea?");
+                    this.$refs.refYesNo.setMessage("Datele sterse nu mai pot fi recuperate.");
+                    this.$refs.refYesNo.show();
+                }
+
+                if(this.runtime.sendDataToServer) {
+                    this.runtime.sendDataToServer = false;
+
+                    this.axios
+                        .post(this.cfgtime.URL_DELETE_ITEM_EXPENSE, this.runtime.post)
+                        .then(response => {
+                            if (response.data.succes){
+                            }
+                            else {
+                                this.$refs.validateWindowRef.setCaption("Nu se poate sterge elementul");
+                                this.$refs.validateWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+                                this.$refs.validateWindowRef.show();
+                            }
+
+                        })
+                        .catch(error => console.log(error))
+                        .finally(() => {
+                            this.showListItems();
+                            this.$refs[this.REF_FORM].showModal(false);
+                        });
+                }
             },
 	        emitStergArticol: function (button){
 		        let tr = button.closest('tr');
 		        this.runtime.post.idPk = tr.getAttribute('idPk');
-		        console.log(this.runtime.post.idPk);
+
+		        this.serverDeleteItemChelt();
 	        },
 	        emitListaSumary: function (sumarInvoice) {
                 console.log(sumarInvoice);

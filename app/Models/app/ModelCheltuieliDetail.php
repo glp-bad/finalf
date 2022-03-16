@@ -13,6 +13,19 @@ class ModelCheltuieliDetail extends MyModel {
         $this->tableName = 't_cheltuieli_d';
     }
 
+
+    public function deleteExpenseArticle($id){
+        $rezult = DB::delete(
+            "DELETE t_cheltuieli_d
+                    FROM t_cheltuieli_d
+                    INNER JOIN t_cheltuieli ON t_cheltuieli.id = t_cheltuieli_d.id_chlet
+                    where t_cheltuieli_d.id = :id and t_cheltuieli.salvata = :salvata;",
+            ['id'=>$id, 'salvata'=> 0 ]
+        );
+
+        return $rezult;
+    }
+
     public function deleteDetailExpense($idExpense){
         $rezult = DB::delete(
             "delete from t_cheltuieli_d where id_chlet = :idExpense;",
