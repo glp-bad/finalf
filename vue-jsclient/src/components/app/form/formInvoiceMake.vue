@@ -174,6 +174,9 @@
                         <td class="control">
                             {{this.invoiceRezumat.total}}
                         </td>
+                        <td class="control">
+                            <div style="width: 250px"></div>
+                        </td>
                     </tr>
                 </table>
             </div>

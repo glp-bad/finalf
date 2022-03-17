@@ -230,4 +230,40 @@ class CheltuieliController extends Controller
     }
 
 
+	public function saveExpense(Request $request) {
+		$msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
+
+		$modelExpense = new ModelCheltuieli($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+		$id = $request->id;
+
+		// --- check mounth
+		$entity = $modelExpense->selectEntity($id);
+		$dataDocument = MyHelp::getCarbonDate('Y-m-d H:i:s.u', $entity[0]->datac);
+
+		$openMonth = $this->isOpenMonth($dataDocument->year, $dataDocument->month);
+		if(!$openMonth['open']){
+			$msg->succes = false;
+			$msg->lastId = -1;
+			$msg->messages= $openMonth['msg'];
+			return $msg->toJson();
+		}
+
+		try {
+			$saveAntet = $modelExpense->saveExpense($id);
+
+			if($saveAntet != 1){
+				throw new \Exception("Cheltuiala este salvata deja in baza de date sau nu are articole!");
+			}
+
+			$msg->succes = true;
+		} catch (\Exception $e) {
+			$msg->messages=  $e->getMessage();
+			$msg->errorMsg = $e->getMessage();
+			$msg->succes = false;
+		}
+
+		return $msg->toJson();
+	}
+
+
 }

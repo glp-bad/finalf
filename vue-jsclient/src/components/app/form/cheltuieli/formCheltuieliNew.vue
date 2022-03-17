@@ -278,10 +278,35 @@
                     @emitFinallyCustomResponse = 'emitListaSumary'
             ></my-list>
 
+            <br>
+            <div class="form-rezumat-right">
+                <table class="ff-form-table">
+                    <tr>
+                        <td class="label-left bold">
+                            <label>Total tva:</label></td>
+                        <td class="control">
+                            {{this.sumar.total_tva}}
+                        </td>
+                        <td class="label-left bold">
+                            <label>&nbsp;&nbsp;&nbsp;Total cheltuiala:</label></td>
+                        <td class="control">
+                            {{this.sumar.total}}
+                        </td>
+
+                        <td class="control">
+                            <div style="width: 160px"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
 
 
         </template>
         <template v-slot:slotButton>
+            <div class="buttons-left">
+                <my-button :ref=this.cfgtime.REF_BUTTON_SAVE_EXPENSE @click="this.serverSaveExpense" :heightButton=22 :buttonType=0 title="salvez documentul in baza de date">Salvez cheltuiala</my-button>
+            </div>
         </template>
     </form-tab>
 </template>
@@ -315,10 +340,11 @@
         created() {
             this.REF_FORM = 'refCheltuialaNew';
             this.cfgtime ={
-                REF_LABEL_SUMA: 'refLabelSuma',
+                REF_LABEL_SUMA:           'refLabelSuma',
                 REF_BUTTON_ADD_CHELT:     'refAddChelt',
                 REF_BUTTON_REMOVE_CHELT:  'refRemoveChelt',
-                REF_BUTTON_ADD_ITEM:        'refAddItem',
+                REF_BUTTON_ADD_ITEM:      'refAddItem',
+	            REF_BUTTON_SAVE_EXPENSE:  'refSalvezCheltuiala',
 	            TIP_PLATA: {
 		            id: 'refTipPlata',
 		            ref: 'refTipPlata',
@@ -343,7 +369,8 @@
                 URL_CHECK_WORKING_EXPENSE: this.$url.getUrl('checkWorkingExpense'),
                 URL_DELETE_EXPENSE: this.$url.getUrl('deleteAntetExpense'),
                 URL_DELETE_ITEM_EXPENSE: this.$url.getUrl('deleteExpenseArticol'),
-                CTR_TIP_SUMA: {
+	            URL_SAVE_EXPENSE: this.$url.getUrl('saveExpense'),
+	            CTR_TIP_SUMA: {
                     id:         'refTipSuma',
                     ref:        'refTipSuma',
                     caption:    'Suma',
@@ -406,6 +433,38 @@
         mounted () {
         },
         methods: {
+	        serverSaveExpense: function (){
+		        if(!this.runtime.sendDataToServer) {
+			        this.runtime.yesNoMethod = 'serverSaveExpense';
+			        this.$refs.refYesNo.setCaption("Salvez");
+			        this.$refs.refYesNo.setMessage("Salvez cheltuiala in baza de date ?");
+			        this.$refs.refYesNo.show();
+		        }
+
+		        if(this.runtime.sendDataToServer) {
+			        this.runtime.sendDataToServer = false;
+
+			        this.axios
+				        .post(this.cfgtime.URL_SAVE_EXPENSE, this.runtime.antetData)
+				        .then(response => {
+					        if (response.data.succes){
+					        }
+					        else {
+						        this.$refs.validateWindowRef.setCaption("Fail...");
+						        this.$refs.validateWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+						        this.$refs.validateWindowRef.show();
+					        }
+
+				        })
+				        .catch(error => console.log(error))
+				        .finally(() => {
+					        this.serverCheckWorkingExpense();
+					        this.$refs[this.REF_FORM].showModal(false);
+				        });
+
+
+		        }
+            },
             serverAddArticol: function (){
                 if(this.validateNewArticol()){
                     this.$refs.validateWindowRef.show();
@@ -555,8 +614,9 @@
 
 		        this.serverDeleteItemChelt();
 	        },
-	        emitListaSumary: function (sumarInvoice) {
-                console.log(sumarInvoice);
+	        emitListaSumary: function (sumar) {
+		        this.sumar.total_tva = sumar.total_tva;
+		        this.sumar.total = sumar.total;
 	        },
 	        emitDetailListRowSelection: function () {
                 // do nothing
@@ -673,6 +733,7 @@
 	                this.$refs[this.cfgtime.REF_BUTTON_ADD_CHELT].disable(readOnly);
 	                this.$refs[this.cfgtime.REF_BUTTON_REMOVE_CHELT].disable(false);
                     this.$refs[this.cfgtime.REF_BUTTON_ADD_ITEM].disable(false);
+	                this.$refs[this.cfgtime.REF_BUTTON_SAVE_EXPENSE].disable(false);
                 }
 
                 if(this.runtime.mode == this.$constFROM.MODE_NEW) {
@@ -680,6 +741,7 @@
 	                this.$refs[this.cfgtime.REF_BUTTON_ADD_CHELT].disable(readOnly);
 	                this.$refs[this.cfgtime.REF_BUTTON_REMOVE_CHELT].disable(true);
                     this.$refs[this.cfgtime.REF_BUTTON_ADD_ITEM].disable(true);
+	                this.$refs[this.cfgtime.REF_BUTTON_SAVE_EXPENSE].disable(true);
 
                 }
 
@@ -1065,6 +1127,7 @@
         },
         data () {
             return {
+	            sumar: {total_tva: 0, total: 0}
             }
         }
     }

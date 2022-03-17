@@ -53,15 +53,33 @@ class ModelCheltuieli extends MyModel {
 	}
 
 	public function insertAntet(Expense $param){
-			$rezult = DB::insert(
-				"INSERT INTO t_cheltuieli(id_avocat,datac,an_datac,id_part,id_tipc,id_tipd,id_tipplata,cNrDoc,salvata,id_user,created) 
-						values (:id_avocat,:datac,:an_datac,:id_part,:id_tipc,:id_tipd,:id_tipplata,:cNrDoc,:salvata,:id_user,:created);",
-				["id_avocat"=>$this->idAvocat,"datac"=>$param->data_document,"an_datac"=>$param->data_year,"id_part"=>$param->id_partner,
-				 "id_tipc"=>$param->id_tip_expense,"id_tipd"=>$param->id_tip_doc,"id_tipplata"=>$param->id_tip_plata,"cNrDoc"=>$param->nr_doc,
-				  "salvata"=>0,"id_user"=>$this->idUser,"created"=>MyHelp::getCarbonDateNow()]
-			);
+		$rezult = DB::insert(
+			"INSERT INTO t_cheltuieli(id_avocat,datac,an_datac,id_part,id_tipc,id_tipd,id_tipplata,cNrDoc,salvata,id_user,created) 
+					values (:id_avocat,:datac,:an_datac,:id_part,:id_tipc,:id_tipd,:id_tipplata,:cNrDoc,:salvata,:id_user,:created);",
+			["id_avocat"=>$this->idAvocat,"datac"=>$param->data_document,"an_datac"=>$param->data_year,"id_part"=>$param->id_partner,
+			 "id_tipc"=>$param->id_tip_expense,"id_tipd"=>$param->id_tip_doc,"id_tipplata"=>$param->id_tip_plata,"cNrDoc"=>$param->nr_doc,
+			  "salvata"=>0,"id_user"=>$this->idUser,"created"=>MyHelp::getCarbonDateNow()]
+		);
 
-            $returnId = intval( DB::getPdo()->lastInsertId() );
+        $returnId = intval( DB::getPdo()->lastInsertId() );
+
+        return $returnId;
+	}
+
+
+	public function saveExpense($id) {
+		$rezult = DB::update(
+			" 
+             update t_cheltuieli
+                set salvata = 1,
+                	id_user = :idUser,
+                	last_update = :lastUpdate  
+             where id=:id01 and id_avocat = :idAvocat
+             	   and (SELECT COUNT(*) nr_rec from t_cheltuieli_d where t_cheltuieli_d.id_chlet = :id02) > 0;",
+			["idUser"=>$this->idUser, ":lastUpdate"=>MyHelp::getCarbonDateNow(), 'id01'=>$id, 'id02'=>$id ,'idAvocat'=>$this->idAvocat]
+		);
+
+		return $rezult;
 	}
 
     public function selectEntity($id){
