@@ -34,22 +34,12 @@
         <div class="ff-form-tab" :ref=CONTAINER_REF :id=cfgForm.id >
             <div :class=formClass.content ref="contentRef">
                 <form>
-                    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
                     <table class="ff-form-table">
                     </table>
                 </form>
             </div>
 
             <div :class=formClass.button >
-                <div :class=formClass.buttonPozition  >
-                    <button-send @click="sendData(this.$constGrid.SQL_UPDATE)">Update data</button-send>
-                </div>
-
-                <!--
-                <div :class=formClass.buttonPozition  >
-                    <button-send @click="sendData(this.$constGrid.SQL_DELETE)">Delete data</button-send>
-                </div>
-                -->
             </div>
 
 

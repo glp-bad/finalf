@@ -55,7 +55,6 @@ Route::post('app/invoice/invoicesList'             , [PartenerInvoicesController
 Route::post('app/invoice/deleteInvoice'            , [PartenerInvoicesController::class,  'deleteInvoice'])->middleware('auth');
 Route::post('app/invoice/invoicePrint'             , [PartenerInvoicesController::class,  'invoicePrint'])->middleware('auth');
 
-
 // incasari
 Route::post('app/cashing/listaUnpaidInvoices', [PartenerInvoicesCashingInController::class,  'listaUnpaidInvoices'])->middleware('auth');
 Route::post('app/cashing/nomDocumentTipe',     [PartenerInvoicesCashingInController::class,  'nomDocumentTipe'])->middleware('auth');
@@ -75,11 +74,8 @@ Route::post('app/cheltuieli/insertExpenseArticol'       ,[CheltuieliController::
 Route::post('app/cheltuieli/detailExpenseList'          ,[CheltuieliController::class,  'detailExpenseList'])->middleware('auth');
 Route::post('app/cheltuieli/deleteExpenseArticol'       ,[CheltuieliController::class,  'deleteExpenseArticol'])->middleware('auth');
 Route::post('app/cheltuieli/saveExpense'                ,[CheltuieliController::class,  'saveExpense'])->middleware('auth');
-
-
-
-
-
+Route::post('app/cheltuieli/expenseList'                ,[CheltuieliController::class,  'expenseList'])->middleware('auth');
+Route::post('app/cheltuieli/deleteSaveExpense'          ,[CheltuieliController::class,  'deleteSaveExpense'])->middleware('auth');
 
 
 

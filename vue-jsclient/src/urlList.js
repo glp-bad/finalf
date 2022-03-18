@@ -64,7 +64,8 @@ export default [
 	{name: "detailExpenseList"          ,url: "public/app/cheltuieli/detailExpenseList"},
     {name: "deleteExpenseArticol"       ,url: "public/app/cheltuieli/deleteExpenseArticol"},
 	{name: "saveExpense"                ,url: "public/app/cheltuieli/saveExpense"},
-
+    {name: "expenseList"                ,url: "public/app/cheltuieli/expenseList"},
+    {name: "deleteSaveExpense"          ,url: "public/app/cheltuieli/deleteSaveExpense"},
 
 
 
@@ -74,7 +75,5 @@ export default [
     {name: "monthList"  ,url: "public/app/avocat/monthList"},
     {name: "checkMonth" ,url: "public/app/avocat/checkMonth"},
     {name: "insertMonth",url: "public/app/avocat/insertMonth"}
-
-
 ]
 

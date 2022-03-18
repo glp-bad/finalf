@@ -8,10 +8,11 @@
             <template v-slot:tabs>
                 <div class="tab" :id="this.$constTab.getIdTab(this.cfgtime.tabConfig.TAB_NEW.id)">
                     <div class="up-line"></div>
-                    <my-cheltuiala_new :ref=this.cfgtime.REF_CHELTUIALA_NEW></my-cheltuiala_new>
+                    <my-cheltuiala-new :ref=this.cfgtime.REF_CHELTUIALA_NEW></my-cheltuiala-new>
                 </div>
                 <div class="tab" :id="this.$constTab.getIdTab(this.cfgtime.tabConfig.TAB_LIST.id)">
                     <div class="up-line"></div>
+                    <my-cheltuiala-list :ref=this.cfgtime.REF_CHELTUIALA_LIST></my-cheltuiala-list>
                 </div>
             </template>
         </my-tab>
@@ -22,21 +23,22 @@
 <script>
 
 import Tab from "@/components/base/Tab";
-//import formInvoiceMake from "@/components/app/form/formInvoiceMake";
 import formCheltuieliNew from "@/components/app/form/cheltuieli/formCheltuieliNew";
+import formCheltuieliList from "@/components/app/form/cheltuieli/formCheltuieliList";
 
 
 export default {
     components: {
         'my-tab': Tab,
-	    'my-cheltuiala_new': formCheltuieliNew
-        //'invoice-make': formInvoiceMake,
-        //'invoice-list': formInvoiceList
+	    'my-cheltuiala-new': formCheltuieliNew,
+        'my-cheltuiala-list':formCheltuieliList
+
     },
     name: "view-invoices",
     created() {
         this.cfgtime = {
 	        REF_CHELTUIALA_NEW: 'refCheltuialaNew',
+            REF_CHELTUIALA_LIST: 'refCheltuialaList',
             tabConfig: {
                 TAB_NEW: {id: '1t'},
                 TAB_LIST: {id: '2t'},
@@ -58,7 +60,7 @@ export default {
 	             this.$refs[this.cfgtime.REF_CHELTUIALA_NEW].serverCheckWorkingExpense();
 
              } else if(idTab == this.cfgtime.tabConfig.TAB_LIST.id) {
-                 //this.$refs[this.cfgtime.REF_INVOICE_LIST].refreshInvoiceList();
+                 this.$refs[this.cfgtime.REF_CHELTUIALA_LIST].refreshExpenseList();
              }
          },
      },

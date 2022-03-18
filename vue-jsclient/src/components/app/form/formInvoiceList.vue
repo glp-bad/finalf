@@ -234,7 +234,9 @@
 
                         downloadLink.href = linkSource;
                         downloadLink.download = response.data.fileName;
-                        downloadLink.click();
+
+                        window.open(downloadLink, '_blank');
+                        // downloadLink.click();
 
                 }).finally(() => {
                     this.$refs[this.REF_FORM].showModal(false);

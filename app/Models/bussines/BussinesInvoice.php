@@ -3,6 +3,7 @@
 namespace App\Models\bussines;
 use App\allClass\helpers\GridPaginateOrderFilter;
 use App\allClass\helpers\MyModel;
+use App\allClass\helpers\param\ListFilter;
 use App\allClass\helpers\response\PaginateResponse;
 use Illuminate\Support\Facades\DB;
 use App\allClass\helpers\param\IncomingList;
@@ -12,6 +13,37 @@ class BussinesInvoice extends MyModel {
     {
         parent::__construct($idAvocat, $idUser);
         $this->tableName = null;
+    }
+
+
+    public function selectExepnese(ListFilter $f)
+    {
+        //DB::enableQueryLog(); // Enable query log
+        $rezult = DB::select(
+            "select  t_cheltuieli.id,
+                            DATE_FORMAT(t_cheltuieli.datac, '%d/%m/%Y') as data_c,
+                            t_cheltuieli.cNrDoc as nr_doc,
+                            t_tip_plata.tipplata as tip_plata,	
+                            concat(t_tip_document.tipc, ' (' ,t_tip_document.abrev, ')') as tipd,
+                            t_tip_cheltuieli.tipc,
+                            t_parteneri.cNume as nume_furnizor,
+                            (select sum(nTotalTva)  from t_cheltuieli_d where id_chlet = t_cheltuieli.id) as total_tva,
+                            (select sum(nTotalFaraTva + nTotalTva)  from t_cheltuieli_d where id_chlet = t_cheltuieli.id) as total
+                     from 
+                      t_cheltuieli 
+                        inner join t_parteneri on t_parteneri.id = t_cheltuieli.id_part
+                        inner join t_tip_cheltuieli on t_tip_cheltuieli.id = t_cheltuieli.id_tipc
+                        inner join t_tip_document on t_tip_document.id = t_cheltuieli.id_tipd
+                        inner join t_tip_plata on t_tip_plata.id = t_cheltuieli.id_tipplata
+                      where t_cheltuieli.id_avocat = :idAvocat 
+                            and t_cheltuieli.salvata = :salvata
+                            and t_cheltuieli.datac between :dataIn	and :dataSf
+                            and (t_cheltuieli.id_part = :idPartner or 0 = :filterActive)
+                      order by t_cheltuieli.datac desc;"
+            , ['idAvocat' => $this->idAvocat, 'salvata' => 1, 'dataIn' => $f->data_in, 'dataSf' => $f->data_sf, 'idPartner' => $f->partner_id, 'filterActive' => $f->filterActiv]
+        );
+
+        return $rezult;
     }
 
 

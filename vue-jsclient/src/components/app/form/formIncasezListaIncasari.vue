@@ -83,6 +83,7 @@
                 :pConfig = this.cfgtime.CFG_INVOICE_LIST
                 @emitFinallyCustomResponse="emitListResumData"
                 @emitStergIncasare = "emitStergIncasare"
+                @emitPrintIncasare = "emitPrintIncasare"
             ></my-list>
 
         </template>
@@ -145,7 +146,8 @@
                         this.$constList.getHeader(5, 'Action', 100, 'null', this.$constList.HEADER.CAPTION_TYPE_ACTION)
                     ],
                     recordActionButon: [
-                        this.$constList.getActionButton(4, 'sterg incasare', 'emitStergIncasare', this.$constGrid.ICON_DELETE, this.$constList.ACTION_BUTTON.TYPE_BUTTON, null)
+                        this.$constList.getActionButton(10, 'sterg incasare', 'emitStergIncasare', this.$constGrid.ICON_DELETE, this.$constList.ACTION_BUTTON.TYPE_BUTTON, null),
+                        this.$constList.getActionButton(11, 'printez incasare', 'emitPrintIncasare', this.$constGrid.ICON_PRINT, this.$constList.ACTION_BUTTON.TYPE_BUTTON, null)
                         // this.$constList.getActionButton(5, 'adresa implicita', 'emitAdresaImplicita', null, this.$constList.ACTION_BUTTON.TYPE_CHECKBOX, this.$app.cfgCheckBox('ro', false)),   // poate fi un singur checkbox pe linie, trebuie setat si filedNameForCheckBox, campul poate fi doar 1 si 0
                         // this.$constList.getActionButton(6, 'adresa implicita', 'emitCheckBox', this.$constGrid.getIcon('fas','skull', '#adad00'))
                     ],
@@ -164,6 +166,13 @@
             // this.refreshInvoiceList();
         },
         methods: {
+            emitPrintIncasare: function (button){
+                let tr = button.closest('tr');
+                this.runtime.postDeleteItem.idPk = tr.getAttribute('idPk');
+
+                console.log(this.runtime.postDeleteItem.idPk);
+
+            },
             refreshInvoiceList: function(){
                 this.privateSetListInvoiceParameter();
                 this.$refs[this.cfgtime.CFG_INVOICE_LIST.ref].showList(this.runtime.paramInvoiceList);

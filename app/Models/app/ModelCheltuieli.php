@@ -14,6 +14,15 @@ class ModelCheltuieli extends MyModel {
     }
 
 
+    public function deleteCheltuialaSalvata($idPk){
+        $rezult = DB::delete(
+            "delete from t_cheltuieli where id = :id and id_avocat = :idAvocat and salvata = :salvata;",
+            ['id'=>$idPk, 'idAvocat'=>$this->idAvocat, 'salvata'=>1]
+        );
+
+        return $rezult;
+    }
+
     public function deleteAntet($idPk){
         $rezult = DB::delete(
             "delete from t_cheltuieli where id = :id and id_avocat = :idAvocat and salvata = :salvata;",

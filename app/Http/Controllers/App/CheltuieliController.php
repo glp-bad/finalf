@@ -5,10 +5,12 @@ namespace App\Http\Controllers\App;
 use App\allClass\helpers\MyHelp;
 use App\allClass\helpers\param\Expense;
 use App\allClass\helpers\param\ExpenseArticol;
+use App\allClass\helpers\param\ListFilter;
 use App\Http\Controllers\Controller;
 use App\allClass\helpers\response\SqlMessageResponse;
 use App\Models\app\ModelCheltuieli;
 use App\Models\app\ModelCheltuieliDetail;
+use App\Models\bussines\BussinesInvoice;
 use App\Models\nomenclatoare\ModelNomCategoriCheltuilei;
 use App\Models\nomenclatoare\ModelNomProduse;
 use App\Models\nomenclatoare\ModelNomTipCheltuieli;
@@ -21,6 +23,33 @@ use Illuminate\Support\Facades\DB;
 class CheltuieliController extends Controller
 {
     public function __construct(){}
+
+
+
+    public function expenseList(Request $request)
+    {
+
+        $sqlDateFormatIn = MyHelp::getSqlDateFormat($request['dataIn'], null);
+        $sqlDateFormatSf = MyHelp::getSqlDateFormat($request['dataSf'], null);
+        $paramList = new ListFilter($sqlDateFormatIn['dataFormat'], $sqlDateFormatSf['dataFormat'], $request['idPartner']);
+
+        $msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false);
+        $bussinesInvoice = new BussinesInvoice($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+
+        $msg->records = $bussinesInvoice->selectExepnese($paramList);
+
+        $nr_records = count($msg->records);
+        $total_expense = 0.00;
+        $total_expense_tva = 0.00;
+        foreach ($msg->records as $r) {
+            $total_expense += floatval($r->total);
+            $total_expense_tva += floatval($r->total_tva);
+        }
+
+        $msg->setCustomData(['nr_records' => $nr_records, 'total_expense' => round($total_expense, 2), 'total_expense_tva' => round($total_expense_tva, 2)]);
+
+        return $msg->toJson();
+    }
 
 
         public function deleteExpenseArticol (Request $request) {
@@ -136,6 +165,48 @@ class CheltuieliController extends Controller
             DB::rollBack();
 
             $msg->messages= 'App error. Nu se poate sterge antetul. Incercati relogarea in aplicatie.';
+            $msg->errorMsg = $e->getMessage();
+            $msg->succes = false;
+        }
+        return $msg->toJson();
+    }
+
+    public function deleteSaveExpense (Request $request){
+        $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
+        $modelExpense = new ModelCheltuieli($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        $id = $request->idPk;
+
+        // --- check mounth
+        $entity = $modelExpense->selectEntity($id);
+        $dataDocument = MyHelp::getCarbonDate('Y-m-d H:i:s.u', $entity[0]->datac);
+
+        $openMonth = $this->isOpenMonth($dataDocument->year, $dataDocument->month);
+        if(!$openMonth['open']){
+            $msg->succes = false;
+            $msg->lastId = -1;
+            $msg->messages= $openMonth['msg'];
+            return $msg->toJson();
+        }
+
+        $modelExpenseDetail =  new ModelCheltuieliDetail($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+
+        try {
+            DB::beginTransaction();
+
+            $modelExpenseDetail->deleteDetailExpense($id);
+            $deleteAntet = $modelExpense->deleteCheltuialaSalvata($id);
+            if($deleteAntet != 1){
+                throw new \Exception("Cheltuiala nu poate fi stearsa!");
+            }
+
+            DB::commit();
+
+            $msg->succes = true;
+
+        }catch (\Exception $e){
+            DB::rollBack();
+
+            $msg->messages= 'App error. Nu se poate sterge cheltuiala. Incercati relogarea in aplicatie.';
             $msg->errorMsg = $e->getMessage();
             $msg->succes = false;
         }
