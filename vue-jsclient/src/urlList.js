@@ -66,6 +66,8 @@ export default [
 	{name: "saveExpense"                ,url: "public/app/cheltuieli/saveExpense"},
     {name: "expenseList"                ,url: "public/app/cheltuieli/expenseList"},
     {name: "deleteSaveExpense"          ,url: "public/app/cheltuieli/deleteSaveExpense"},
+    {name: "receiptPrint"               ,url: "public/app/cheltuieli/receiptPrint"},
+
 
 
 

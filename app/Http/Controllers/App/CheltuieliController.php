@@ -26,6 +26,18 @@ class CheltuieliController extends Controller
 
 
 
+
+    public function receiptPrint(Request $request)
+    {
+        $id = $request->idPk;
+        $bussinesInvoice = new BussinesInvoice($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        $receipt = $bussinesInvoice->selectReceiptIncomePrint($id);
+
+        dd($receipt);
+
+
+    }
+
     public function expenseList(Request $request)
     {
 

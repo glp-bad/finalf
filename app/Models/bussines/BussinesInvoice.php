@@ -260,5 +260,50 @@ class BussinesInvoice extends MyModel {
     }
 
 
+    public function selectReceiptIncomePrint($id){
+        $rezult = DB::select(
+            "select t_incasari_facturi.id, 
+                           t_facturi_numar.cNr as invoice_nr,
+                           DATE_FORMAT(t_factura.data_f, '%d/%m/%Y') as invoice_date,
+                           concat(t_tip_document.tipc ,' (' , t_tip_document.abrev, ')') as receipt_doc,
+                           receipt.cNr as receipt_nr,
+                           DATE_FORMAT(t_incasari_facturi.data_incas, '%d/%m/%Y') as receipt_date,
+                           t_incasari_facturi.nSuma as receipt_suma,
+                           t_avocati.cNumeCabinet as av_cabinet,
+                           t_avocati.cdecizia as av_decizia,
+                           t_avocati.cui as av_cui,
+                           t_avocati.Ro_ as av_cui_ro,
+                           t_avocati_adresa.cAdresa as av_adresa,
+                           av_localitati.cLocalitate as av_localitate,
+                           t_avocati_banca.cIBAN as av_iban,
+                           t_avocati_banca.cBanca as av_banca,
+                           t_avocati_banca.cSucursala as av_sucursala,
+                           t_parteneri_adrese.cAdresa as pa_adresa,
+                           pa_localitati.cLocalitate as pa_localitate,
+                           t_parteneri_banca.cIBAN as pa_iban,
+                           t_parteneri_banca.cBanca as pa_banca,
+                           t_parteneri_banca.cSucursala as pa_sucursala
+                     from 
+                        t_incasari_facturi
+                        inner join t_factura on t_factura.id = t_incasari_facturi.id_factura and t_factura.id_avocat = :idAvocat
+                        inner join t_facturi_numar on t_facturi_numar.id = t_factura.id_nr
+                        inner join t_tip_document on t_tip_document.id = t_incasari_facturi.id_tipd
+                        inner join t_facturi_numar as receipt on receipt.id = t_incasari_facturi.id_nr
+                        inner join t_avocati on t_avocati.id = t_factura.id_avocat
+                        inner join t_parteneri on t_parteneri.id = t_factura.id_part
+                        left join t_avocati_adresa on t_avocati_adresa.id_avocat = t_avocati.id and t_avocati_adresa.activ = 1
+                        left join t_localitati as av_localitati on av_localitati.id = t_avocati_adresa.id_localitate
+                        left join t_avocati_banca on t_avocati_banca.id_avocat = t_avocati.id and t_avocati_banca.activ = 1
+                        left join t_parteneri_adrese on t_parteneri_adrese.id_part = t_parteneri.id and t_parteneri_adrese.activ = 1
+                        left join t_localitati as pa_localitati on pa_localitati.id = t_parteneri_adrese.id_localitate
+                        left join t_parteneri_banca on t_parteneri_banca.id_part = t_parteneri.id and t_parteneri_banca.activ = 1
+                     where t_incasari_facturi.id = :id;"
+            , ['id'=>$id, "idAvocat" => $this->idAvocat ]
+        );
+
+        return $rezult;
+    }
+
+
 
 }

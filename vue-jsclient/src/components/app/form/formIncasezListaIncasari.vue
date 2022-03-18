@@ -125,6 +125,7 @@
 	            message: [],
                 paramInvoiceList: {'dataIn': null, 'dataSf': null, idPartner: 0},
                 postDeleteItem: { idPk: null, field: {}, sqlAction: null},
+                post: { idPk: null}
             };
             this.cfgtime = {
                 REF_BUTTON_REFRESH: 'refButtonRefresh',
@@ -132,7 +133,8 @@
 	            DATA_IN: this.cfgDataIn(),
                 DATA_SF: this.cfgDataSf(),
                 PARTNER_LIST: this.cfgDropDownPartner(),
-                URL_DELETE_INVOICE_ITEM: this.$url.getUrl('deleteIncomingDoc'),
+                URL_DELETE_INCOMING_ITEM: this.$url.getUrl('deleteIncomingDoc'),
+                URL_RECEIPT_PRINT: this.$url.getUrl('receiptPrint'),
                 CFG_INVOICE_LIST : {
                     ref: 'refDetailList',
                     header: [
@@ -168,9 +170,25 @@
         methods: {
             emitPrintIncasare: function (button){
                 let tr = button.closest('tr');
-                this.runtime.postDeleteItem.idPk = tr.getAttribute('idPk');
+                this.runtime.post.idPk = tr.getAttribute('idPk');
 
-                console.log(this.runtime.postDeleteItem.idPk);
+                this.$refs[this.REF_FORM].showModal(true);
+
+                this.axios.post(this.cfgtime.URL_RECEIPT_PRINT, this.runtime.post)
+                    .then((response) => {
+                        const linkSource = `data:application/pdf;base64,${response.data.pdf}`;
+                        const downloadLink = document.createElement("a");
+
+                        downloadLink.href = linkSource;
+                        downloadLink.download = response.data.fileName;
+
+                        window.open(downloadLink, '_blank');
+                        // downloadLink.click();
+
+                    }).finally(() => {
+                    this.$refs[this.REF_FORM].showModal(false);
+                });
+
 
             },
             refreshInvoiceList: function(){
@@ -204,7 +222,7 @@
 
                     this.$refs[this.REF_FORM].showModal(true);
                     this.axios
-                        .post(this.cfgtime.URL_DELETE_INVOICE_ITEM, this.runtime.postDeleteItem)
+                        .post(this.cfgtime.URL_DELETE_INCOMING_ITEM, this.runtime.postDeleteItem)
                         .then(response => {
                             if (response.data.succes){
                             }
