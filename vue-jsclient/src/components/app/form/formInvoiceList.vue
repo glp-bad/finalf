@@ -57,7 +57,7 @@
                                 <font-awesome-icon :icon=this.$constComponent.cfgIconPicture(this.cfgtime.ICON_REFRESH) size="1x" />
                             </my-button>
                             &nbsp;&nbsp;
-                            <my-button  :ref=this.cfgtime.REF_BUTTON_REFRESH @click="this.clickExportExcel" :heightButton=22 :buttonType=2 title="export excel file" :style="this.cfgtime.ICON_EXCEL.colorStyle">
+                            <my-button  :ref=this.cfgtime.REF_BUTTON_REFRESH @click="this.clickExportExcel" :heightButton=22 :buttonType=2 title="export excel facturi emise" :style="this.cfgtime.ICON_EXCEL.colorStyle">
                                 <font-awesome-icon :icon=this.$constComponent.cfgIconPicture(this.cfgtime.ICON_EXCEL) size="1x" />
                             </my-button>
                         </div>
@@ -177,42 +177,24 @@
         mounted () {
         },
         methods: {
-            clickExportExcel: function () {
+            clickExportExcel: function (){
+                this.privateSetListInvoiceParameter();
+
+                this.$refs[this.REF_FORM].showModal(true);
+
                 this.axios
-                    .post(this.cfgtime.URL_REPORT_INVOICE_EMITTED, this.runtime.post)
+                    .post(this.cfgtime.URL_REPORT_INVOICE_EMITTED, this.runtime.paramInvoiceList)
                     .then(response => {
                         if (response.data.succes){
+                            this.$print.downloadXLSX(response.data.custom.fileName, response.data.custom.xls);
                         }
                         else {
-                            //this.$refs.validateWindowRef.setCaption("Fail...");
-                            //this.$refs.validateWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
-                            //this.$refs.validateWindowRef.show();
-
-                            // console.log(response.data.xls);
-
-                            /*
-                            const url = window.URL.createObjectURL(new Blob([response.data.xls]));
-                            const link = document.createElement('a');
-                            link.href = url;
-                            link.setAttribute('download', response.data.fileName); //or any other extension
-                            document.body.appendChild(link);
-                            link.click();
-                            */
-
-                            this.$print.downloadXLSX(response.data.fileName, response.data.xls);
-
-                            // saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), 'test.xlsx');
-
-
                         }
-
                     })
                     .catch(error => console.log(error))
                     .finally(() => {
-                        //this.refreshInvoiceList();
                         this.$refs[this.REF_FORM].showModal(false);
                     });
-
             },
             clickRefresInvoiceList: function (){
                 this.refreshInvoiceList();

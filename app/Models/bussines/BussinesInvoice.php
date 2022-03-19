@@ -305,5 +305,32 @@ class BussinesInvoice extends MyModel {
     }
 
 
+    public function reportFacturiEmise(IncomingList $incomingList){
+        $rezult = DB::select(
+            "select t_factura.id, t_facturi_numar.cNr as f_nr,
+                            t_tip_factura.cTipfactura as f_tip,
+                            DATE_FORMAT(t_factura.data_f, '%d/%m/%Y') as f_data,
+                            t_tip_organizare_juridica.cTipAbrev as f_client_tip, 
+                            t_parteneri.cNume as f_client, 
+                            concat(if(t_parteneri.Ro_='--','',t_parteneri.Ro_), t_parteneri.cui) as f_client_cf,
+                            t_factura.nProcTVA as f_procent_tva,
+                            (select sum(t_factura_d.nSumaFaraTva) from t_factura_d where t_factura_d.id_factura = t_factura.id) as f_suma_fara_tva,
+                            (select sum(t_factura_d.nSumaTVA) from t_factura_d where t_factura_d.id_factura = t_factura.id) as f_suma_tva,
+                            (select sum(t_factura_d.nTotal) from t_factura_d where t_factura_d.id_factura = t_factura.id) as f_suma
+                     from t_factura
+                        inner join t_facturi_numar on t_facturi_numar.id = t_factura.id_nr
+                        inner join t_tip_factura on t_tip_factura.id = t_factura.id_tipfactura
+                        inner join t_parteneri on t_parteneri.id = t_factura.id_part
+                        inner join t_tip_organizare_juridica on t_tip_organizare_juridica.id = t_parteneri.id_tip
+                      where t_factura.id_avocat = :idAvocat and t_factura.data_f between :dataIn and :dataSf and t_factura.salvata = 1
+                            and (t_factura.id_part = :idPartner OR 0 = :filterActive)
+                        order by t_factura.data_f asc;"
+            , ['idAvocat'=>$this->idAvocat, 'dataIn'=>$incomingList->data_in, 'dataSf'=>$incomingList->data_sf, 'idPartner'=>$incomingList->partner_id, 'filterActive'=>$incomingList->filterActiv]
+        );
+
+        return $rezult;
+    }
+
+
 
 }

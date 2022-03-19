@@ -10,7 +10,7 @@ namespace App;
 
 class MyAppConstants {
 
-    const VERSION_APP = '1.1.000';
+    const VERSION_APP = '1.2.000';
 
     const MY_SESSION = 'my-session';
 

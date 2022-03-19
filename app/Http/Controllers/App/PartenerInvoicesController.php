@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 use App\allClass\helpers\param\IncomingList;
 use  App\Models\app\ModelInvoiceIncasari;
 use  App\allClass\PrintApp;
+use  App\allClass\ToXLSX;
 use DateTime;
 
 use App\allClass\XLSXWriter;
@@ -36,60 +37,57 @@ class PartenerInvoicesController extends Controller
     public function reportExcelInvoiceEmitted(Request $request)
     {
 
-        /*
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();
-        $sheet->setCellValue('A1', 'Hello World !');
+        $msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false );
 
-        $writer = new Xlsx($spreadsheet);
+        $sqlDateFormatIn = MyHelp::getSqlDateFormat($request['dataIn'], null);
+        $sqlDateFormatSf = MyHelp::getSqlDateFormat($request['dataSf'], null);
+        $paramIncomingList = new IncomingList($sqlDateFormatIn['dataFormat'], $sqlDateFormatSf['dataFormat'], $request['idPartner']);
 
-        $path = storage_path() . '/app/' . 'glp.xlsx';
-        $writer->save($path);
+        $bussinesInvoice = new BussinesInvoice($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
 
-             // Path of storage              => /opt/lampp/htdocs/finalf/storage;
+        $report = $bussinesInvoice->reportFacturiEmise($paramIncomingList);
 
-        // return $writer-
-
-        $xls = base64_encode(file_get_contents($path));
-
-        return json_encode(['xls' => $xls]);
-        */
 
         $header = array(
-            'c1-text'=>'string',//text
-            'c2-text'=>'@',//text
-            'c3-integer'=>'integer',
-            'c4-integer'=>'0',
-            'c5-price'=>'price',
-            'c6-price'=>'#,##0.00',//custom
-            'c7-date'=>'date',
-            'c8-date'=>'YYYY-MM-DD',
+            'id'=>'string',
+            'nr factura'=>'string',
+            'tip factura'=>'string',
+            'data factura'=>'string',
+            'client firma'=>'string',
+            'client nume'=>'string',
+            'client cf'=>'string',
+            'procent tva'=>'price',
+            'suma fara tva'=>'price',
+            'suma tva'=>'price',
+            'suma'=>'price',
         );
-        $rows = array(
-            array('x101',102,103,104,105,106,'2018-01-07','2018-01-08'),
-            array('x201',202,203,204,205,206,'2018-02-07','2018-02-08'),
-            array('x301',302,303,304,305,306,'2018-03-07','2018-03-08'),
-            array('x401',402,403,404,405,406,'2018-04-07','2018-04-08'),
-            array('x501',502,503,504,505,506,'2018-05-07','2018-05-08'),
-            array('x601',602,603,604,605,606,'2018-06-07','2018-06-08'),
-            array('x701',702,703,704,705,706,'2018-07-07','2018-07-08'),
-        );
-        $writer = new XLSXWriter();
 
-        $writer->writeSheetHeader('Sheet1', $header);
-        foreach($rows as $row)
-            $writer->writeSheetRow('Sheet1', $row);
+        // dd($rows);
 
-        //$writer->writeSheet($rows,'Sheet1', $header);//or write the whole sheet in 1 call
+        $rows = array();
+
+        foreach ($report as $r){
+            $rows[] =  (array) $r;
+        }
+
+        $toXls =  new ToXLSX($header, $rows);
+
+        /*
+            $writer = new XLSXWriter();
+
+            $writer->writeSheetHeader('Sheet1', $header);
+            foreach($rows as $row) {
+                $writer->writeSheetRow('Sheet1', $row);
+            }
+            $path = storage_path() . '/app/' . 'report.xlsx';
+            $writer->writeToFile($path);
+            $xls = base64_encode(file_get_contents($path));
+        */
+
+        $msg->setCustomData(['xls' => $toXls->getBase6fFile(), 'fileName' =>  'facturi_emise.xlsx']);
 
 
-        $path = storage_path() . '/app/' . 'glp_next.xlsx';
-        $writer->writeToFile($path);
-
-        $xls = base64_encode(file_get_contents($path));
-
-        return json_encode(['xls' => $xls, 'fileName' =>  'nume_fisieer_xls.xlsx']);
-
+        return $msg->toJson();
     }
 
 
