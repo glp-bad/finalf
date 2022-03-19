@@ -22,11 +22,39 @@ use App\allClass\helpers\param\IncomingList;
 use  App\Models\app\ModelInvoiceIncasari;
 use  App\allClass\PrintApp;
 use DateTime;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
 class PartenerInvoicesController extends Controller
 {
     public function __construct(){}
+
+
+    public function reportExcelInvoiceEmitted(Request $request)
+    {
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'Hello World !');
+
+        $writer = new Xlsx($spreadsheet);
+
+        $path = storage_path() . '/app/' . 'glp.xlsx';
+        $writer->save($path);
+
+             // Path of storage              => /opt/lampp/htdocs/finalf/storage;
+
+        // return $writer-
+
+        $xls = base64_encode(file_get_contents($path));
+
+        return json_encode(['xls' => $xls]);
+
+    }
+
+
+
 
 
     public function invoicePrint(Request $request)

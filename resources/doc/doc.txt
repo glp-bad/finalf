@@ -8,8 +8,12 @@ Pentru cPanel:
     /usr/local/bin/php /home2/badminto/finalf.badmintonclub.ro/artisan schedule:run
 
 Deplot prod:
-1. D:\bin\xampp8\htdocs\finalf\app\Http\Middleware\VerifyCsrfToken.php
-2. ENV VUE_APP_ENV = host
+1. Version in
+    D:\bin\xampp8\htdocs\finalf\app\MyAppConstants.php
+    D:\bin\xampp8\htdocs\finalf\vue-jsclient\src\components\app\Login.vue
+2. D:\bin\xampp8\htdocs\finalf\app\Http\Middleware\VerifyCsrfToken.php
+3. ENV VUE_APP_ENV = host
+
 
 
 
@@ -23,6 +27,10 @@ PDF
     https://github.com/dompdf/dompdf/wiki/Requirements
     composer require dompdf/dompdf
 
+EXCEL
+    extension=gd    // on php.ini
+    composer require phpoffice/phpspreadsheet
+    https://phpspreadsheet.readthedocs.io/en/latest/
 
 
 -- header

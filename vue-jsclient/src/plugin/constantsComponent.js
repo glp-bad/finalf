@@ -22,6 +22,9 @@ const constantsComponent = {
 			ALIGN_TEXT_LEFT: 'alignLeft',
 			ALIGN_TEXT_RIGHT: 'alignRight',
 			ALIGN_TEXT_CENTER: 'alignCenter',
+            ICON_EXCEL: function (color){
+                return {fawIcon:'fas', icon: 'file-excel', color: color, colorStyle: {color: color }};
+            },
 			ICON_REFRESH: function (color){
 				return {fawIcon:'fas', icon: 'sync', color: color, colorStyle: {color: color }};
 			},

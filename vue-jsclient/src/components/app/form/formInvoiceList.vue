@@ -56,8 +56,13 @@
                             <my-button  :ref=this.cfgtime.REF_BUTTON_REFRESH @click="this.clickRefresInvoiceList" :heightButton=22 :buttonType=2 title="refresh lista" :style="this.cfgtime.ICON_REFRESH.colorStyle">
                                 <font-awesome-icon :icon=this.$constComponent.cfgIconPicture(this.cfgtime.ICON_REFRESH) size="1x" />
                             </my-button>
+                            &nbsp;&nbsp;
+                            <my-button  :ref=this.cfgtime.REF_BUTTON_REFRESH @click="this.clickExportExcel" :heightButton=22 :buttonType=2 title="export excel file" :style="this.cfgtime.ICON_EXCEL.colorStyle">
+                                <font-awesome-icon :icon=this.$constComponent.cfgIconPicture(this.cfgtime.ICON_EXCEL) size="1x" />
+                            </my-button>
                         </div>
-                    </td>
+
+                     </td>
                 </tr>
             </table>
 
@@ -126,11 +131,13 @@
             this.REF_FORM = 'refFormInvoiceList';
             this.cfgtime = {
                 ICON_REFRESH: this.$constComponent.ICON_REFRESH("green"),
+                ICON_EXCEL: this.$constComponent.ICON_EXCEL("blue"),
                 DATA_IN: this.cfgDataIn(),
                 DATA_SF: this.cfgDataSf(),
                 PARTNER_LIST: this.cfgDropDownPartner(),
                 URL_DELETE_INVOICE: this.$url.getUrl('deleteInvoice'),
                 URL_INVOICE_PRINT: this.$url.getUrl('invoicePrint'),
+                URL_REPORT_INVOICE_EMITTED: this.$url.getUrl('reportExcelInvoiceEmitted'),
                 CFG_INVOICE_LIST : {
                     ref: 'refInvoiceList',
                     header: [
@@ -170,6 +177,28 @@
         mounted () {
         },
         methods: {
+            clickExportExcel: function () {
+                this.axios
+                    .post(this.cfgtime.URL_REPORT_INVOICE_EMITTED, this.runtime.post)
+                    .then(response => {
+                        if (response.data.succes){
+                        }
+                        else {
+                            //this.$refs.validateWindowRef.setCaption("Fail...");
+                            //this.$refs.validateWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+                            //this.$refs.validateWindowRef.show();
+
+                            console.log(response.data);
+                        }
+
+                    })
+                    .catch(error => console.log(error))
+                    .finally(() => {
+                        //this.refreshInvoiceList();
+                        this.$refs[this.REF_FORM].showModal(false);
+                    });
+
+            },
             clickRefresInvoiceList: function (){
                 this.refreshInvoiceList();
             },

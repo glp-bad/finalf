@@ -22,6 +22,7 @@ Route::get('/', function () { return view('welcome'); });
 
 // Auth::routes();
 Route::post('app/login',               [LoginController::class,             'login']);
+Route::post('app/appInfo',             [LoginController::class,             'appInfo']);        // not used
 Route::post('app/logout',              [LoginController::class,             'logout'])->middleware('auth');
 Route::post('app/loginCheck',          [LoginController::class,             'loginCheck'])->middleware('auth');
 
@@ -54,6 +55,9 @@ Route::post('app/invoice/saveInvoice'              , [PartenerInvoicesController
 Route::post('app/invoice/invoicesList'             , [PartenerInvoicesController::class,  'invoicesList'])->middleware('auth');
 Route::post('app/invoice/deleteInvoice'            , [PartenerInvoicesController::class,  'deleteInvoice'])->middleware('auth');
 Route::post('app/invoice/invoicePrint'             , [PartenerInvoicesController::class,  'invoicePrint'])->middleware('auth');
+Route::post('app/invoice/reportExcelInvoiceEmitted'             , [PartenerInvoicesController::class,  'reportExcelInvoiceEmitted'])->middleware('auth');
+
+
 
 // incasari
 Route::post('app/cashing/listaUnpaidInvoices', [PartenerInvoicesCashingInController::class,  'listaUnpaidInvoices'])->middleware('auth');

@@ -3,7 +3,7 @@
         <div class="w-login" ref="windowRef">
 
             <div class="header" ref="headerRef">
-                <span>Login</span>
+                <span>Login ({{this.VERSION_APP}})</span>
             </div>
 
             <div class="content">
@@ -72,7 +72,7 @@
 
         },
         mounted() {
-	        this.post= {email:  "gavrilapaul@hotmail.com", password: null };
+	        this.post= {email:  "...email", password: null };
 	        this.$vanilla.dragDiv(this.$refs.windowRef, this.$refs.headerRef);
         },
         methods: {
@@ -83,7 +83,7 @@
             },
 	        logOn: function (){
 		        // this.$emit(this.EMIT);
-                console.log("this.URI: ", this.URI);
+                // console.log("this.URI: ", this.URI);
 		        this.axios.post(this.URI, this.post).then((response) => {
 				        if(response.data.succes){
 					        this.login = true;
@@ -113,7 +113,8 @@
 		        post:{},
 		        login: false,
                 requestLoginFail: false,
-                messageFail: 'Login fail.'
+                messageFail: 'Login fail.',
+                VERSION_APP: '1.1.000'                  // from D:\bin\xampp8\htdocs\finalf\app\MyAppConstants.php
 	        }
         }
     }

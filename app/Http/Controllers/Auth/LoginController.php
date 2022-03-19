@@ -7,11 +7,7 @@ use App\Models\app\ModelUserLogged;
 use App\Models\app\User;
 use App\MyAppConstants;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-//use Illuminate\Support\Facades\Auth;
-//use Illuminate\Support\Facades\DB;
-//use Illuminate\Support\Facades\Session;
 use \Illuminate\Http\Request;
-//use Illuminate\Support\Facades\Hash;
 
 
 class LoginController extends Controller
@@ -160,6 +156,12 @@ class LoginController extends Controller
 	    return $message->toJson();
     }
 
+
+    public function appInfo(Request $request){
+        $msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false) ;
+        $msg->setCustomData(['VERSION' => MyAppConstants::VERSION_APP]);
+        return $msg->toJson();
+    }
 
 	public function logout(Request $request){
         // dd(Auth::check(), Auth::user(), dd($this->guard()));

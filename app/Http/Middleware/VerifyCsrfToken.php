@@ -13,7 +13,7 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
 
-    //protected $except = ['app', 'app/*' ];
+    // protected $except = ['app', 'app/*' ];
     protected $except = [];
 
     public function handle($request, Closure $next)
