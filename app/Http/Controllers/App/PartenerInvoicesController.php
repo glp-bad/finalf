@@ -84,7 +84,7 @@ class PartenerInvoicesController extends Controller
 
 
         $path = storage_path() . '/app/' . 'glp_next.xlsx';
-        // $x = $writer->writeToFile($path);
+        $writer->writeToFile($path);
 
         $xls = base64_encode(file_get_contents($path));
 
