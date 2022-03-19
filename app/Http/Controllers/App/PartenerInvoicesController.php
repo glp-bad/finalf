@@ -22,8 +22,8 @@ use App\allClass\helpers\param\IncomingList;
 use  App\Models\app\ModelInvoiceIncasari;
 use  App\allClass\PrintApp;
 use DateTime;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+// use PhpOffice\PhpSpreadsheet\Spreadsheet;
+// use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 
 class PartenerInvoicesController extends Controller
@@ -34,6 +34,7 @@ class PartenerInvoicesController extends Controller
     public function reportExcelInvoiceEmitted(Request $request)
     {
 
+        /*
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setCellValue('A1', 'Hello World !');
@@ -50,6 +51,8 @@ class PartenerInvoicesController extends Controller
         $xls = base64_encode(file_get_contents($path));
 
         return json_encode(['xls' => $xls]);
+        */
+
 
     }
 
