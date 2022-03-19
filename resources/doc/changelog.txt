@@ -1,0 +1,2 @@
+2022-03-19 1.0
+am eliminat filtrul pe avocat la lista parteneri (era deja eliminat in vechea versiune)

@@ -82,7 +82,7 @@ class ModelParteneri extends MyModel {
 	                    SELECT t_parteneri.id,
 	                            concat(t_parteneri.cNume,'/ ',t_parteneri.cui) as caption
 						from t_parteneri 
-	                    where t_parteneri.id_avocat= :idAvocat
+	                    where (t_parteneri.id_avocat= :idAvocat or 1=1)
 	                    order by t_parteneri.cNume   
 	                ) a    
 	                where a.caption like '%$wordSearch%'",
@@ -100,7 +100,7 @@ class ModelParteneri extends MyModel {
         $orderBy  = $gridSet->getOrder();
         $filterBy = $gridSet->getFilter();
 
-        $whereFilterBy =  ' where t_parteneri.id_avocat = ' . $this->idAvocat;
+        $whereFilterBy =  ' where (1=1 or t_parteneri.id_avocat = ' . $this->idAvocat . ')';
 
         if(!empty($filterBy)){
             $whereFilterBy = ' AND ' .  $filterBy;
