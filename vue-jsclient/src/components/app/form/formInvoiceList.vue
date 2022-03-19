@@ -188,7 +188,16 @@
                             //this.$refs.validateWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
                             //this.$refs.validateWindowRef.show();
 
-                            console.log(response.data);
+                            // console.log(response.data.xls);
+
+                            const url = window.URL.createObjectURL(new Blob([response.data.xls]));
+                            const link = document.createElement('a');
+                            link.href = url;
+                            link.setAttribute('download', response.data.fileName); //or any other extension
+                            document.body.appendChild(link);
+                            link.click();
+
+
                         }
 
                     })
