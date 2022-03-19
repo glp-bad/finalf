@@ -190,12 +190,18 @@
 
                             // console.log(response.data.xls);
 
+                            /*
                             const url = window.URL.createObjectURL(new Blob([response.data.xls]));
                             const link = document.createElement('a');
                             link.href = url;
                             link.setAttribute('download', response.data.fileName); //or any other extension
                             document.body.appendChild(link);
                             link.click();
+                            */
+
+                            this.$print.downloadXLSX(response.data.fileName, response.data.xls);
+
+                            // saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), 'test.xlsx');
 
 
                         }

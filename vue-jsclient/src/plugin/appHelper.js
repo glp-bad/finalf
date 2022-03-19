@@ -12,6 +12,19 @@ const appHelper = {
 
         app.config.globalProperties.$print = {
 
+            downloadXLSX: function(filename, _base64Str) {
+                var element = document.createElement('a');
+                element.setAttribute('href', 'data:application/octet-stream;base64,' + encodeURIComponent(_base64Str));
+                element.setAttribute('download', filename);
+
+                element.style.display = 'none';
+                document.body.appendChild(element);
+
+                // window.open(element, '_blank');
+                element.click();
+
+                document.body.removeChild(element);
+            },
 
             downloadPdf: function(filename, _base64Str) {
                 var element = document.createElement('a');
