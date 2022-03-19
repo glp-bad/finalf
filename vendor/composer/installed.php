@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'fd326c8a8cac17044755833624aca327f1c38384',
+        'reference' => 'cefcaded1d231536f0525daca5fb5fa557cf3b54',
         'name' => 'laravel/laravel',
         'dev' => true,
     ),
@@ -409,7 +409,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'fd326c8a8cac17044755833624aca327f1c38384',
+            'reference' => 'cefcaded1d231536f0525daca5fb5fa557cf3b54',
             'dev_requirement' => false,
         ),
         'laravel/sail' => array(
@@ -491,6 +491,15 @@
             'install_path' => __DIR__ . '/../league/mime-type-detection',
             'aliases' => array(),
             'reference' => 'aa70e813a6ad3d1558fc927863d47309b4c23e69',
+            'dev_requirement' => false,
+        ),
+        'mk-j/php_xlsxwriter' => array(
+            'pretty_version' => '0.38',
+            'version' => '0.38.0.0',
+            'type' => 'project',
+            'install_path' => __DIR__ . '/../mk-j/php_xlsxwriter',
+            'aliases' => array(),
+            'reference' => '00579529fea072851789505b2dec0d14cdfffe60',
             'dev_requirement' => false,
         ),
         'mockery/mockery' => array(
