@@ -5,4 +5,4 @@ am eliminat filtrul pe avocat la lista parteneri (era deja eliminat in vechea ve
 am modificat variabila $this->idUserLogin  = $result[0]->id;, acum are tot id user
 
 2022-03-19 1.1.000 (in progress)
-    report export in excel
+    remove phpOffice

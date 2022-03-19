@@ -53,6 +53,8 @@ class PartenerInvoicesController extends Controller
         return json_encode(['xls' => $xls]);
         */
 
+        return  phpinfo();
+
 
     }
 
