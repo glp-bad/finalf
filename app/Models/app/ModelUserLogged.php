@@ -22,7 +22,7 @@ class ModelUserLogged extends MyModel {
 
         $this->getUserFromDataBase();
 
-        if($this->idUserLogin == null){
+        if($this->idUserLogin == null && $this->idUser != null){
             $this->insert();
         }else{
 
@@ -55,13 +55,16 @@ class ModelUserLogged extends MyModel {
     public function select(){}
 
     public function expireLogIn(){
-        $lastAction = MyHelp::getCarbonDate('Y-m-d H:i:s', $this->lastAction);
 
-        $limitTime = $lastAction->diffInMinutes(MyHelp::getCarbonDateNow());
+        if($this->idUser != null) {
+            $lastAction = MyHelp::getCarbonDate('Y-m-d H:i:s', $this->lastAction);
 
-        if($limitTime > env('SESSION_LIFETIME')){
+            $limitTime = $lastAction->diffInMinutes(MyHelp::getCarbonDateNow());
+
+            if ($limitTime > env('SESSION_LIFETIME')) {
                 self::logInOut($this->idUserLogin, MyAppConstants::USER_LOGOFF);
                 $this->logged = MyAppConstants::USER_LOGOFF;
+            }
         }
     }
 
@@ -80,10 +83,12 @@ class ModelUserLogged extends MyModel {
                                        where users.email = ?', [$this->email]
         );
 
-        $this->idUser = $result[0]->id;
-        $this->idUserLogin = $result[0]->users_login_id;
-        $this->lastAction = $result[0]->last_action;
-        $this->logged = $result[0]->logged;
+        if($result ) {
+            $this->idUser = $result[0]->id;
+            $this->idUserLogin = $result[0]->users_login_id;
+            $this->lastAction = $result[0]->last_action;
+            $this->logged = $result[0]->logged;
+        }
     }
 
 }

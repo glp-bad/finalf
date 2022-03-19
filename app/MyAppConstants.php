@@ -10,11 +10,11 @@ namespace App;
 
 class MyAppConstants {
 
-    const VERSION_APP = '0.1';
+    const VERSION_APP = '1.0';
 
     const MY_SESSION = 'my-session';
 
-    const ID_USER    =   'ID_USER';
+    const ID_USER    = 'ID_USER';
 	const ID_AVOCAT  = 'ID_AVOCAT';
 	const IS_LOGIN   = 'IS_LOGIN';     // use with VUECLI only
     const USER_EMAIL_LOGGED  = 'USER_EMAIL_LOGGED';

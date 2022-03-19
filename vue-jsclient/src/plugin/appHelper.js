@@ -9,6 +9,47 @@ import {v4 as uuidv4} from '../../node_modules/uuid'
 
 const appHelper = {
 	install: (app, options) => {
+
+        app.config.globalProperties.$print = {
+
+
+            downloadPdf: function(filename, _base64Str) {
+                var element = document.createElement('a');
+                element.setAttribute('href', 'data:application/pdf;base64,' + encodeURIComponent(_base64Str));
+                element.setAttribute('download', filename);
+
+                element.style.display = 'none';
+                document.body.appendChild(element);
+
+                // window.open(element, '_blank');
+                element.click();
+
+                document.body.removeChild(element);
+            },
+
+            base64ToArrayBuffer: function (_base64Str) {
+                let binaryString = window.atob(_base64Str);
+                let binaryLen = binaryString.length;
+                let bytes = new Uint8Array(binaryLen);
+                for (let i = 0; i < binaryLen; i++) {
+                    let ascii = binaryString.charCodeAt(i);
+                    bytes[i] = ascii;
+                }
+                return bytes;
+            },
+            showDocument: function (_base64Str, _contentType) {
+                let binaryString = window.atob(_base64Str);
+                let binaryLen = binaryString.length;
+                let bytes = new Uint8Array(binaryLen);
+                for (let i = 0; i < binaryLen; i++) {
+                    let ascii = binaryString.charCodeAt(i);
+                    bytes[i] = ascii;
+                }
+                var byte = bytes;
+                var blob = new Blob([byte], { type: _contentType })
+                window.open(URL.createObjectURL(blob), "_blank");
+            }
+        },
         app.config.globalProperties.$url = {
             vueEnv:  process.env.VUE_APP_ENV,
             urlAppHost: process.env.VUE_APP_URL_HOST,

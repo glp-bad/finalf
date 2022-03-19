@@ -9,3 +9,5 @@ ALTER TABLE badminto_finalf.t_avocati_adresa CHANGE COLUMN data_o created TIMEST
 ALTER TABLE badminto_finalf.t_avocati_adresa ADD COLUMN `last_update` TIMESTAMP NULL AFTER `created` ;
 update badminto_finalf.t_avocati_adresa set cUser = 3;
 ALTER TABLE badminto_finalf.t_avocati_adresa CHANGE COLUMN `cUser` `id_user` INT UNSIGNED NULL ;
+ALTER TABLE `badminto_finalf`.`t_avocati_adresa` CHANGE COLUMN `id_avocat` `id_avocat` INT UNSIGNED NOT NULL;
+ALTER TABLE `badminto_finalf`.`t_avocati_adresa` CHANGE COLUMN `id_localitate` `id_localitate` INT UNSIGNED NOT NULL;

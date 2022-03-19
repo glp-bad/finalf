@@ -9,3 +9,5 @@ ALTER TABLE `badminto_finalf`.`t_parteneri_adrese` CHANGE COLUMN `data_o` `creat
 ALTER TABLE `badminto_finalf`.`t_parteneri_adrese` ADD COLUMN `last_update` TIMESTAMP NULL AFTER `created` ;
 update `badminto_finalf`.`t_parteneri_adrese` set cUser = 3;
 ALTER TABLE `badminto_finalf`.`t_parteneri_adrese` CHANGE COLUMN `cUser` `id_user` INT UNSIGNED NULL ;
+ALTER TABLE `badminto_finalf`.`t_parteneri_adrese` CHANGE COLUMN `id_part` `id_part` INT UNSIGNED NOT NULL;
+ALTER TABLE `badminto_finalf`.`t_parteneri_adrese` CHANGE COLUMN `id_localitate` `id_localitate` INT UNSIGNED NOT NULL;

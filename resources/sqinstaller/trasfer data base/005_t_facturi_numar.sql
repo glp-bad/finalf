@@ -6,6 +6,7 @@ ALTER TABLE `badminto_finalf`.`t_facturi_numar`
 CHANGE COLUMN `id` `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ,
 ADD UNIQUE INDEX `uix_id` (`id` ASC) VISIBLE;
 
+ALTER TABLE `badminto_finalf`.`t_facturi_numar` CHANGE COLUMN `id_avocat` `id_avocat` INT UNSIGNED NOT NULL;
 
 ALTER TABLE `badminto_finalf`.`t_facturi_numar` CHANGE COLUMN `data_o` `created` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ;
 ALTER TABLE `badminto_finalf`.`t_facturi_numar` ADD COLUMN `last_update` TIMESTAMP NULL AFTER `created` ;

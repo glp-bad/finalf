@@ -11,4 +11,5 @@ ALTER TABLE badminto_finalf.t_avocati_banca CHANGE COLUMN data_o created TIMESTA
 ALTER TABLE badminto_finalf.t_avocati_banca ADD COLUMN `last_update` TIMESTAMP NULL AFTER `created` ;
 update badminto_finalf.t_avocati_banca set cUser = 3;
 ALTER TABLE badminto_finalf.t_avocati_banca CHANGE COLUMN `cUser` `id_user` INT UNSIGNED NULL ;
+ALTER TABLE `badminto_finalf`.`t_avocati_banca` CHANGE COLUMN `id_avocat` `id_avocat` INT UNSIGNED NOT NULL;
 

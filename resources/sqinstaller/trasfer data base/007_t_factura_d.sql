@@ -9,3 +9,4 @@ ALTER TABLE `badminto_finalf`.`t_factura_d` CHANGE COLUMN `data_o` `created` TIM
 ALTER TABLE `badminto_finalf`.`t_factura_d` ADD COLUMN `last_update` TIMESTAMP NULL AFTER `created` ;
 update `badminto_finalf`.`t_factura_d` set cUser = 3;
 ALTER TABLE `badminto_finalf`.`t_factura_d` CHANGE COLUMN `cUser` `id_user` INT UNSIGNED NULL ;
+ALTER TABLE `badminto_finalf`.`t_factura_d` CHANGE COLUMN `id_factura` `id_factura` INT UNSIGNED NOT NULL;

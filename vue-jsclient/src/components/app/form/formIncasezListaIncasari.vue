@@ -176,6 +176,8 @@
 
                 this.axios.post(this.cfgtime.URL_RECEIPT_PRINT, this.runtime.post)
                     .then((response) => {
+
+                        /*
                         const linkSource = `data:application/pdf;base64,${response.data.pdf}`;
                         const downloadLink = document.createElement("a");
 
@@ -184,6 +186,12 @@
 
                         window.open(downloadLink, '_blank');
                         // downloadLink.click();
+
+                         */
+
+                        //this.$print.showDocument(response.data.pdf, 'data:application/pdf');
+                        //this.$print.downloadPdf(response.data.fileName, response.data.pdf);
+
 
                     }).finally(() => {
                     this.$refs[this.REF_FORM].showModal(false);

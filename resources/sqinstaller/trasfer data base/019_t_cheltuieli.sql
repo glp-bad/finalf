@@ -9,3 +9,8 @@ ALTER TABLE badminto_finalf.t_cheltuieli CHANGE COLUMN data_o created TIMESTAMP 
 ALTER TABLE badminto_finalf.t_cheltuieli ADD COLUMN `last_update` TIMESTAMP NULL AFTER `created` ;
 update badminto_finalf.t_cheltuieli set cUser = 3;
 ALTER TABLE badminto_finalf.t_cheltuieli CHANGE COLUMN `cUser` `id_user` INT UNSIGNED NULL ;
+ALTER TABLE `badminto_finalf`.`t_cheltuieli` CHANGE COLUMN `id_avocat` `id_avocat` INT UNSIGNED NOT NULL;
+ALTER TABLE `badminto_finalf`.`t_cheltuieli` CHANGE COLUMN `id_part` `id_part` INT UNSIGNED NOT NULL;
+ALTER TABLE `badminto_finalf`.`t_cheltuieli` CHANGE COLUMN `id_tipc` `id_tipc` INT UNSIGNED NOT NULL;
+ALTER TABLE `badminto_finalf`.`t_cheltuieli` CHANGE COLUMN `id_tipd` `id_tipd` INT UNSIGNED NOT NULL;
+ALTER TABLE `badminto_finalf`.`t_cheltuieli` CHANGE COLUMN `id_tipplata` `id_tipplata` INT UNSIGNED NOT NULL;

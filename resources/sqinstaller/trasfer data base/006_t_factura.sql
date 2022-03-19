@@ -10,3 +10,7 @@ ALTER TABLE `badminto_finalf`.`t_factura` ADD COLUMN `last_update` TIMESTAMP NUL
 update `badminto_finalf`.`t_factura` set cUser = 3;
 ALTER TABLE `badminto_finalf`.`t_factura` CHANGE COLUMN `cUser` `id_user` INT UNSIGNED NULL ;
 ALTER TABLE `badminto_finalf`.`t_factura` CHANGE COLUMN `data_f` `data_f` DATE NOT NULL ;
+ALTER TABLE `badminto_finalf`.`t_factura` CHANGE COLUMN `id_avocat` `id_avocat` INT UNSIGNED NOT NULL;
+ALTER TABLE `badminto_finalf`.`t_factura` CHANGE COLUMN `id_nr` `id_nr` INT UNSIGNED NOT NULL;
+ALTER TABLE `badminto_finalf`.`t_factura` CHANGE COLUMN `id_tipfactura` `id_tipfactura` INT UNSIGNED NOT NULL;
+update t_factura set id_avocat = 6 where id_avocat = 0;

@@ -10,3 +10,4 @@ ALTER TABLE badminto_finalf.t_s_luni_inchise ADD COLUMN last_update TIMESTAMP NU
 ALTER TABLE badminto_finalf.t_s_luni_inchise ADD COLUMN id_user INT UNSIGNED NULL;
 update badminto_finalf.t_s_luni_inchise set id_user = 3;
 ALTER TABLE badminto_finalf.t_s_luni_inchise CHANGE COLUMN id_user id_user INT UNSIGNED NULL ;
+ALTER TABLE `badminto_finalf`.`t_s_luni_inchise` CHANGE COLUMN `id_avocat` `id_avocat` INT UNSIGNED NOT NULL;

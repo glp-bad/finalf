@@ -13,6 +13,7 @@ CREATE TABLE `users` (
 
 -- LOIJNSU&^%$A7a67s
 -- insert into users (name, email, password) values('Gavrila Leonard Paul', 'gavrilapalul@hotmail.com', '$2y$10$k2S5gIlC0G6wVnEDX6xSD.zSiKofQgOXhTIPj9V10J2sPc1UZWZfK');
+-- insert into users (name, email, password) values('Daniela Gavrila', 'daniela.gavrila@avocatbun.ro', '$2y$10$k2S5gIlC0G6wVnEDX6xSD.zSiKofQgOXhTIPj9V10J2sPc1UZWZfK');
 
 CREATE TABLE `users_login` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,

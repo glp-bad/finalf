@@ -9,3 +9,4 @@ ALTER TABLE `badminto_finalf`.`t_parteneri_banca` CHANGE COLUMN `data_o` `create
 ALTER TABLE `badminto_finalf`.`t_parteneri_banca` ADD COLUMN `last_update` TIMESTAMP NULL AFTER `created` ;
 update `badminto_finalf`.`t_parteneri_banca` set cUser = 3;
 ALTER TABLE `badminto_finalf`.`t_parteneri_banca` CHANGE COLUMN `cUser` `id_user` INT UNSIGNED NULL ;
+ALTER TABLE `badminto_finalf`.`t_parteneri_banca` CHANGE COLUMN `id_part` `id_part` INT UNSIGNED NOT NULL;

@@ -14,7 +14,3 @@ ALTER TABLE `badminto_finalf`.`t_parteneri` ADD COLUMN `last_update` TIMESTAMP N
 update `badminto_finalf`.`t_parteneri` set cUser = 3;
 ALTER TABLE `badminto_finalf`.`t_parteneri` CHANGE COLUMN `cUser` `id_user` INT UNSIGNED NULL ;
 
--- add fk
-ALTER TABLE badminto_finalf.t_parteneri ADD FOREIGN KEY (id_avocat) REFERENCES badminto_finalf.t_avocati(id);
-ALTER TABLE badminto_finalf.t_parteneri ADD FOREIGN KEY (id_tip) REFERENCES badminto_finalf.t_tip_organizare_juridica(id);
-ALTER TABLE badminto_finalf.t_parteneri ADD FOREIGN KEY (id_user) REFERENCES badminto_finalf.users(id);

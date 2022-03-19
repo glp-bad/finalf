@@ -9,3 +9,8 @@ ALTER TABLE badminto_finalf.t_incasari_facturi CHANGE COLUMN data_o created TIME
 ALTER TABLE badminto_finalf.t_incasari_facturi ADD COLUMN last_update TIMESTAMP NULL AFTER created;
 update badminto_finalf.t_incasari_facturi set cUser = 3;
 ALTER TABLE badminto_finalf.t_incasari_facturi CHANGE COLUMN cUser id_user INT UNSIGNED NULL ;
+
+ALTER TABLE `badminto_finalf`.`t_incasari_facturi` CHANGE COLUMN `id_factura` `id_factura` INT UNSIGNED NOT NULL;
+ALTER TABLE `badminto_finalf`.`t_incasari_facturi` CHANGE COLUMN `id_nr` `id_nr` INT UNSIGNED NOT NULL;
+ALTER TABLE `badminto_finalf`.`t_incasari_facturi` CHANGE COLUMN `id_tipd` `id_tipd` INT UNSIGNED NOT NULL;
+ALTER TABLE `badminto_finalf`.`t_incasari_facturi` CHANGE COLUMN `id_incas` `id_incas` INT UNSIGNED NOT NULL;

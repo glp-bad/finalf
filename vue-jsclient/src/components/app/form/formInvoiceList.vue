@@ -229,6 +229,8 @@
 
                 this.axios.post(this.cfgtime.URL_INVOICE_PRINT, this.runtime.post)
                     .then((response) => {
+
+                        /*
                         const linkSource = `data:application/pdf;base64,${response.data.pdf}`;
                         const downloadLink = document.createElement("a");
 
@@ -237,6 +239,14 @@
 
                         window.open(downloadLink, '_blank');
                         // downloadLink.click();
+                        */
+
+                        // this.$print.showDocument(response.data.pdf, 'data:application/pdf');
+                        this.$print.downloadPdf(response.data.fileName, response.data.pdf);
+
+                        // let x = new File(this.$print.base64ToArrayBuffer(response.data.pdf), 'vasile.pdf', { type: "application/pdf;base64" });
+                        //console.log('Eu aici', x);
+                        //window.open(x., '_blank');
 
                 }).finally(() => {
                     this.$refs[this.REF_FORM].showModal(false);
