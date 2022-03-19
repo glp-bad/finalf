@@ -84,10 +84,10 @@ class ModelUserLogged extends MyModel {
         );
 
         if($result ) {
-            $this->idUser = $result[0]->id;
-            $this->idUserLogin = $result[0]->users_login_id;
-            $this->lastAction = $result[0]->last_action;
-            $this->logged = $result[0]->logged;
+            $this->idUser       = $result[0]->id;
+            $this->idUserLogin  = $result[0]->id;
+            $this->lastAction   = $result[0]->last_action;
+            $this->logged       = $result[0]->logged;
         }
     }
 

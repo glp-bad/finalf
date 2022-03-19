@@ -62,6 +62,7 @@ class ModelCheltuieli extends MyModel {
 	}
 
 	public function insertAntet(Expense $param){
+
 		$rezult = DB::insert(
 			"INSERT INTO t_cheltuieli(id_avocat,datac,an_datac,id_part,id_tipc,id_tipd,id_tipplata,cNrDoc,salvata,id_user,created) 
 					values (:id_avocat,:datac,:an_datac,:id_part,:id_tipc,:id_tipd,:id_tipplata,:cNrDoc,:salvata,:id_user,:created);",
