@@ -48,13 +48,12 @@ export default [
     {name: "invoicePrint"              ,url: "public/app/invoice/invoicePrint"},
     {name: "reportExcelInvoiceEmitted" ,url: "public/app/invoice/reportExcelInvoiceEmitted"},
 
-
-
     {name: "listaUnpaidInvoices",url: "public/app/cashing/listaUnpaidInvoices"},
     {name: "nomDocumentTipe"    ,url: "public/app/cashing/nomDocumentTipe"},
     {name: "saveIncoming"       ,url: "public/app/cashing/saveIncoming"},
     {name: "incomingList"       ,url: "public/app/cashing/incomingList"},
     {name: "deleteIncomingDoc"  ,url: "public/app/cashing/deleteIncomingDoc"},
+    {name: "reportIncasari"     ,url: "public/app/cashing/reportIncasari"},
 
 	{name: "nomTipCheltuieli"           ,url: "public/app/cheltuieli/nomTipCheltuieli"},
 	{name: "insertExpenseAntet"         ,url: "public/app/cheltuieli/insertExpenseAntet"},

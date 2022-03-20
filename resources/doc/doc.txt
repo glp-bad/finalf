@@ -28,9 +28,7 @@ PDF
     composer require dompdf/dompdf
 
 EXCEL
-    extension=gd    // on php.ini
-    composer require phpoffice/phpspreadsheet
-    https://phpspreadsheet.readthedocs.io/en/latest/
+    https://github.com/mk-j/PHP_XLSXWriter
 
 
 -- header

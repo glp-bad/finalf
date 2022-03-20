@@ -85,4 +85,26 @@ class MyHelp {
         return ['sumaFaraTva'=>$sumaFaraTva, 'sumaTva'=>$sumaTva, 'total'=>$total];
     }
 
+    /**
+     * @param $sumaFaraTva
+     * @param $procentTVA
+     * @return array
+     */
+    public static function getValueFromSumaCuTva($suma, $procentTVA){
+
+        $total       = $suma;
+
+        if($procentTVA > 0) {
+            $proc        = ($procentTVA / 100) + 1;
+            $sumaFaraTva = round($suma/$proc,4);
+            $sumaTva     = round($suma - $sumaFaraTva,2);
+
+        }else{
+            $sumaTva     = 0;
+            $sumaFaraTva = 0;
+        }
+
+        return ['sumaFaraTva'=>$sumaFaraTva, 'sumaTva'=>$sumaTva, 'total'=>$total];
+    }
+
 }

@@ -57,6 +57,10 @@
                                 <my-button  :ref=this.cfgtime.REF_BUTTON_REFRESH @click="this.clickRefresIncomingList" :heightButton=22 :buttonType=2 title="refresh lista" :style="this.cfgtime.ICON_REFRESH.colorStyle">
                                     <font-awesome-icon :icon=this.$constComponent.cfgIconPicture(this.cfgtime.ICON_REFRESH) size="1x" />
                                 </my-button>
+                                &nbsp;&nbsp;
+                                <my-button  :ref=this.cfgtime.REF_BUTTON_REFRESH @click="this.clickExportExcel" :heightButton=22 :buttonType=2 title="export excel incasari" :style="this.cfgtime.ICON_EXCEL.colorStyle">
+                                    <font-awesome-icon :icon=this.$constComponent.cfgIconPicture(this.cfgtime.ICON_EXCEL) size="1x" />
+                                </my-button>
                             </div>
                         </td>
                     </tr>
@@ -130,11 +134,13 @@
             this.cfgtime = {
                 REF_BUTTON_REFRESH: 'refButtonRefresh',
                 ICON_REFRESH: this.$constComponent.ICON_REFRESH("green"),
+                ICON_EXCEL: this.$constComponent.ICON_EXCEL("blue"),
 	            DATA_IN: this.cfgDataIn(),
                 DATA_SF: this.cfgDataSf(),
                 PARTNER_LIST: this.cfgDropDownPartner(),
                 URL_DELETE_INCOMING_ITEM: this.$url.getUrl('deleteIncomingDoc'),
                 URL_RECEIPT_PRINT: this.$url.getUrl('receiptPrint'),
+                URL_REPORT_INCOMING_EMITTED: this.$url.getUrl('reportIncasari'),
                 CFG_INVOICE_LIST : {
                     ref: 'refDetailList',
                     header: [
@@ -168,6 +174,26 @@
             // this.refreshInvoiceList();
         },
         methods: {
+            clickExportExcel: function (){
+                this.privateSetListInvoiceParameter();
+
+                this.$refs[this.REF_FORM].showModal(true);
+
+                this.axios
+                    .post(this.cfgtime.URL_REPORT_INCOMING_EMITTED, this.runtime.paramInvoiceList)
+                    .then(response => {
+                        if (response.data.succes){
+                            this.$print.downloadXLSX(response.data.custom.fileName, response.data.custom.xls);
+                        }
+                        else {
+                        }
+                    })
+                    .catch(error => console.log(error))
+                    .finally(() => {
+                        this.$refs[this.REF_FORM].showModal(false);
+                    });
+
+            },
             emitPrintIncasare: function (button){
                 let tr = button.closest('tr');
                 this.runtime.post.idPk = tr.getAttribute('idPk');

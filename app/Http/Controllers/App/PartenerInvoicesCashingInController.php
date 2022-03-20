@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\App;
 
 use App\allClass\helpers\MyHelp;
+use App\allClass\helpers\param\ListFilter;
 use App\allClass\helpers\param\SaveIncoming;
 use App\allClass\helpers\param\WokingMonth;
+use App\allClass\ToXLSX;
 use App\Http\Controllers\Controller;
 use App\Models\app\ModelInvoiceIncasari;
 use App\Models\app\ModelLuniInchise;
@@ -64,6 +66,70 @@ class PartenerInvoicesCashingInController extends Controller
             $msg->succes = false;
         }
 
+        return $msg->toJson();
+    }
+
+
+    public function reportIncasari(Request $request){
+        $sqlDateFormatIn = MyHelp::getSqlDateFormat($request['dataIn'], null);
+        $sqlDateFormatSf = MyHelp::getSqlDateFormat($request['dataSf'], null);
+        $param = new ListFilter($sqlDateFormatIn['dataFormat'], $sqlDateFormatSf['dataFormat'], $request['idPartner']);
+
+        $msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false );
+        $bussinesInvoice = new BussinesInvoice($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+
+        $dataReport = $bussinesInvoice->reportIncasari($param);
+
+        $report = array();
+        foreach ($dataReport as $r){
+            $record = array();
+            $record["receipt_tipdoc"       ] = $r->receipt_tipdoc       ;
+            $record["receipt_tipin"        ] = $r->receipt_tipin        ;
+            $record["receipt_date"         ] = $r->receipt_date         ;
+            $record["receipt_nrdoc"        ] = $r->receipt_nrdoc        ;
+
+            if(floatval($r->invoice_suma) == floatval($r->receipt_suma)){
+                $record["receipt_suma_fara_tva"] = $r->invoice_suma_fara_tva;
+                $record["receipt_suma_tva"     ] = $r->invoice_suma_tva     ;
+                $record["receipt_suma"         ] = $r->invoice_suma         ;
+
+            }else{
+                $receipt_tva = MyHelp::getValueFromSumaCuTva($r->receipt_suma, $r->invoice_percent_tva);
+                $record["receipt_suma_fara_tva"] = $receipt_tva['sumaFaraTva'];
+                $record["receipt_suma_tva"     ] = $receipt_tva['sumaTva'];
+                $record["receipt_suma"         ] = $receipt_tva['total'];
+            }
+
+            $record["invoice_nrdoc"        ] = $r->invoice_nrdoc        ;
+            $record["invoice_client"       ] = $r->invoice_client       ;
+            $record["invoice_cf"           ] = $r->invoice_cf           ;
+            $record["invoice_percent_tva"  ] = $r->invoice_percent_tva  ;
+            $record["invoice_suma_fara_tva"] = $r->invoice_suma_fara_tva;
+            $record["invoice_suma_tva"     ] = $r->invoice_suma_tva     ;
+            $record["invoice_suma"         ] = $r->invoice_suma         ;
+
+            $report[] = $record;
+
+        }
+
+        $headerExcel = array(
+            "receipt_tipdoc"        =>'string',
+            "receipt_tipin"         =>'string',
+            "receipt_date"          =>'string',
+            "receipt_nrdoc"         =>'string',
+            "receipt_suma_fara_tva" =>'price',
+            "receipt_suma_tva"      =>'price',
+            "receipt_suma"          =>'price',
+            "invoice_nrdoc"         =>'string',
+            "invoice_client"        =>'string',
+            "invoice_cf"            =>'string',
+            "invoice_percent_tva"   =>'string',
+            "invoice_suma_fara_tva" =>'price',
+            "invoice_suma_tva"      =>'price',
+            "invoice_suma"          =>'price'
+        );
+        $toXls =  new ToXLSX($headerExcel, $report);
+        $msg->setCustomData(['xls' => $toXls->getBase6fFile(), 'fileName' =>  'incasari_lunare.xlsx']);
         return $msg->toJson();
     }
 

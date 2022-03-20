@@ -65,6 +65,9 @@ Route::post('app/cashing/nomDocumentTipe',     [PartenerInvoicesCashingInControl
 Route::post('app/cashing/saveIncoming',        [PartenerInvoicesCashingInController::class,  'saveIncoming'])->middleware('auth');
 Route::post('app/cashing/incomingList',        [PartenerInvoicesCashingInController::class,  'incomingList'])->middleware('auth');
 Route::post('app/cashing/deleteIncomingDoc',   [PartenerInvoicesCashingInController::class,  'deleteIncomingDoc'])->middleware('auth');
+Route::post('app/cashing/reportIncasari',      [PartenerInvoicesCashingInController::class,  'reportIncasari'])->middleware('auth');
+
+
 
 // cheltuieli
 Route::post('app/cheltuieli/nomTipCheltuieli'           ,[CheltuieliController::class,  'nomTipCheltuieli'])->middleware('auth');

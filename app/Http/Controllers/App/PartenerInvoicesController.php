@@ -47,9 +47,7 @@ class PartenerInvoicesController extends Controller
 
         $report = $bussinesInvoice->reportFacturiEmise($paramIncomingList);
 
-
         $header = array(
-            'id'=>'string',
             'nr factura'=>'string',
             'tip factura'=>'string',
             'data factura'=>'string',

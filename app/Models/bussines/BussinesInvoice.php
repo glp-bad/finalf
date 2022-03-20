@@ -307,7 +307,7 @@ class BussinesInvoice extends MyModel {
 
     public function reportFacturiEmise(IncomingList $incomingList){
         $rezult = DB::select(
-            "select t_factura.id, t_facturi_numar.cNr as f_nr,
+            "select  t_facturi_numar.cNr as f_nr,
                             t_tip_factura.cTipfactura as f_tip,
                             DATE_FORMAT(t_factura.data_f, '%d/%m/%Y') as f_data,
                             t_tip_organizare_juridica.cTipAbrev as f_client_tip, 
@@ -331,6 +331,35 @@ class BussinesInvoice extends MyModel {
         return $rezult;
     }
 
+
+    public function reportIncasari(ListFilter $f){
+        $rezult = DB::select(
+            "select t_tip_document.tipc as receipt_tipdoc, t_tip_incasare.cIncas as receipt_tipin, 
+                           DATE_FORMAT(t_incasari_facturi.data_incas, '%d/%m/%Y') as receipt_date,
+                           in_nr.cNr as receipt_nrdoc, 
+                           t_incasari_facturi.nSuma as receipt_suma,
+                           f_nr.cNr as invoice_nrdoc, t_parteneri.cNume as invoice_client,
+                           concat(if(t_parteneri.Ro_='--','',t_parteneri.Ro_), t_parteneri.cui) as invoice_cf,
+                           t_factura.nProcTVA as invoice_percent_tva,
+                           (select sum(t_factura_d.nSumaFaraTva) from t_factura_d where t_factura_d.id_factura = t_factura.id) as invoice_suma_fara_tva,
+                           (select sum(t_factura_d.nSumaTVA) from t_factura_d where t_factura_d.id_factura = t_factura.id) as invoice_suma_tva,
+                           (select sum(t_factura_d.nTotal) from t_factura_d where t_factura_d.id_factura = t_factura.id) as invoice_suma
+                     from 
+                        t_incasari_facturi
+                        inner join t_factura on t_factura.id = t_incasari_facturi.id_factura and t_factura.id_avocat = :idAvocat
+                        inner join t_facturi_numar as in_nr on in_nr.id = t_incasari_facturi.id_nr
+                        inner join t_tip_document on t_tip_document.id = t_incasari_facturi.id_tipd
+                        inner join t_tip_incasare on t_tip_incasare.id = t_incasari_facturi.id_incas
+                        inner join t_facturi_numar as f_nr on f_nr.id = t_factura.id_nr
+                        inner join t_parteneri on t_parteneri.id = t_factura.id_part
+                    where t_incasari_facturi.data_incas between :dataIn and :dataSf
+                          and (t_factura.id_part = :idPartner OR 0 = :filterActive)  
+                    order by t_incasari_facturi.data_incas asc"
+            , ['idAvocat'=>$this->idAvocat, 'dataIn'=>$f->data_in, 'dataSf'=>$f->data_sf, 'idPartner'=>$f->partner_id, 'filterActive'=>$f->filterActiv]
+        );
+
+        return $rezult;
+    }
 
 
 }
