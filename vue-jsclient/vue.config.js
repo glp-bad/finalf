@@ -10,6 +10,13 @@ module.exports = {
   devServer: {
       proxy: 'https://finalf.badmintonclub.ro.mydev'
   },
-   configureWebpack: {
-   }
+  configureWebpack: {
+  },
+  css: {
+        loaderOptions: {
+            scss: {
+                prependData:    `@import "@/scss/integrate/invoice.scss";`
+              }
+        }
+    }
 }
