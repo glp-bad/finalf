@@ -66,7 +66,7 @@ Route::post('app/cashing/saveIncoming',        [PartenerInvoicesCashingInControl
 Route::post('app/cashing/incomingList',        [PartenerInvoicesCashingInController::class,  'incomingList'])->middleware('auth');
 Route::post('app/cashing/deleteIncomingDoc',   [PartenerInvoicesCashingInController::class,  'deleteIncomingDoc'])->middleware('auth');
 Route::post('app/cashing/reportIncasari',      [PartenerInvoicesCashingInController::class,  'reportIncasari'])->middleware('auth');
-
+Route::post('app/cashing/receiptPrint',     [PartenerInvoicesCashingInController::class,  'receiptPrint'])->middleware('auth');
 
 
 // cheltuieli
@@ -83,7 +83,6 @@ Route::post('app/cheltuieli/deleteExpenseArticol'       ,[CheltuieliController::
 Route::post('app/cheltuieli/saveExpense'                ,[CheltuieliController::class,  'saveExpense'])->middleware('auth');
 Route::post('app/cheltuieli/expenseList'                ,[CheltuieliController::class,  'expenseList'])->middleware('auth');
 Route::post('app/cheltuieli/deleteSaveExpense'          ,[CheltuieliController::class,  'deleteSaveExpense'])->middleware('auth');
-Route::post('app/cheltuieli/receiptPrint'               ,[CheltuieliController::class,  'receiptPrint'])->middleware('auth');
 
 // avocat
 Route::post('app/avocat/monthList', [AvocatController::class,  'monthList'])->middleware('auth');

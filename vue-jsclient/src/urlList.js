@@ -54,6 +54,7 @@ export default [
     {name: "incomingList"       ,url: "public/app/cashing/incomingList"},
     {name: "deleteIncomingDoc"  ,url: "public/app/cashing/deleteIncomingDoc"},
     {name: "reportIncasari"     ,url: "public/app/cashing/reportIncasari"},
+	{name: "receiptPrint"       ,url: "public/app/cashing/receiptPrint"},
 
 	{name: "nomTipCheltuieli"           ,url: "public/app/cheltuieli/nomTipCheltuieli"},
 	{name: "insertExpenseAntet"         ,url: "public/app/cheltuieli/insertExpenseAntet"},
@@ -68,12 +69,6 @@ export default [
 	{name: "saveExpense"                ,url: "public/app/cheltuieli/saveExpense"},
     {name: "expenseList"                ,url: "public/app/cheltuieli/expenseList"},
     {name: "deleteSaveExpense"          ,url: "public/app/cheltuieli/deleteSaveExpense"},
-    {name: "receiptPrint"               ,url: "public/app/cheltuieli/receiptPrint"},
-
-
-
-
-
 
 
     {name: "monthList"  ,url: "public/app/avocat/monthList"},

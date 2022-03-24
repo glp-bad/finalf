@@ -17,12 +17,34 @@ use App\MyAppConstants;
 use \Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\allClass\helpers\param\IncomingList;
+use  App\allClass\PrintApp;
 
 class PartenerInvoicesCashingInController extends Controller
 {
     public function __construct(){}
 
 
+
+
+	public function receiptPrint(Request $request)
+	{
+		$id = $request->idPk;
+		$bussinesInvoice = new BussinesInvoice($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+		$data = $bussinesInvoice->selectReceiptIncomePrint($id);
+		$receipt = json_decode(json_encode($data[0]), true);
+
+		// dd($receipt);
+		$htmlView = view('app/receipt')->with(['receipt'=> $receipt]);
+
+
+		$print = new PrintApp('A4','portrait');
+		$pathRezultPrint = $print->printReceipt($htmlView);
+
+		$pdf = base64_encode(file_get_contents($pathRezultPrint));
+
+		return json_encode(['pdf' => $pdf, 'fileName' =>  "test_receipt"]);
+
+	}
 
     public function deleteIncomingDoc(Request $request) {
         $msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false );
