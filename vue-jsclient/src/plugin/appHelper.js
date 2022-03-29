@@ -34,7 +34,7 @@ const appHelper = {
                 element.style.display = 'none';
                 document.body.appendChild(element);
 
-                // window.open(element, '_blank');
+                 // window.open(element, '_blank');
                 element.click();
 
                 document.body.removeChild(element);

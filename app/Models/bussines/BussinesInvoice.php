@@ -278,6 +278,7 @@ class BussinesInvoice extends MyModel {
                            t_avocati_banca.cIBAN as av_iban,
                            t_avocati_banca.cBanca as av_banca,
                            t_avocati_banca.cSucursala as av_sucursala,
+                           t_parteneri.cNume as pa_nume,
                            t_parteneri_adrese.cAdresa as pa_adresa,
                            pa_localitati.cLocalitate as pa_localitate,
                            t_parteneri_banca.cIBAN as pa_iban,

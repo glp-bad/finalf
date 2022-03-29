@@ -1,0 +1,84 @@
+html{margin:100px 50px}
+
+@page {
+	margin: 0cm 0cm 0cm 0cm;
+	    // size: A4 portrait; set on php
+}
+
+body {
+	.line{
+		border-collapse: collapse;
+		border-top: 1px solid black;
+		width: 100%;
+	}
+	.line-dotted{
+		border-collapse: collapse;
+		border-top: 1px dotted black;
+		width: 100%;
+	}
+
+	.tr-blank{
+		height: 10px;
+		td{
+			height: 10px;
+		}
+	}
+
+	.td-label-right{
+		text-align: right;
+	}
+
+	font-family: "Nunito", sans-serif;
+	font-size: 12px;
+	// border: 1px solid black;
+
+	/** Define now the real margins of every page in the PDF **/
+	margin-top:     6cm;
+	margin-left:      -1.5cm;
+	margin-right:     -1.5cm;
+	margin-bottom:    0cm;
+
+	/** Define the header rules **/
+	header {
+		position: fixed;
+		top: -1cm;
+		left: 0cm;
+		right: 0cm;
+		height: 6.5cm;
+		background: #98dfb6;    // color debug
+
+		.ff-receipt-antet {
+			border: 1px solid black;
+			border-collapse: collapse;
+			width: 100%;
+
+			.td-label-right{
+				text-align: right;
+				div {
+					padding-right: 10px;
+				}
+			}
+
+
+		}
+	}
+
+	main {
+		.test{}
+	}
+
+	/** Define the footer rules **/
+	footer {
+		position: fixed;
+		bottom: -2cm;
+		left: 0cm;
+		right: 0cm;
+		height: 1cm;
+		// background: #e9605c;        // color debug
+	}
+}
+
+
+
+
+
