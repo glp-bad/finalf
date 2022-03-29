@@ -63,11 +63,19 @@
             width: 100%;
         }
 
-        body header .ff-receipt-antet .td-label-right {
+        body header .ff-receipt-antet .td-av-cabinet {
+            text-align: left;
+        }
+
+        body header .ff-receipt-antet .td-av-cabinet div {
+            padding-left: 10px;
+        }
+
+        body header .ff-receipt-antet .td-receipt-doc {
             text-align: right;
         }
 
-        body header .ff-receipt-antet .td-label-right div {
+        body header .ff-receipt-antet .td-receipt-doc div {
             padding-right: 10px;
         }
 
@@ -90,8 +98,8 @@
 
     <table class = 'ff-receipt-antet'>
         <tr>
-            <td>{{$receipt['av_cabinet']}}</td>
-            <td class="td-label-right"><div>{{$receipt['receipt_doc']}}</div></td>
+            <td class="td-av-cabinet"><div>{{$receipt['av_cabinet']}}</div></td>
+            <td class="td-receipt-doc"><div>{{$receipt['receipt_doc']}}</div></td>
         </tr>
     </table>
 </header>

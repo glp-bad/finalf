@@ -52,7 +52,15 @@ body {
 			border-collapse: collapse;
 			width: 100%;
 
-			.td-label-right{
+
+			.td-av-cabinet{
+				text-align: left;
+				div {
+					padding-left: 10px;
+				}
+			}	
+
+			.td-receipt-doc{
 				text-align: right;
 				div {
 					padding-right: 10px;
