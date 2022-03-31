@@ -42,6 +42,17 @@ body .td-label-right {
   text-align: right;
 }
 
+body .td-label {
+  font-weight: bold;
+  vertical-align: top;
+  width: 18%;
+}
+
+body .td-val {
+  vertical-align: top;
+  word-wrap: break-word;
+}
+
 body header {
   position: fixed;
   top: -1cm;
@@ -52,25 +63,40 @@ body header {
 }
 
 body header .ff-receipt-antet {
-  border: 1px solid black;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
   border-collapse: collapse;
   width: 100%;
 }
 
 body header .ff-receipt-antet .td-av-cabinet {
   text-align: left;
+  width: 55%;
 }
 
 body header .ff-receipt-antet .td-av-cabinet div {
-  padding-left: 10px;
+  background-color: coral;
+  padding-left: 5mm;
 }
 
 body header .ff-receipt-antet .td-receipt-doc {
   text-align: right;
+  width: 45%;
 }
 
 body header .ff-receipt-antet .td-receipt-doc div {
-  padding-right: 10px;
+  background-color: lavenderblush;
+  padding-right: 5mm;
+}
+
+body header .ff-receipt-antet .table-antet-receipt {
+  border: 1px solid black;
+}
+
+body header .ff-receipt-antet .td-antet-receipt {
+  background-color: greenyellow;
+  vertical-align: top;
 }
 
 body footer {

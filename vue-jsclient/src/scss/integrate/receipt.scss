@@ -28,6 +28,20 @@ body {
 		text-align: right;
 	}
 
+	.td-label {
+		// background: #1d68a7; // color debug
+		font-weight: bold;
+		vertical-align: top;
+		width: 18%;
+		// border: 1px solid black;
+	}
+
+	.td-val {
+		vertical-align: top;
+		// border: 1px solid black;
+		word-wrap: break-word;
+	}
+
 	font-family: "Nunito", sans-serif;
 	font-size: 12px;
 	// border: 1px solid black;
@@ -48,23 +62,38 @@ body {
 		background: #98dfb6;    // color debug
 
 		.ff-receipt-antet {
-			border: 1px solid black;
+			border-top: 1px solid black;
+			border-left: 1px solid black;
+			border-right: 1px solid black;
 			border-collapse: collapse;
 			width: 100%;
 
-
 			.td-av-cabinet{
 				text-align: left;
+				width: 55%;
 				div {
-					padding-left: 10px;
+					background-color: coral;
+					padding-left: 5mm;
 				}
-			}	
+			}
 
 			.td-receipt-doc{
 				text-align: right;
+
+				width: 45%;
 				div {
-					padding-right: 10px;
+					background-color: lavenderblush;
+					padding-right: 5mm;
 				}
+			}
+
+			.table-antet-receipt{
+				border: 1px solid black;
+			}
+
+			.td-antet-receipt{
+				background-color: greenyellow;
+				vertical-align: top;
 			}
 
 
@@ -72,7 +101,7 @@ body {
 	}
 
 	main {
-		.test{}
+		
 	}
 
 	/** Define the footer rules **/
