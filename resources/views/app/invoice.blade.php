@@ -287,14 +287,14 @@
                 <th class="th-right">Valoare TVA</th>
             </tr>
 
-
+            @foreach ($servicii as $s)
                 <tr>
-                    <td class="td-center nr-column">{{ $servicii['nro']}}</td>
-                    <td class="td-left serviciu-column">{{ $servicii['cExplicf']}}</td>
-                    <td class="td-right valoare-column">{{ $servicii['nSuma']}}</td>
-                    <td class="td-right tva-column">{{ $servicii['nTVA']}}</td>
+                    <td class="td-center nr-column">{{$s['nro']}}</td>
+                    <td class="td-left serviciu-column">{{$s['cExplicf']}}</td>
+                    <td class="td-right valoare-column">{{ number_format($s['nSuma'],2,'.',',')}}</td>
+                    <td class="td-right tva-column">{{ number_format($s['nTVA'],2,'.',',')}}</td>
                 </tr>
-
+            @endforeach
 
             <tr>
                 <td colspan="4">
@@ -304,8 +304,8 @@
 
             <tr>
                 <td colspan="2" class="td-right">Total:</td>
-                <td class="td-right">{{$plata['suma']}}</td>
-                <td class="td-right">{{$plata['tva']}}</td>
+                <td class="td-right">{{number_format($plata['suma'],2,'.',',')}}</td>
+                <td class="td-right">{{number_format($plata['tva'],2,'.',',')}}</td>
             </tr>
 
 
@@ -315,7 +315,7 @@
 
             <tr class="tr-total-plata" >
                 <td colspan="3" class="td-label-right">Total plata:</td>
-                <td class="td-value-right">{{$plata['totalPLata']}}</td>
+                <td class="td-value-right">{{number_format($plata['totalPlata'],2,'.',',')}}</td>
             </tr>
 
 

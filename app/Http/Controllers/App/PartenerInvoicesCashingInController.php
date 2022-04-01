@@ -18,6 +18,7 @@ use \Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\allClass\helpers\param\IncomingList;
 use  App\allClass\PrintApp;
+use DateTime;
 
 class PartenerInvoicesCashingInController extends Controller
 {
@@ -31,9 +32,24 @@ class PartenerInvoicesCashingInController extends Controller
 		$id = $request->idPk;
 		$bussinesInvoice = new BussinesInvoice($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
 		$data = $bussinesInvoice->selectReceiptIncomePrint($id);
+
+
 		$receipt = json_decode(json_encode($data[0]), true);
 
-		// dd($receipt);
+		if($receipt['av_cui_ro'] == 'RO'){
+            $receipt['av_cuiro'] = $receipt['av_cui_ro'] . ' ' . $receipt['av_cui'];
+        }else{
+            $receipt['av_cuiro'] = $receipt['av_cui'];
+        }
+
+
+        if($receipt['pa_cui_ro'] == 'RO'){
+            $receipt['pa_cuiro'] = $receipt['pa_cui_ro'] . ' ' . $receipt['pa_cui'];
+        }else{
+            $receipt['pa_cuiro'] = $receipt['pa_cui'];
+        }
+
+
 		$htmlView = view('app/receipt')->with(['receipt'=> $receipt]);
 
 
@@ -42,7 +58,9 @@ class PartenerInvoicesCashingInController extends Controller
 
 		$pdf = base64_encode(file_get_contents($pathRezultPrint));
 
-		return json_encode(['pdf' => $pdf, 'fileName' =>  "test_receipt"]);
+		$filename = $this->getReceiptFileName($receipt);
+
+		return json_encode(['pdf' => $pdf, 'fileName' =>  $filename]);
 
 	}
 
@@ -259,4 +277,16 @@ class PartenerInvoicesCashingInController extends Controller
 
         return $msg->toJson();
     }
+
+    private function getReceiptFileName($r){
+        $dts = new DateTime($r['data_incas']);
+
+        $client = substr($r['pa_nume'], 0, 5);
+        $client = str_replace(' ', '', $client);
+        $dataString  = date_format($dts,"Ymd");
+        $invoiceNumber = str_replace(' ', '', $r['receipt_nr']);
+
+        return $client . '_' . $dataString . '_' . $invoiceNumber . '.pdf';
+    }
+
 }

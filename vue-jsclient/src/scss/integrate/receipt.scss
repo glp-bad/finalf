@@ -1,6 +1,6 @@
 html{margin:100px 50px}
 
-$receiptTest: true;
+$receiptTest: false;
 
 @page {
 	margin: 0cm 0cm 0cm 0cm;
@@ -75,8 +75,6 @@ body {
 
 		.ff-receipt-antet {
 			border-top: 1px solid black;
-			border-left: 1px solid black;
-			border-right: 1px solid black;
 			border-collapse: collapse;
 			width: 100%;
 
@@ -169,7 +167,7 @@ body {
 				// background: #1d68a7; // color debug
 				font-weight: bold;
 				vertical-align: top;
-				width: 18%;
+				width: 20%;
 				@if $receiptTest {
 					border: 1px solid black;
 				}

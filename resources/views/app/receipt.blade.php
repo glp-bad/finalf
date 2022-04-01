@@ -52,13 +52,11 @@
             font-weight: bold;
             vertical-align: top;
             width: 18%;
-            border: 1px solid black;
         }
 
         body .td-val {
             vertical-align: top;
             word-wrap: break-word;
-            border: 1px solid black;
         }
 
         body header {
@@ -67,13 +65,10 @@
             left: 0cm;
             right: 0cm;
             height: 6.5cm;
-            background: #98dfb6;
         }
 
         body header .ff-receipt-antet {
             border-top: 1px solid black;
-            border-left: 1px solid black;
-            border-right: 1px solid black;
             border-collapse: collapse;
             width: 100%;
         }
@@ -85,7 +80,6 @@
 
         body header .ff-receipt-antet .td-av-cabinet div {
             padding-left: 5mm;
-            background-color: coral;
         }
 
         body header .ff-receipt-antet .td-receipt-doc {
@@ -95,29 +89,21 @@
 
         body header .ff-receipt-antet .td-receipt-doc div {
             padding-left: 3mm;
-            background-color: lavenderblush;
         }
 
         body header .ff-receipt-antet .table-antet-receipt {
             width: 100%;
-            border: 1px solid black;
         }
 
         body header .ff-receipt-antet .table-antet-receipt .td-label-antet-recipt {
             font-weight: bold;
             vertical-align: top;
             width: 5%;
-            border: 1px solid black;
         }
 
         body header .ff-receipt-antet .td-antet-receipt {
             vertical-align: top;
             padding-left: 3mm;
-            background-color: greenyellow;
-        }
-
-        body header .ff-receipt-antet .td-antet-receipt tr {
-            border: 1px solid black;
         }
 
         body header .ff-receipt-antet .td-antet-receipt .td-signature {
@@ -130,7 +116,6 @@
             height: 15mm;
             border: 1px solid black;
             margin-left: 20mm;
-            background-color: crimson;
         }
 
         body header .ff-receipt-antet .td-antet-receipt .td-signature .signature .div-text {
@@ -146,14 +131,12 @@
         body header .ff-receipt-content .td-label {
             font-weight: bold;
             vertical-align: top;
-            width: 15%;
-            border: 1px solid black;
+            width: 20%;
         }
 
         body header .ff-receipt-content .td-val {
             vertical-align: top;
             word-wrap: break-word;
-            border: 1px solid black;
         }
 
         body main {
@@ -191,7 +174,7 @@
                     </tr>
                     <tr>
                         <td class="td-label"><div>Cod fiscal:</div></td>
-                        <td class="td-val">{{$receipt['av_cui']}}</td>
+                        <td class="td-val">{{$receipt['av_cuiro']}}</td>
                     </tr>
                     <tr>
                         <td class="td-label"><div>Sediu:</div></td>
@@ -241,7 +224,7 @@
         </tr>
         <tr>
             <td class="td-label"><div>CUI\CNP:</div></td>
-            <td class="td-val">{{$receipt['pa_cui']}}</td>
+            <td class="td-val">{{$receipt['pa_cuiro']}}</td>
         </tr>
         <tr>
             <td class="td-label"><div>Reg. com:</div></td>
@@ -256,10 +239,12 @@
             <td class="td-val">{{$receipt['receipt_suma']}}</td>
         </tr>
         <tr>
-            <td class="td-label"><div>Pentru factura:</div></td>
-            <td class="td-val">{{$receipt['invoice_nr']}}</td>
+            <td class="td-label"><div>contravaloare factura: </div></td>
+            <td class="td-val">{{$receipt['invoice_nr']}} din data {{$receipt['invoice_date']}}</td>
         </tr>
     </table>
+
+    <div class="line"></div>
 
 </header>
 <!-- <footer></footer> -->

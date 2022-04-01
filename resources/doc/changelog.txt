@@ -1,3 +1,7 @@
+2022-04-01 1.4.000    - bug filter grid facturi partener dupa nr factura,
+                      - printare chitanta
+                      - printare factura servici multiple pe aceasi factura
+                      - formatare numere in factura
 2022-03-20 1.3.000    - raport incasari, export excel
 2022-03-19 1.2.000    - raport facturi emise in excel
 2022-03-19 1.0        - am eliminat filtrul pe avocat la lista parteneri (era deja eliminat in vechea versiune)

@@ -26,9 +26,6 @@ use DateTime;
 
 use App\allClass\XLSXWriter;
 
-// include_once'vendor/mk-j/php_xlsxwriter/xlsxwriter.class.php';
-
-
 class PartenerInvoicesController extends Controller
 {
     public function __construct(){}
@@ -88,10 +85,6 @@ class PartenerInvoicesController extends Controller
         return $msg->toJson();
     }
 
-
-
-
-
     public function invoicePrint(Request $request)
     {
         $id = $request->idPk;
@@ -117,11 +110,20 @@ class PartenerInvoicesController extends Controller
         }
 
         $arAntet = json_decode(json_encode($antetFactura[0]), true);
-        $arDetaliu = json_decode(json_encode($detaliuFactura[0]), true);
-        $plata = ['suma'=>$arDetaliu['nSuma'], 'tva'=>$arDetaliu['nTVA'], 'totalPLata'=>$arDetaliu['ValoareFactura']];
+        $arDetaliu = json_decode(json_encode($detaliuFactura), true);
+
+        $suma = 0.00;
+        $tva = 0.00;
+        $totalPlata = 0.00;
+        foreach ($arDetaliu as $det){
+            $suma   += $det['nSuma'];
+            $tva    += $det['nTVA'];
+            $totalPlata   += $det['ValoareFactura'];
+        }
+
+        $plata = ['suma'=>$suma, 'tva'=>$tva, 'totalPlata'=>$totalPlata];
 
         $invoicePrintName = $this->getInvoiceFileName($arAntet);
-
         $htmlView = view('app/invoice')->with(['antet'=> $arAntet, 'servicii'=>$arDetaliu, 'plata'=>$plata]);
 
         $print = new PrintApp('A4','portrait');
@@ -528,6 +530,7 @@ class PartenerInvoicesController extends Controller
 
         return ['param'=>$param, 'errorMsg'=>$errorMsg];
     }
+
 
     private function getInvoiceFileName($antet){
         $dts = new DateTime($antet['data_f']);
