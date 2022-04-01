@@ -1,9 +1,12 @@
 html{margin:100px 50px}
 
+$receiptTest: true;
+
 @page {
 	margin: 0cm 0cm 0cm 0cm;
 	    // size: A4 portrait; set on php
 }
+
 
 body {
 	.line{
@@ -33,13 +36,18 @@ body {
 		font-weight: bold;
 		vertical-align: top;
 		width: 18%;
-		// border: 1px solid black;
+		@if $receiptTest {
+			border: 1px solid black;
+		}
 	}
 
 	.td-val {
 		vertical-align: top;
-		// border: 1px solid black;
 		word-wrap: break-word;
+
+		@if $receiptTest {
+			border: 1px solid black;
+		}
 	}
 
 	font-family: "Nunito", sans-serif;
@@ -59,7 +67,11 @@ body {
 		left: 0cm;
 		right: 0cm;
 		height: 6.5cm;
-		background: #98dfb6;    // color debug
+
+		@if $receiptTest {
+			background: #98dfb6;    // color debug	
+		}
+		
 
 		.ff-receipt-antet {
 			border-top: 1px solid black;
@@ -70,38 +82,115 @@ body {
 
 			.td-av-cabinet{
 				text-align: left;
-				width: 55%;
+				width: 60%;
 				div {
-					background-color: coral;
 					padding-left: 5mm;
+					@if $receiptTest {
+						background-color: coral;	
+					}
 				}
 			}
 
 			.td-receipt-doc{
-				text-align: right;
+				text-align: left;
 
-				width: 45%;
+				width: 40%;
 				div {
-					background-color: lavenderblush;
-					padding-right: 5mm;
+					padding-left: 3mm;
+					@if $receiptTest {
+						background-color: lavenderblush;	
+					}
 				}
 			}
 
-			.table-antet-receipt{
-				border: 1px solid black;
+			.table-antet-receipt {
+				width: 100%;
+
+				.td-label-antet-recipt {
+					// background: #1d68a7; // color debug
+					font-weight: bold;
+					vertical-align: top;
+					width: 5%;
+					@if $receiptTest {
+						border: 1px solid black;
+					}
+				}
+
+
+				@if $receiptTest {
+					border: 1px solid black;
+				}
 			}
 
-			.td-antet-receipt{
-				background-color: greenyellow;
+			.td-antet-receipt {
 				vertical-align: top;
+				padding-left: 3mm;	
+				@if $receiptTest {
+					background-color: greenyellow;	
+				}
+				tr{
+					@if $receiptTest {
+						border: 1px solid black;
+					}
+				}
+
+				
+				.td-signature{
+					display: inline-block;	
+					.signature {
+						position: relative;
+						width: 35mm;
+						height: 15mm;
+						border: 1px solid black;
+						margin-left: 20mm;
+						@if $receiptTest {
+							background-color: crimson;	
+						}
+						.div-text {
+							position: absolute;
+							bottom: 0;
+							left: 2mm;
+						}
+					}
+				}
+
+				
+				
 			}
 
 
 		}
+
+
+		.ff-receipt-content{
+			width: 100%;
+
+			.td-label {
+				// background: #1d68a7; // color debug
+				font-weight: bold;
+				vertical-align: top;
+				width: 18%;
+				@if $receiptTest {
+					border: 1px solid black;
+				}
+			}
+
+			.td-val {
+				vertical-align: top;
+				word-wrap: break-word;
+		
+				@if $receiptTest {
+					border: 1px solid black;
+				}
+			}
+
+		}
+
+
 	}
 
 	main {
-		
+		font-family: "Nunito", sans-serif;	// doar pentru a nu fi un empty {}		
 	}
 
 	/** Define the footer rules **/

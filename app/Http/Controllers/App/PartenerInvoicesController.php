@@ -99,6 +99,8 @@ class PartenerInvoicesController extends Controller
         $antetFactura = $bussinesInvoice->selectInvoicePrintAntet($id);
         $detaliuFactura = $bussinesInvoice->selectInvoicePrintDetail($id);
 
+        // problema test FAGD 00002252
+
         $ro = 'RO';
         if($antetFactura[0]->ro_ == $ro){
             $antetFactura[0]->cui = trim($ro . $antetFactura[0]->cui);

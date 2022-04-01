@@ -279,11 +279,15 @@ class BussinesInvoice extends MyModel {
                            t_avocati_banca.cBanca as av_banca,
                            t_avocati_banca.cSucursala as av_sucursala,
                            t_parteneri.cNume as pa_nume,
+                           t_parteneri.cui as pa_cui,
+                           t_parteneri.Ro_ as pa_cui_ro,
+                           t_parteneri.regcom as pa_regcom,
                            t_parteneri_adrese.cAdresa as pa_adresa,
                            pa_localitati.cLocalitate as pa_localitate,
                            t_parteneri_banca.cIBAN as pa_iban,
                            t_parteneri_banca.cBanca as pa_banca,
                            t_parteneri_banca.cSucursala as pa_sucursala
+                           
                      from 
                         t_incasari_facturi
                         inner join t_factura on t_factura.id = t_incasari_facturi.id_factura and t_factura.id_avocat = :idAvocat

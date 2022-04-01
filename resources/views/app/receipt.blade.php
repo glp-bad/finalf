@@ -52,11 +52,13 @@
             font-weight: bold;
             vertical-align: top;
             width: 18%;
+            border: 1px solid black;
         }
 
         body .td-val {
             vertical-align: top;
             word-wrap: break-word;
+            border: 1px solid black;
         }
 
         body header {
@@ -78,31 +80,84 @@
 
         body header .ff-receipt-antet .td-av-cabinet {
             text-align: left;
-            width: 55%;
+            width: 60%;
         }
 
         body header .ff-receipt-antet .td-av-cabinet div {
-            background-color: coral;
             padding-left: 5mm;
+            background-color: coral;
         }
 
         body header .ff-receipt-antet .td-receipt-doc {
-            text-align: right;
-            width: 45%;
+            text-align: left;
+            width: 40%;
         }
 
         body header .ff-receipt-antet .td-receipt-doc div {
+            padding-left: 3mm;
             background-color: lavenderblush;
-            padding-right: 5mm;
         }
 
         body header .ff-receipt-antet .table-antet-receipt {
+            width: 100%;
+            border: 1px solid black;
+        }
+
+        body header .ff-receipt-antet .table-antet-receipt .td-label-antet-recipt {
+            font-weight: bold;
+            vertical-align: top;
+            width: 5%;
             border: 1px solid black;
         }
 
         body header .ff-receipt-antet .td-antet-receipt {
-            background-color: greenyellow;
             vertical-align: top;
+            padding-left: 3mm;
+            background-color: greenyellow;
+        }
+
+        body header .ff-receipt-antet .td-antet-receipt tr {
+            border: 1px solid black;
+        }
+
+        body header .ff-receipt-antet .td-antet-receipt .td-signature {
+            display: inline-block;
+        }
+
+        body header .ff-receipt-antet .td-antet-receipt .td-signature .signature {
+            position: relative;
+            width: 35mm;
+            height: 15mm;
+            border: 1px solid black;
+            margin-left: 20mm;
+            background-color: crimson;
+        }
+
+        body header .ff-receipt-antet .td-antet-receipt .td-signature .signature .div-text {
+            position: absolute;
+            bottom: 0;
+            left: 2mm;
+        }
+
+        body header .ff-receipt-content {
+            width: 100%;
+        }
+
+        body header .ff-receipt-content .td-label {
+            font-weight: bold;
+            vertical-align: top;
+            width: 15%;
+            border: 1px solid black;
+        }
+
+        body header .ff-receipt-content .td-val {
+            vertical-align: top;
+            word-wrap: break-word;
+            border: 1px solid black;
+        }
+
+        body main {
+            font-family: "Nunito", sans-serif;
         }
 
         body footer {
@@ -156,18 +211,56 @@
             <td class="td-antet-receipt">
                 <table class = 'table-antet-receipt'>
                     <tr>
-                        <td class="td-label"><div>Nr.:</div></td>
+                        <td class="td-label-antet-recipt"><div>Nr.:</div></td>
                         <td class="td-val">{{$receipt['receipt_nr']}}</td>
                     </tr>
                     <tr>
-                        <td class="td-label"><div>Data:</div></td>
+                        <td class="td-label-antet-recipt"><div>Data:</div></td>
                         <td class="td-val">{{$receipt['receipt_date']}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <div class="td-signature">
+                                <div class="signature">
+                                    <div class="div-text">semnatura</div>
+                                </div>
+                            </div>
+                        <td>
                     </tr>
                 </table>
              </td>
         </tr>
-
     </table>
+
+    <div class="line"></div>
+
+    <table class = 'ff-receipt-content'>
+        <tr>
+            <td class="td-label"><div>Am primit de la:</div></td>
+            <td class="td-val">{{$receipt['pa_nume']}}</td>
+        </tr>
+        <tr>
+            <td class="td-label"><div>CUI\CNP:</div></td>
+            <td class="td-val">{{$receipt['pa_cui']}}</td>
+        </tr>
+        <tr>
+            <td class="td-label"><div>Reg. com:</div></td>
+            <td class="td-val">{{$receipt['pa_regcom']}}</td>
+        </tr>
+        <tr>
+            <td class="td-label"><div>Adresa:</div></td>
+            <td class="td-val">{{$receipt['pa_adresa']}}</td>
+        </tr>
+        <tr>
+            <td class="td-label"><div>Suma de:</div></td>
+            <td class="td-val">{{$receipt['receipt_suma']}}</td>
+        </tr>
+        <tr>
+            <td class="td-label"><div>Pentru factura:</div></td>
+            <td class="td-val">{{$receipt['invoice_nr']}}</td>
+        </tr>
+    </table>
+
 </header>
 <!-- <footer></footer> -->
 <main>

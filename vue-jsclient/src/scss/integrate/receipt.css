@@ -46,11 +46,13 @@ body .td-label {
   font-weight: bold;
   vertical-align: top;
   width: 18%;
+  border: 1px solid black;
 }
 
 body .td-val {
   vertical-align: top;
   word-wrap: break-word;
+  border: 1px solid black;
 }
 
 body header {
@@ -72,31 +74,84 @@ body header .ff-receipt-antet {
 
 body header .ff-receipt-antet .td-av-cabinet {
   text-align: left;
-  width: 55%;
+  width: 60%;
 }
 
 body header .ff-receipt-antet .td-av-cabinet div {
-  background-color: coral;
   padding-left: 5mm;
+  background-color: coral;
 }
 
 body header .ff-receipt-antet .td-receipt-doc {
-  text-align: right;
-  width: 45%;
+  text-align: left;
+  width: 40%;
 }
 
 body header .ff-receipt-antet .td-receipt-doc div {
+  padding-left: 3mm;
   background-color: lavenderblush;
-  padding-right: 5mm;
 }
 
 body header .ff-receipt-antet .table-antet-receipt {
+  width: 100%;
+  border: 1px solid black;
+}
+
+body header .ff-receipt-antet .table-antet-receipt .td-label-antet-recipt {
+  font-weight: bold;
+  vertical-align: top;
+  width: 5%;
   border: 1px solid black;
 }
 
 body header .ff-receipt-antet .td-antet-receipt {
-  background-color: greenyellow;
   vertical-align: top;
+  padding-left: 3mm;
+  background-color: greenyellow;
+}
+
+body header .ff-receipt-antet .td-antet-receipt tr {
+  border: 1px solid black;
+}
+
+body header .ff-receipt-antet .td-antet-receipt .td-signature {
+  display: inline-block;
+}
+
+body header .ff-receipt-antet .td-antet-receipt .td-signature .signature {
+  position: relative;
+  width: 35mm;
+  height: 15mm;
+  border: 1px solid black;
+  margin-left: 20mm;
+  background-color: crimson;
+}
+
+body header .ff-receipt-antet .td-antet-receipt .td-signature .signature .div-text {
+  position: absolute;
+  bottom: 0;
+  left: 2mm;
+}
+
+body header .ff-receipt-content {
+  width: 100%;
+}
+
+body header .ff-receipt-content .td-label {
+  font-weight: bold;
+  vertical-align: top;
+  width: 18%;
+  border: 1px solid black;
+}
+
+body header .ff-receipt-content .td-val {
+  vertical-align: top;
+  word-wrap: break-word;
+  border: 1px solid black;
+}
+
+body main {
+  font-family: "Nunito", sans-serif;
 }
 
 body footer {
