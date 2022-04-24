@@ -36,5 +36,17 @@ Header set Access-Control-Allow-Origin "*"
 Header set Access-Control-Allow-Headers "*"
 
 
+:when clone
+    D:\work\docker project\finalf\vue-jsclient\package.json
+        - right click,  install
 
+
+    inside vue-jsclient:
+        npm i -g @vue/cli
+
+    npm install --save-dev copyfiles
+
+
+    in root:
+        composer update
 
