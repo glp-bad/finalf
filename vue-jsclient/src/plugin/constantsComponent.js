@@ -103,6 +103,7 @@ const constantsComponent = {
 	        ICON_DOWN_ORDER: {fawIcon:'fas', icon: 'caret-down', color: null},
             ICON_ORDER: {fawIcon:'fas', icon: 'sort', color: null},
             ICON_FILTER: {fawIcon:'fas', icon: 'ellipsis-v', color: null},
+	        ICON_POPUP: {fawIcon:'fas', icon: 'window-restore', color: "green"},
             ORDER_ASC: 'asc',
             ORDER_DESC: 'desc',
 	        SQL_UPDATE: 'update',

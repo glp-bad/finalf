@@ -27,6 +27,7 @@
     <form-tab :ref = this.REF_FORM>
         <template v-slot:slotTitle></template>
         <template v-slot:slotContent>
+            <my-popup></my-popup>
             <table class="ff-form-table">
                 <tr>
                     <td class="label-left bold" colspan="1">
@@ -90,6 +91,7 @@
                 :pConfig = this.cfgtime.CFG_EXPENSE_LIST
                 @emitFinallyCustomResponse="emitListResumData"
                 @emitDeleteExpense = "emitDeleteExpense"
+                @emitShowDetail = "emitShowDetail"
             ></my-list>
 
         </template>
@@ -105,6 +107,7 @@
     import InputDateTime  from "@/components/base/InputDateTime.vue";
     import Button         from "@/components/base/Button";
     import DropDownSearch from "@/components/base/DropDownSearch.vue";
+    import PopUpWindow    from "@/components/base/PopUpWindow";
 
 
     export default {
@@ -114,7 +117,8 @@
             'my-list': Lista,
             'my-datetime': InputDateTime,
             'my-dropdown-search': DropDownSearch,
-            'my-button': Button
+            'my-button': Button,
+	        'my-popup': PopUpWindow
         },
         name: "form-partener",
         created() {
@@ -140,9 +144,10 @@
                         this.$constList.getHeader(10, 'Action',         100, 'null',            this.$constList.HEADER.CAPTION_TYPE_ACTION)
                     ],
                     recordActionButon: [
+	                    this.$constList.getActionButton(21, 'detalii cheltuieli', 'emitShowDetail', this.$constGrid.ICON_POPUP, this.$constList.ACTION_BUTTON.TYPE_BUTTON, null),
                         this.$constList.getActionButton(20, 'sterg cheltuiala', 'emitDeleteExpense', this.$constGrid.ICON_DELETE, this.$constList.ACTION_BUTTON.TYPE_BUTTON, null)
                         // this.$constList.getActionButton(5, 'adresa implicita', 'emitAdresaImplicita', null, this.$constList.ACTION_BUTTON.TYPE_CHECKBOX, this.$app.cfgCheckBox('ro', false)),   // poate fi un singur checkbox pe linie, trebuie setat si filedNameForCheckBox, campul poate fi doar 1 si 0
-                        // this.$constList.getActionButton(6, 'adresa implicita', 'emitCheckBox', this.$constGrid.getIcon('fas','skull', '#adad00'))
+
                     ],
                     cfg: {  urlData: 'expenseList', loadOnCreate: false,
                         filedNameForCheckBox: 'activ',
@@ -203,6 +208,11 @@
                 }
 
             },
+	        emitShowDetail: function (button){
+		        let tr = button.closest('tr');
+		        this.runtime.post.idPk = tr.getAttribute('idPk');
+                console.log('arata detalii ' + this.runtime.post.idPk);
+	        },
             emitDeleteExpense: function (button){
                 let tr = button.closest('tr');
                 this.runtime.post.idPk = tr.getAttribute('idPk');
