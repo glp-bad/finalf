@@ -13,7 +13,7 @@
               <thead class="theadClass">
                 <tr>
                     <template v-for="ph in pConfig.header">
-                        <th v-if="ph.type === this.$constList.HEADER.CAPTION_TYPE_FIELD" class="thClass" :style="this.privateCfsTDStyle(ph)">{{ph.caption}}</th>
+                        <th v-if="ph.type === this.$constList.HEADER.CAPTION_TYPE_FIELD" class="thClass"><div :style="this.privateCfsTHStyle(ph)">{{ph.caption}}</div></th>
                         <th v-if="ph.type === this.$constList.HEADER.CAPTION_TYPE_ACTION" class="thClass">{{ph.caption}}</th>
                     </template>
                 </tr>
@@ -25,7 +25,7 @@
                   <template v-for="(tr, index) in this.dataList">
                         <tr class="trClass" :idPk="tr.id" @click="this.privateCfgEmitRowSelection($event, this.pConfig.cfg.emitListRowSelection)">
                             <template v-for="(td, index) in tr" v-bind:key="index">
-                                <td class="tdClass" v-if="privateCfgFieldShow(index, tr)" :field=index >
+                                <td class="tdClass" v-if="privateCfgFieldShow(index, tr)" :field=index>
                                         <div :na="this.privateCfgTDAlign(index)" :class="{tdDivRightAlign, tdDivLeftAlign, tdDivCenterAlign}">{{td}}</div>
                                 </td>
                             </template>
@@ -88,7 +88,8 @@
 				fieldArray: [],
                 checkBoxValue: null,
                 idPk: null,
-                headerArrayObject: {}
+                headerArrayObject: {},
+				totalWidth: 0
             },
             this.runtime = {
                 post: null,
@@ -104,6 +105,9 @@
 	        this.privateCfgList();
         },
         methods: {
+			getTotalWidth: function () {
+                return this.cfgTime.totalWidth;
+			},
 		    getDataList: function(){
 		      return this.dataList;
             },
@@ -166,7 +170,7 @@
 		        return returnVal;
             },
             privateCfgHaveButton: function (){
-                 if(this.pConfig.recordActionButon.length > 0){
+                 if(this.pConfig.recordActionButon.length > 0) {
                      return true;
                  }
                  return false;
@@ -183,12 +187,18 @@
 	            return this.cfgTime.fieldArray.includes(fieldName);
             },
 	        privateCfgSetData() {
+
+		    	let totalWidth = 0;
+
 	            this.pConfig.header.forEach(h => {
 		            this.cfgTime.fieldArray.push(h.fieldName);
 		            this.cfgTime.headerArrayObject[h.fieldName] = h;
+		            totalWidth = totalWidth + h.width;
 	            });
+
+		        this.cfgTime.totalWidth = totalWidth;
             },
-            privateCfsTDStyle: function (cf) {
+            privateCfsTHStyle: function (cf) {
 		        if(!this.$check.isUndef(this.pConfig.cfg.headerLenghtActivate) && this.pConfig.cfg.headerLenghtActivate){
                     return {
                         width: cf.width + 'px'
@@ -210,8 +220,6 @@
 		        }else if(align == this.$constGrid.ALIGN_TEXT_CENTER){
 			        this.tdDivCenterAlign = true;
 		        }
-
-		        // console.log(event);
 
 	        },
             privateCfgList(){

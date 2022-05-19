@@ -27,7 +27,6 @@
     <form-tab :ref = this.REF_FORM>
         <template v-slot:slotTitle></template>
         <template v-slot:slotContent>
-            <my-popup></my-popup>
             <table class="ff-form-table">
                 <tr>
                     <td class="label-left bold" colspan="1">
@@ -94,6 +93,19 @@
                 @emitShowDetail = "emitShowDetail"
             ></my-list>
 
+
+            <my-popup
+                    :ref = this.cfgtime.CFG_POPUP_DETAIL.ref
+                    :pConfig = this.cfgtime.CFG_POPUP_DETAIL
+            >
+                <template v-slot:slotContent>
+                    <my-list-detail
+                            :ref = this.cfgtime.CFG_EXPENSE_DETAIL_LIST.ref
+                            :pConfig = this.cfgtime.CFG_EXPENSE_DETAIL_LIST
+                    ></my-list-detail>
+                </template>
+            </my-popup>
+
         </template>
         <template v-slot:slotButton>
         </template>
@@ -118,7 +130,8 @@
             'my-datetime': InputDateTime,
             'my-dropdown-search': DropDownSearch,
             'my-button': Button,
-	        'my-popup': PopUpWindow
+	        'my-popup': PopUpWindow,
+	        'my-list-detail': Lista
         },
         name: "form-partener",
         created() {
@@ -130,17 +143,24 @@
                 DATA_IN: this.cfgDataIn(),
                 DATA_SF: this.cfgDataSf(),
                 URL_DELETE_SAVE_EXPENSE: this.$url.getUrl('deleteSaveExpense'),
+                CFG_POPUP_DETAIL : {
+	                ref: 'refPopUpDetail',
+                    title: 'Lista cheltuieli',
+                    height: null,
+                    width: null,
+	                urlData: 'hahaha'
+                },
                 CFG_EXPENSE_LIST : {
                     ref: 'refDetailList',
                     header: [
                         this.$constList.getHeader(1, 'Data',             90, 'data_c',          this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER ),
-                        this.$constList.getHeader(2, 'Nr. doc.',        130, 'nr_doc',          this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER  ),
+                        this.$constList.getHeader(2, 'Nr. doc.',        100, 'nr_doc',          this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER  ),
                         this.$constList.getHeader(3, 'Tip plata',       100, 'tip_plata',       this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER ),
                         this.$constList.getHeader(4, 'Tip doc.',        140, 'tipd',            this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER  ),
                         this.$constList.getHeader(5, 'Tip cheltuiala.', 140, 'tipc',            this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER  ),
                         this.$constList.getHeader(6, 'Furnizor',        450, 'nume_furnizor',   this.$constList.HEADER.CAPTION_TYPE_FIELD),
-                        this.$constList.getHeader(7, 'TVA',             120, 'total_tva',       this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT),
-                        this.$constList.getHeader(8, 'Total',           120, 'total',           this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER),
+                        this.$constList.getHeader(7, 'TVA',             90, 'total_tva',        this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT),
+                        this.$constList.getHeader(8, 'Total',           90, 'total',            this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER),
                         this.$constList.getHeader(10, 'Action',         100, 'null',            this.$constList.HEADER.CAPTION_TYPE_ACTION)
                     ],
                     recordActionButon: [
@@ -156,6 +176,33 @@
                         heightList: 700
                     }
                 },
+	            CFG_EXPENSE_DETAIL_LIST : {
+		            ref: 'refExpenseDetailList',
+		            header: [
+			            this.$constList.getHeader(1, 'Nr.'              ,20     ,'row_num'          , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER  ),
+			            this.$constList.getHeader(2, 'Cat'              ,100    ,'tip_cat'          , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER ),
+			            this.$constList.getHeader(3, 'Nume produs'      ,400    ,'produs'           , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_LEFT  ),
+			            this.$constList.getHeader(4, 'UM'               ,30     ,'um'               , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER  ),
+			            this.$constList.getHeader(5, 'Cantitate'        ,80     ,'cantitate'        , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_CENTER  ),
+			            this.$constList.getHeader(6, 'Pret unitar'      ,100    ,'pret_unitar'      , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT  ),
+			            this.$constList.getHeader(7, 'Valoare fara TVA' ,110    ,'total_fara_tva'   , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT  ),
+			            this.$constList.getHeader(8, 'Valoare TVA'      ,100    ,'total_tva'        , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT  ),
+			            this.$constList.getHeader(9, 'Total'            ,90     ,'total'            , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT  ),
+			            this.$constList.getHeader(10, '% TVA'           ,70     ,'procent_tva'      , this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT  )
+
+			            // this.$constList.getHeader(20, 'Action'       ,100    ,'null', this.$constList.HEADER.CAPTION_TYPE_ACTION)
+		            ],
+		            recordActionButon: [
+			            // this.$constList.getActionButton(4, 'sterg articol', 'emitStergArticol', this.$constGrid.ICON_DELETE, this.$constList.ACTION_BUTTON.TYPE_BUTTON, null)
+			            // this.$constList.getActionButton(5, 'adresa implicita', 'emitAdresaImplicita', null, this.$constList.ACTION_BUTTON.TYPE_CHECKBOX, this.$app.cfgCheckBox('ro', false)),   // poate fi un singur checkbox pe linie, trebuie setat si filedNameForCheckBox, campul poate fi doar 1 si 0
+			            // this.$constList.getActionButton(6, 'adresa implicita', 'emitCheckBox', this.$constGrid.getIcon('fas','skull', '#adad00'))
+		            ],
+		            cfg: { urlData: 'detailExpenseList', loadOnCreate: false,
+			            filedNameForCheckBox: 'activ',
+			            headerLenghtActivate: true,                         // tine cont de lungimea coloanelor setate in header
+			            emitListRowSelection: 'emitListRowSelection'},
+		                heightList: 500
+	            }
             },
             this.runtime = {
                 sendDataToServer: false,
@@ -208,12 +255,18 @@
                 }
 
             },
-	        emitShowDetail: function (button){
+	        emitShowDetail: function (button) {
 		        let tr = button.closest('tr');
-		        this.runtime.post.idPk = tr.getAttribute('idPk');
-                console.log('arata detalii ' + this.runtime.post.idPk);
+		        let id = tr.getAttribute('idPk');
+
+		        let listDetail = this.$refs[this.cfgtime.CFG_EXPENSE_DETAIL_LIST.ref];
+			    listDetail.showList({idExpense: id});
+		        let popUp     = this.$refs[this.cfgtime.CFG_POPUP_DETAIL.ref];
+		        popUp.setCaption('Detalii pentru: ' + id + ' ');
+		        popUp.show();
+
 	        },
-            emitDeleteExpense: function (button){
+            emitDeleteExpense: function (button) {
                 let tr = button.closest('tr');
                 this.runtime.post.idPk = tr.getAttribute('idPk');
                 this.serverDeleteExpense();
