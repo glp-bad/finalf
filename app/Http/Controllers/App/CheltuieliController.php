@@ -18,12 +18,52 @@ use App\Models\nomenclatoare\ModelNomTipUm;
 use App\MyAppConstants;
 use \Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\allClass\ToXLSX;
 
 
 class CheltuieliController extends Controller
 {
     public function __construct(){}
 
+
+
+	public function reportExcelExpense(Request $request)
+	{
+
+		$msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false );
+
+		$sqlDateFormatIn = MyHelp::getSqlDateFormat($request['dataIn'], null);
+		$sqlDateFormatSf = MyHelp::getSqlDateFormat($request['dataSf'], null);
+		$paramList = new ListFilter($sqlDateFormatIn['dataFormat'], $sqlDateFormatSf['dataFormat'], $request['idPartner']);
+
+		$msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false);
+		$bussinesInvoice = new BussinesInvoice($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+
+		$report = $bussinesInvoice->selectExepnese($paramList);
+
+		$header = array(
+			'id'=>'string',
+			'data_c'=>'string',
+			'nr_doc'=>'string',
+			'tip_plata'=>'string',
+			'tipd'=>'string',
+			'tipc'=>'string',
+			'nume_furnizor'=>'string',
+			'total_tva'=>'price',
+			'total'=>'price'
+		);
+
+		$rows = array();
+
+		foreach ($report as $r){
+			$rows[] =  (array) $r;
+		}
+
+		$toXls =  new ToXLSX($header, $rows);
+		$msg->setCustomData(['xls' => $toXls->getBase6fFile(), 'fileName' =>  'cheltuieli_inregistrate.xlsx']);
+
+		return $msg->toJson();
+	}
 
     public function expenseList(Request $request)
     {

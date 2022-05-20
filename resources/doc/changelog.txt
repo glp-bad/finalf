@@ -1,3 +1,4 @@
+2022-05-19 1.4.200    - download cheltuilei in excel
 2022-05-19 1.4.100    - vizualizare detalii cheltuieli
 2022-04-01 1.4.000    - bug filter grid facturi partener dupa nr factura,
                       - printare chitanta

@@ -34,7 +34,7 @@ services:
         - ../mysql_database:/var/lib/mysql
   php:    
     container_name: glp_php_apache
-    image: gavriladocker/php:lastapache
+    image: gavriladocker/php:withzip
     #command: ["ls"]
     tty: true
     ports:

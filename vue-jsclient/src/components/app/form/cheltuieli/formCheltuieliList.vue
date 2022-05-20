@@ -55,6 +55,10 @@
                             <my-button  :ref=this.cfgtime.REF_BUTTON_REFRESH @click="this.clickExpenseList" :heightButton=22 :buttonType=2 title="refresh lista" :style="this.cfgtime.ICON_REFRESH.colorStyle">
                                 <font-awesome-icon :icon=this.$constComponent.cfgIconPicture(this.cfgtime.ICON_REFRESH) size="1x" />
                             </my-button>
+                            &nbsp;&nbsp;
+                            <my-button  :ref=this.cfgtime.REF_BUTTON_REFRESH @click="this.clickExportExcel" :heightButton=22 :buttonType=2 title="export excel cheltuieli" :style="this.cfgtime.ICON_EXCEL.colorStyle">
+                                <font-awesome-icon :icon=this.$constComponent.cfgIconPicture(this.cfgtime.ICON_EXCEL) size="1x" />
+                            </my-button>
                         </div>
                     </td>
                 </tr>
@@ -139,10 +143,12 @@
             this.cfgtime = {
                 REF_BUTTON_REFRESH: 'refButtonRefresh',
                 ICON_REFRESH: this.$constComponent.ICON_REFRESH("green"),
+	            ICON_EXCEL: this.$constComponent.ICON_EXCEL("blue"),
                 PARTNER_LIST: this.cfgDropDownPartner(),
                 DATA_IN: this.cfgDataIn(),
                 DATA_SF: this.cfgDataSf(),
                 URL_DELETE_SAVE_EXPENSE: this.$url.getUrl('deleteSaveExpense'),
+                URL_REPORT_EXPENSE: this.$url.getUrl('reportExcelExpense'),
                 CFG_POPUP_DETAIL : {
 	                ref: 'refPopUpDetail',
                     title: 'Lista cheltuieli',
@@ -216,6 +222,25 @@
         mounted () {
         },
         methods: {
+	        clickExportExcel: function (){
+		        this.privateParameterExpense();
+
+		        this.$refs[this.REF_FORM].showModal(true);
+
+		        this.axios
+			        .post(this.cfgtime.URL_REPORT_EXPENSE, this.runtime.paramExpenseList)
+			        .then(response => {
+				        if (response.data.succes){
+					        this.$print.downloadXLSX(response.data.custom.fileName, response.data.custom.xls);
+				        }
+				        else {
+				        }
+			        })
+			        .catch(error => console.log(error))
+			        .finally(() => {
+				        this.$refs[this.REF_FORM].showModal(false);
+			        });
+	        },
             refreshExpenseList: function(){
                 this.privateParameterExpense();
                 this.$refs[this.cfgtime.CFG_EXPENSE_LIST.ref].showList(this.runtime.paramExpenseList);
