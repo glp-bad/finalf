@@ -31,6 +31,9 @@ class PrintApp {
 	}
 
 	public function print($htmlView) {
+
+		// $text ='Diacritice romanest: Ă ă - Â â - Î î - Ș ș - Ț ț';
+
 		$this->dompdf = new Dompdf();
 		$this->dompdf->setPaper($this->pageFormat, $this->pageOrientation);
         $this->dompdf->loadHtml($htmlView, 'UTF-8');
