@@ -1,3 +1,6 @@
+2022-05-31 1.5.000    - bug fix - completare registrul comertului la adaugare partener
+					  - denumire factura la tiparire cu diacritice - eliminat diacriticele din numele fiserului
+					  - adaugare si modificare denumire produs
 2022-05-25 1.4.300    - compile with www
 2022-05-19 1.4.200    - download cheltuilei in excel
 2022-05-19 1.4.100    - vizualizare detalii cheltuieli
@@ -8,6 +11,6 @@
 2022-03-20 1.3.000    - raport incasari, export excel
 2022-03-19 1.2.000    - raport facturi emise in excel
 2022-03-19 1.0        - am eliminat filtrul pe avocat la lista parteneri (era deja eliminat in vechea versiune)
-2022-03-19 1.0.001    -  am modificat variabila $this->idUserLogin  = $result[0]->id;, acum are tot id user
+2022-03-19 1.0.001    - am modificat variabila $this->idUserLogin  = $result[0]->id;, acum are tot id user
 
 

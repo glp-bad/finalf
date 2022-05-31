@@ -114,7 +114,7 @@
 		        login: false,
                 requestLoginFail: false,
                 messageFail: 'Login fail.',
-                VERSION_APP: '1.4.300'                  // from D:\bin\xampp8\htdocs\finalf\app\MyAppConstants.php
+                VERSION_APP: '1.5.000'                  // from finalf\app\MyAppConstants.php
 	        }
         }
     }

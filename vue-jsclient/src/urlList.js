@@ -70,6 +70,14 @@ export default [
     {name: "expenseList"                ,url: "public/app/cheltuieli/expenseList"},
     {name: "deleteSaveExpense"          ,url: "public/app/cheltuieli/deleteSaveExpense"},
 	{name: "reportExcelExpense"         ,url: "public/app/cheltuieli/reportExcelExpense"},
+	{name: "allProductsList"            ,url: "public/app/cheltuieli/allProductsList"},
+	{name: "insertNewProduct"           ,url: "public/app/cheltuieli/insertNewProduct"},
+	{name: "updateProductName"           ,url: "public/app/cheltuieli/updateProductName"},
+
+
+
+
+
 
     {name: "monthList"  ,url: "public/app/avocat/monthList"},
     {name: "checkMonth" ,url: "public/app/avocat/checkMonth"},

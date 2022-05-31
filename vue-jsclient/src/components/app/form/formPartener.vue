@@ -41,7 +41,7 @@
             <form>
                 <table class="ff-form-table">
                     <tr>
-                        <td class="label-left bold">
+                        <td class="label-right bold">
                             <label :for=NUME.id>{{NUME.caption}}</label></td>
                         <td class="control">
                             <input-field
@@ -57,8 +57,9 @@
                     </tr>
 
                     <tr>
-                        <td class="label-left bold">
-                            <label :for=CUI.id>{{CUI.caption}}</label></td>
+                        <td class="label-right bold">
+                            <label :for=CUI.id>{{CUI.caption}}</label>
+                        </td>
                         <td class="control">
                             <input-field
                                 :ref=CUI.ref
@@ -75,18 +76,23 @@
                                 :ref= SKIP_CHECK_COD.ref
                             ></check-box>
 
-                            <label class="label-left bold">&nbsp;&nbsp;{{REGCOM.caption}}</label>
-                            <input-field
-                                :ref = REGCOM.ref
-                                :pConfig = REGCOM
-                            ></input-field>
-
                         </td>
                     </tr>
+
+                    <tr>
+                        <td class="label-right bold">
+                            <label>&nbsp;&nbsp;{{REGCOM.caption}}</label></td>
+                        <td class="control">
+                            <input-field
+                                    :ref = REGCOM.ref
+                                    :pConfig = REGCOM
+                            ></input-field>
+                        </td>
+                    </tr>
+
                 </table>
             </form>
         </template>
-
 
         <template v-slot:slotButton>
             <div class="buttons">
@@ -291,7 +297,7 @@
                 let cfg = this.$app.cfgInputField("regcom", 20);
                 cfg.setValidate(3,150);
                 cfg.setValidateFunction(this.validateRegcom);
-                cfg.setCaption("Cod registrul comertului");
+                cfg.setCaption("Cod reg. com.");
                 cfg.setMandatory(false);
                 cfg.setMaska("");
 
@@ -366,6 +372,10 @@
             },
             validateRegcom: function () {
                 let value = this.$refs[this.REGCOM.ref].getValue();
+                if(this.$check.isUndef(value) || !value){
+	                value = '-'
+                }
+
                 this.setPost(this.REGCOM, value);
             }
         },

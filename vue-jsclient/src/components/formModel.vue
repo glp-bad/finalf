@@ -43,11 +43,13 @@
             'form-tab': FormTab,
             'validate-window': AlertWindow
         },
-        name: "form-partener",
+        name: "form-xxxxxxx",
         created() {
             this.REF_FORM = 'refFormModel';
             this.cfgtime = {},
             this.runtime = {
+	            mode: this.$constFROM.MODE_NEW,
+	            validateMessage: [],
                 sendDataToServer: false,
                 yesNoMethod: 'methodName',
                 post: { idPk: null, field: {}, sqlAction: null}
@@ -65,9 +67,25 @@
                     this.runtime.sendDataToServer = false;
                 }
             },
+	        setModeForm: function (mode){
+		        this.runtime.mode = mode;
+	        },
             setPost: function (component, value){
                 this.runtime.post['field'][component.name] = value;
-            }
+            },
+	        validateForm: function () {
+		        let returnValidate = false;
+		        this.runtime.validateMessage = [];
+		        this.$check.validateForm(this.$refs);
+
+		        if( this.runtime.validateMessage.length>0 ){
+			        this.$refs.validateWindowRef.setCaption("XXXXX nu poate fi acceptat");
+			        this.$refs.validateWindowRef.setMessage(this.$app.getHtmlFormatMessage(this.runtime.validateMessage));
+			        returnValidate = true;
+		        }
+
+		        return returnValidate;
+	        }
         },
         data () {
             return {

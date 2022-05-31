@@ -33,12 +33,12 @@ class PrintApp {
 	public function print($htmlView) {
 		$this->dompdf = new Dompdf();
 		$this->dompdf->setPaper($this->pageFormat, $this->pageOrientation);
-        $this->dompdf->loadHtml($htmlView);
+        $this->dompdf->loadHtml($htmlView, 'UTF-8');
         $this->dompdf->render();
 		$output = $this->dompdf->output();
 		Storage::disk('local')->put($this->localFile, $output);
 
-		return storage_path() . '/app/' . $this->localFile;     // Path of storage              => /opt/lampp/htdocs/finalf/storage;
+		return storage_path() . '/app/' . $this->localFile;     // Path of storage              => finalf/storage;
 	}
 
 
@@ -50,6 +50,6 @@ class PrintApp {
 		$output = $this->dompdf->output();
 		Storage::disk('local')->put($this->localFileReceipt, $output);
 
-		return storage_path() . '/app/' . $this->localFileReceipt;     // Path of storage              => /opt/lampp/htdocs/finalf/storage;
+		return storage_path() . '/app/' . $this->localFileReceipt;     // Path of storage              => finalf/storage;
 	}
 }

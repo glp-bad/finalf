@@ -84,6 +84,14 @@ Route::post('app/cheltuieli/saveExpense'                ,[CheltuieliController::
 Route::post('app/cheltuieli/expenseList'                ,[CheltuieliController::class,  'expenseList'])->middleware('auth');
 Route::post('app/cheltuieli/deleteSaveExpense'          ,[CheltuieliController::class,  'deleteSaveExpense'])->middleware('auth');
 Route::post('app/cheltuieli/reportExcelExpense'         ,[CheltuieliController::class,  'reportExcelExpense'])->middleware('auth');
+Route::post('app/cheltuieli/allProductsList'            ,[CheltuieliController::class,  'allProductsList'])->middleware('auth');
+Route::post('app/cheltuieli/insertNewProduct'            ,[CheltuieliController::class,  'insertNewProduct'])->middleware('auth');
+Route::post('app/cheltuieli/updateProductName'            ,[CheltuieliController::class,  'updateProductName'])->middleware('auth');
+
+
+
+
+
 
 
 

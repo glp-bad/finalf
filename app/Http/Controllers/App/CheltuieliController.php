@@ -263,6 +263,45 @@ class CheltuieliController extends Controller
 		return json_encode(new SqlMessageResponse($succes, $lastId, $messages, $records));
 	}
 
+
+
+	public function updateProductName(Request $request) {
+		$msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
+		$productName = $request->field['name_product_name'];
+		$id = $request->idPk;
+
+		try {
+			$msg->succes = true;
+			$model =  new ModelNomProduse($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+			$msg->lastId = $model->update($id, $productName);
+
+		}catch (\Exception $e){
+			$msg->messages= 'Produsul cu noua denumire este deja inregistrat in baza de date.';
+			$msg->errorMsg = $e->getMessage();
+			$msg->succes = false;
+		}
+
+		return $msg->toJson();
+	}
+	public function insertNewProduct(Request $request) {
+		$msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
+		$productName = $request->field['name_product_name'];
+
+		try {
+			$msg->succes = true;
+			$model =  new ModelNomProduse($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+			$msg->lastId = $model->insert($productName);
+
+		}catch (\Exception $e){
+			$msg->messages= 'Produsul este deja inregistrat in baza de date.';
+			$msg->errorMsg = $e->getMessage();
+			$msg->succes = false;
+		}
+
+
+		return $msg->toJson();
+	}
+
 	public function insertExpenseAntet(Request $request) {
 		$msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
 		$paramExpense = new Expense();
@@ -327,6 +366,17 @@ class CheltuieliController extends Controller
 
         return json_encode(new SqlMessageResponse($succes, $lastId, $messages, $records));
     }
+
+
+	public function allProductsList(Request $request) {
+		$nom = new ModelNomProduse($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+		$succes = true;
+		$lastId = -1;
+		$messages = null;
+		$records  = $nom->selectAllProduct();
+
+		return json_encode(new SqlMessageResponse($succes, $lastId, $messages, $records));
+	}
 
 
     public function nomTipUm(Request $request) {

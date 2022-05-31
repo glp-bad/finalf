@@ -77,12 +77,18 @@ $ff-caption-height: 20px;
 
 
 // tabela pentru aranjarea controalelor in formular
+$ff-form-table-test-layout: false;
 .ff-form-table{
-	// border: 1px solid orangered;
+
+	@if $ff-form-table-test-layout {
+	  border: 1px solid orangered;
+	}
 	border-collapse: collapse;
 
 	.label-right{
-		//border: 1px solid blue;
+		@if $ff-form-table-test-layout {
+		  border: 1px solid blue;
+		}
 		text-align: right;
         padding-right: 5px;
         color: $ff-font-label-formular;
@@ -91,7 +97,9 @@ $ff-caption-height: 20px;
 	}
 
     .label-left{
-        //border: 1px solid blue;
+	    @if $ff-form-table-test-layout {
+		  border: 1px solid blue;
+	    }
         text-align: left;
         color: $ff-font-label-formular;
         padding-right: 5px;
@@ -103,7 +111,9 @@ $ff-caption-height: 20px;
     }
 
 	.control{
-        //border: 1px solid blue;
+		@if $ff-form-table-test-layout {
+		  border: 1px solid blue;
+		}
 	}
 
     .controlRight{

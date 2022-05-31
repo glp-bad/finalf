@@ -93,7 +93,7 @@
                     //this.$constList.getActionButton(7, 'Altceva din functie', 'altCeca', this.$constGrid.getIcon('fas','skull', '#adad00')),
                 ],
                 defaultTabId: '1p',
-                tabsWidth: '1040px'
+                tabsWidth: '1050px'
             },
             this.gridConfig = {
                     header: [

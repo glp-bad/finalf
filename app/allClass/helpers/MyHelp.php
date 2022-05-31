@@ -107,4 +107,32 @@ class MyHelp {
         return ['sumaFaraTva'=>$sumaFaraTva, 'sumaTva'=>$sumaTva, 'total'=>$total];
     }
 
+	/**
+	 * @param      $string
+	 * @param      $replaceChar
+	 * @param null $arraySpecial
+	 * @return mixed
+	 */
+	public static function removeSpecialCharacter($string, $replaceChar, $arraySpecial = null){
+		if(!$arraySpecial){
+			$arraySpecial = array( "Ț", "Ă");
+		}
+
+		return str_replace($arraySpecial, $replaceChar, $string);
+	}
+
+	public  static function replaceROchars($str) {
+		$search = array('ă', 'Ă', 'â', 'Â', 'î', 'Î', 'ș', 'Ș', 'ț', 'Ț');
+		$replace = array('&#259;', '&#258;', '&#226;', '&#194;', '&#238;', '&#206;', '&#351;', '&#350;', '&#355;', '&#354;');
+
+		return str_replace($search, $replace, $str);
+	}
+
+	public static function replaceROcharsToEN($str) {
+		$search = array('ă', 'Ă', 'â', 'Â', 'î', 'Î', 'ș', 'Ș', 'ț', 'Ț', 'ş', 'ţ');
+		$replace = array('a', 'A', 'a', 'A', 'i', 'I', 's', 'S', 't', 'T', 's', 't');
+
+		return str_replace($search, $replace, $str);
+	}
+
 }

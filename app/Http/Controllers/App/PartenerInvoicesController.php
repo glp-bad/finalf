@@ -125,12 +125,10 @@ class PartenerInvoicesController extends Controller
 
         $invoicePrintName = $this->getInvoiceFileName($arAntet);
         $htmlView = view('app/invoice')->with(['antet'=> $arAntet, 'servicii'=>$arDetaliu, 'plata'=>$plata]);
-
         $print = new PrintApp('A4','portrait');
         $pathRezultPrint = $print->print($htmlView);
 
         $pdf = base64_encode(file_get_contents($pathRezultPrint));
-
         return json_encode(['pdf' => $pdf, 'fileName' =>  $invoicePrintName]);
     }
 
@@ -188,12 +186,6 @@ class PartenerInvoicesController extends Controller
     public function detailInvoiceList(Request $request) {
         $msg = $this->getSqlMessageResponse(true, "no msg", -1, null, null, false );
         $modelnvoiceDetail = new ModelnvoiceDetail($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
-
-        $id = -1;
-
-        if(isset($request->idInvoice)){
-            $id = $request->idInvoice;
-        }
 
         $msg->records  = $modelnvoiceDetail->selectDetailList($request->idInvoice);
 
@@ -535,8 +527,9 @@ class PartenerInvoicesController extends Controller
     private function getInvoiceFileName($antet){
         $dts = new DateTime($antet['data_f']);
 
-        $client = substr($antet['cClient'], 0, 5);
-        $client = str_replace(' ', '', $client);
+	    $client = str_replace(' ', '', $antet['cClient']);
+	    $client = MyHelp::replaceROcharsToEN($client);
+        $client = substr($client, 0, 5);
         $dataString  = date_format($dts,"Ymd");
         $invoiceNumber = str_replace(' ', '', $antet['cNr']);
 
