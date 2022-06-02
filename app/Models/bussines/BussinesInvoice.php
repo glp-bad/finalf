@@ -107,7 +107,7 @@ class BussinesInvoice extends MyModel {
                         inner join t_parteneri on t_parteneri.id = t_factura.id_part
                         inner join t_tip_organizare_juridica on t_tip_organizare_juridica.id = t_parteneri.id_tip
                         inner join t_tip_factura on  t_tip_factura.id = t_factura.id_tipfactura
-                    order by t_factura.data_f desc;"
+                    order by a.nr_factura ASC, t_factura.data_f desc;"
             , ['idAvocat'=>$this->idAvocat, 'dataIn'=>$incomingList->data_in, 'dataSf'=>$incomingList->data_sf, 'idPartner'=>$incomingList->partner_id, 'filterActive'=>$incomingList->filterActiv]
         );
 
