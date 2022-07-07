@@ -9,7 +9,6 @@ use App\MyAppConstants;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use \Illuminate\Http\Request;
 
-
 class LoginController extends Controller
 {
     /*
@@ -96,12 +95,10 @@ class LoginController extends Controller
 	    ]);
 
 	    $credentials = $request->except(['_token']);
+
+
         $message = null;
-
         $userLogged = new ModelUserLogged($credentials['email'], null, null);
-
-        // dd(Auth::user());
-        // $password = Hash::make('LOIJNSU&^%$A7a67s');
         $userLogged->expireLogIn();
 
        if($userLogged->isAllreadyLogin()){
@@ -114,7 +111,7 @@ class LoginController extends Controller
         }else {
             if (auth()->attempt($credentials)) {
 
-                ModelUserLogged::logInOut($userLogged->getIdUserLogged(), MyAppConstants::USER_LOGON);
+                ModelUserLogged::logInOut($userLogged->getIdUserLogged(), MyAppConstants::USER_LOGON, $credentials['email']);
 
                 $message = $this->getMessageResponse(true, ["log on"]);
 
@@ -139,7 +136,6 @@ class LoginController extends Controller
 
         // $this->readSessionFile();
         //dd(Auth::check());
-	    //dd(Hash::make('LOIJNSU&^%$A7a67s'));
 	    //dd($credentials);
         //dd(auth());
         //dd(Auth::user());
@@ -170,9 +166,9 @@ class LoginController extends Controller
         // $mySession = $this->getSession();
         // dd($this->getSession()->get(MyAppConstants::ID_USER));
         // dd(Session::all());
-        ModelUserLogged::logInOut($this->getSession()->get(MyAppConstants::USER_ID_LOGEED), MyAppConstants::USER_LOGOFF);
+        ModelUserLogged::logInOut($this->getSession()->get(MyAppConstants::USER_ID_LOGEED), MyAppConstants::USER_LOGOFF, $request->session()->get(MyAppConstants::USER_EMAIL_LOGGED));
 
-        // $this->getSession()->flush();
+        $this->getSession()->flush();
         $this->getSession()->logout();
         // dd($this->loginsSession);
 

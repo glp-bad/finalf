@@ -15,10 +15,12 @@ class ModelUserLogged extends MyModel {
 
     public function __construct($email, $idAvocat, $idUser)
     {
-        parent::__construct($idAvocat, $idUser);
+        parent::__construct($idAvocat, $idUser, $email);
 
         $this->tableName = 'users_login';
         $this->email = $email;
+
+        ModelUserLogged::setDBConnection($email);
 
         $this->getUserFromDataBase();
 
@@ -47,8 +49,17 @@ class ModelUserLogged extends MyModel {
         return $return;
     }
 
-    public static function logInOut($idUserLogin, $onOff){
+    public static function logInOut($idUserLogin, $onOff, $emailLogin = null){
+
+    	ModelUserLogged::setDBConnection($emailLogin);
+
         $result = DB::update( 'update users_login set logged = ?, last_action = ? where id = ?', [$onOff , MyHelp::getCarbonDateNow(),  $idUserLogin]);
+    }
+
+    public static function setDBConnection($email){
+	    if($email && $email == MyAppConstants::DATABASE_USER_ANONIMUS){
+		    DB::setDefaultConnection(MyAppConstants::DATABASE_ANONIMUS);
+	    }
     }
 
     public function delete(){}
@@ -77,7 +88,8 @@ class ModelUserLogged extends MyModel {
 
 
     private function getUserFromDataBase(){
-        $result = DB::select( 'select users.id, users_login.id as users_login_id, users_login.last_action, users_login.logged 
+
+        $result = DB::select( 'select users.id, users_login.id as users_login_id, users_login.last_action, users_login.logged, users.name 
                                         from users 
                                         left join users_login on users.id = users_login.id_user 
                                        where users.email = ?', [$this->email]
@@ -85,7 +97,7 @@ class ModelUserLogged extends MyModel {
 
         if($result ) {
             $this->idUser       = $result[0]->id;
-            $this->idUserLogin  = $result[0]->id;
+            $this->idUserLogin  = $result[0]->users_login_id;
             $this->lastAction   = $result[0]->last_action;
             $this->logged       = $result[0]->logged;
         }

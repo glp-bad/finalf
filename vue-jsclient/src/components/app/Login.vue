@@ -114,7 +114,7 @@
 		        login: false,
                 requestLoginFail: false,
                 messageFail: 'Login fail.',
-                VERSION_APP: '1.5.100'                  // from finalf\app\MyAppConstants.php
+                VERSION_APP: '1.6.000'                  // from finalf\app\MyAppConstants.php
 	        }
         }
     }

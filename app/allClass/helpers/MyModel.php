@@ -2,6 +2,9 @@
 
 
 namespace App\allClass\helpers;
+use App\Models\app\ModelUserLogged;
+use App\MyAppConstants;
+use Illuminate\Support\Facades\Session;
 
 abstract class MyModel
 {
@@ -14,6 +17,8 @@ abstract class MyModel
     public function __construct($idAvocat, $idUser){
         $this->idAvocat = $idAvocat;
         $this->idUser = $idUser;
+
+        ModelUserLogged::setDBConnection(Session::get(MyAppConstants::USER_EMAIL_LOGGED));
     }
 
     public function setId($id){
@@ -27,5 +32,6 @@ abstract class MyModel
     public function setLastIdInserted($id){
         $this->lastIdInsert = $id;
     }
+
 
 }

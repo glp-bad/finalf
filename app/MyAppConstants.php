@@ -10,7 +10,7 @@ namespace App;
 
 class MyAppConstants {
 
-    const VERSION_APP = '1.5.100';
+    const VERSION_APP = '1.6.000';
 
     const MY_SESSION = 'my-session';
 
@@ -38,6 +38,8 @@ class MyAppConstants {
     const BUSS_NR_FACTURA_DANA  = ['nTip' => 1, 'nrString' => 'FAGD', 'lenghtFillNumber' => 8];
     const BUSS_NR_CHITANTA_DANA = ['nTip' => 2, 'nrString' => 'CAGD', 'lenghtFillNumber' => 8];
 
-
+    // database
+	const DATABASE_ANONIMUS = 'mysql_anonimus';
+	const DATABASE_USER_ANONIMUS = 'test@test.com';
 
 }
