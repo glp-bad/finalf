@@ -56,7 +56,7 @@ class ModelnvoiceNumber extends MyModel {
     }
 
     public function getNumber(array $bussinesNumber){
-
+	        dd('idUser= ' . $this->idUser);
             $checkNrNefolosit = DB::select(
                 " 
                  SELECT id, cNr from t_facturi_numar where id_avocat = :idAvocat and nTip = :nTip and folosit = 0 order by nNr asc limit 1
