@@ -53,7 +53,7 @@ class ModelUserLogged extends MyModel {
 
     	ModelUserLogged::setDBConnection($emailLogin);
 
-        $result = DB::update( 'update users_login set logged = ?, last_action = ? where id = ?', [$onOff , MyHelp::getCarbonDateNow(),  $idUserLogin]);
+        $result = DB::update( 'update users_login set logged = ?, last_action = ? where id_user = ?', [$onOff , MyHelp::getCarbonDateNow(),  $idUserLogin]);
     }
 
     public static function setDBConnection($email){
@@ -97,7 +97,7 @@ class ModelUserLogged extends MyModel {
 
         if($result ) {
             $this->idUser       = $result[0]->id;
-            $this->idUserLogin  = $result[0]->users_login_id;
+            $this->idUserLogin  = $result[0]->id;
             $this->lastAction   = $result[0]->last_action;
             $this->logged       = $result[0]->logged;
         }
