@@ -1,3 +1,4 @@
+2022-09-04 1.6.300    - bug fix - numarul de factura nefolosit trebuie sa ignore numarul bagat de mana
 2022-06-08 1.6.200    - bug fix - logInOut se face pe baza id user
 2022-06-08 1.6.100    - debug
 2022-06-07 1.6.000    - logare pe baza de date anonimizata

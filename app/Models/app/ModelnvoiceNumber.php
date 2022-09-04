@@ -58,7 +58,7 @@ class ModelnvoiceNumber extends MyModel {
     public function getNumber(array $bussinesNumber){
             $checkNrNefolosit = DB::select(
                 " 
-                 SELECT id, cNr from t_facturi_numar where id_avocat = :idAvocat and nTip = :nTip and folosit = 0 order by nNr asc limit 1
+                 SELECT id, cNr from t_facturi_numar where id_avocat = :idAvocat and nTip = :nTip and folosit = 0 and manual = 0 order by nNr asc limit 1
                         ",["idAvocat"=>$this->idAvocat, "nTip"=>$bussinesNumber['nTip']]
             );
 
