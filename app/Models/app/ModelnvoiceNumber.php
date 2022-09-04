@@ -69,6 +69,7 @@ class ModelnvoiceNumber extends MyModel {
             if(!empty($checkNrNefolosit)){
                 $returnId = $checkNrNefolosit[0]->id;
                 $invoiceNumberString = $checkNrNefolosit[0]->cNr;
+                $this->updateUseNumber($returnId, 1);
             }else{
                 $lastNumber = DB::select(
                     " 
