@@ -22,6 +22,7 @@ use App\allClass\helpers\param\IncomingList;
 use  App\Models\app\ModelInvoiceIncasari;
 use  App\allClass\PrintApp;
 use  App\allClass\ToXLSX;
+use  App\allClass\ElectronicInvoice;
 use DateTime;
 
 use App\allClass\XLSXWriter;
@@ -84,6 +85,13 @@ class PartenerInvoicesController extends Controller
 
         return $msg->toJson();
     }
+
+
+    public function eInvoiceGenerating(Request $request)
+    {
+        $eInvoices = new ElectronicInvoice();
+    }
+
 
     public function invoicePrint(Request $request)
     {
