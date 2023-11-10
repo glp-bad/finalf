@@ -8,6 +8,7 @@ use App\Models\app\User;
 use App\MyAppConstants;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use \Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -49,8 +50,9 @@ class LoginController extends Controller
      *not used
      */
     private function readSessionFile(){
+        /*
             //$file = 'D:\bin\xampp8\htdocs\finalf\storage\framework\sessions\vPLqQjz8JCfARxYl4FlzVjFbhBKUb1s6APy9aUgC';
-            $file = 'D:\bin\xampp8\htdocs\finalf\storage\framework\sessions';
+            // $file = 'D:\bin\xampp8\htdocs\finalf\storage\framework\sessions';
 
             $this->loginsSession = array();
 
@@ -62,7 +64,7 @@ class LoginController extends Controller
                     $this->loginsSession = unserialize($contents);
                 }
             }
-
+           */ 
     }
 
      /**
@@ -111,6 +113,8 @@ class LoginController extends Controller
         }else {
             if (auth()->attempt($credentials)) {
 
+                
+
                 ModelUserLogged::logInOut($userLogged->getIdUserLogged(), MyAppConstants::USER_LOGON, $credentials['email']);
 
                 $message = $this->getMessageResponse(true, ["log on"]);
@@ -130,6 +134,7 @@ class LoginController extends Controller
                 $this->getSession()->put(MyAppConstants::ID_USER, 99);
 
             } else {
+                //dd(Hash::make('test'));
                 $message = $this->getMessageResponse(false, ["Incorrect credentials. Try again."]);
             }
         }

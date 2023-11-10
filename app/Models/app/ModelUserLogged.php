@@ -68,6 +68,11 @@ class ModelUserLogged extends MyModel {
     public function expireLogIn(){
 
         if($this->idUser != null) {
+
+            if(empty($this->lastAction)){
+                $this->lastAction = now()->toDateTimeString();
+            }
+
             $lastAction = MyHelp::getCarbonDate('Y-m-d H:i:s', $this->lastAction);
 
             $limitTime = $lastAction->diffInMinutes(MyHelp::getCarbonDateNow());

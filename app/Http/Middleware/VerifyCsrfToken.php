@@ -14,7 +14,7 @@ class VerifyCsrfToken extends Middleware
      */
 
      protected $except = ['app', 'app/*' ];  // for development
-     // protected $except = [];    // production
+     //protected $except = [];    // production
 
     public function handle($request, Closure $next)
 	{

@@ -21,7 +21,7 @@ class MyHelp {
      * @return \Carbon\Carbon|false
      */
     public static function getCarbonDate($format, $strindDateFormat){
-        return Carbon::createFromFormat($format,  $strindDateFormat);;
+        return Carbon::createFromFormat($format,  $strindDateFormat);
     }
 
     public static function getCarbonDateNow(){
