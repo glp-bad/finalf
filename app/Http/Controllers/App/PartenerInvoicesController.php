@@ -86,13 +86,6 @@ class PartenerInvoicesController extends Controller
         return $msg->toJson();
     }
 
-
-    public function eInvoiceGenerating(Request $request)
-    {
-        $eInvoices = new ElectronicInvoice();
-    }
-
-
     public function invoicePrint(Request $request)
     {
         $id = $request->idPk;
@@ -398,6 +391,7 @@ class PartenerInvoicesController extends Controller
 
         try {
             $saveAntet = $modelnvoice->saveInvoice($idInvoice);
+            $this->eInvoiceGenerating($idInvoice);
 
             if($saveAntet != 2){
                 throw new \Exception("Factura este salvata deja in baza de date sau nu are articole!");
@@ -542,6 +536,28 @@ class PartenerInvoicesController extends Controller
         $invoiceNumber = str_replace(' ', '', $antet['cNr']);
 
         return $client . '_' . $dataString . '_' . $invoiceNumber . '.pdf';
+    }
+
+    private function eInvoiceGenerating($idInvoice)
+    {
+        $invoiceDate = $this->getDateInvoice($idInvoice);
+
+        // $eInvoices = new ElectronicInvoice();
+    }
+
+    private functiOn getDateInvoice($idInvoice){
+
+        $idInvoice = 2128; // test
+
+        $bussinesInvoice = new BussinesInvoice($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        $antetFactura = $bussinesInvoice->selectInvoicePrintAntet($idInvoice);
+        $detaliuFactura = $bussinesInvoice->selectInvoicePrintDetail($idInvoice);
+
+
+        dd($antetFactura);
+
+
+        return ['antetFactura'=>$antetFactura, 'detaliuFactura'=>$detaliuFactura];
     }
 
 }
