@@ -47,6 +47,8 @@ export default [
     {name: "deleteInvoice"             ,url: "public/app/invoice/deleteInvoice"},
     {name: "invoicePrint"              ,url: "public/app/invoice/invoicePrint"},
     {name: "reportExcelInvoiceEmitted" ,url: "public/app/invoice/reportExcelInvoiceEmitted"},
+    {name: "downloadeFactura"          ,url: "public/app/invoice/downloadeFactura"},
+    
 
     {name: "listaUnpaidInvoices",url: "public/app/cashing/listaUnpaidInvoices"},
     {name: "nomDocumentTipe"    ,url: "public/app/cashing/nomDocumentTipe"},

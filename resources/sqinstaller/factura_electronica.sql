@@ -16,3 +16,10 @@ ADD CONSTRAINT `uix_id_factura`
   REFERENCES `badminto_finalf`.`t_factura` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
+
+
+
+ALTER TABLE `badminto_finalf`.`t_avocati` 
+ADD COLUMN `contact_name` VARCHAR(45) NULL AFTER `platestetva`,
+ADD COLUMN `contact_email` VARCHAR(100) NULL AFTER `contact_name`,
+ADD COLUMN `contact_phone` VARCHAR(15) NULL AFTER `contact_email`;

@@ -22,7 +22,8 @@ use App\allClass\helpers\param\IncomingList;
 use  App\Models\app\ModelInvoiceIncasari;
 use  App\allClass\PrintApp;
 use  App\allClass\ToXLSX;
-use  App\allClass\ElectronicInvoice;
+use  App\allClass\XMLElectronicInvoice;
+use App\allClass\helpers\param\InvoiceElectronic;
 use DateTime;
 
 use App\allClass\XLSXWriter;
@@ -538,24 +539,45 @@ class PartenerInvoicesController extends Controller
         return $client . '_' . $dataString . '_' . $invoiceNumber . '.pdf';
     }
 
+
+    public function downloadeFactura(Request $request){
+        $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
+        $id = $request->idPk;
+
+        $this->eInvoiceGenerating($id );
+
+        $msg->messages= 'id_factura=> ' . $id;
+        $msg->succes = true;
+
+        return $msg->toJson();
+    }
+
     private function eInvoiceGenerating($idInvoice)
     {
         $invoiceDate = $this->getDateInvoice($idInvoice);
+        $param = new InvoiceElectronic($invoiceDate['antetFactura'], $invoiceDate['detaliuFactura'] );
 
-        // $eInvoices = new ElectronicInvoice();
+        // dd($invoiceDate['antetFactura']);
+
+        $xmlInvoices = new XMLElectronicInvoice();
+        $xmlInvoices->createAntet($param->getAntet());
+
+        $xmlInvoices->createAccountingSupplierParty($param->getSupplier(), $param->getSupplierTax());
+
+        $xml = $xmlInvoices->printXml();
+
+        dd($xml);
+
+
     }
 
     private functiOn getDateInvoice($idInvoice){
 
-        $idInvoice = 2128; // test
+        // $idInvoice = 2128; // test
 
         $bussinesInvoice = new BussinesInvoice($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
         $antetFactura = $bussinesInvoice->selectInvoicePrintAntet($idInvoice);
         $detaliuFactura = $bussinesInvoice->selectInvoicePrintDetail($idInvoice);
-
-
-        dd($antetFactura);
-
 
         return ['antetFactura'=>$antetFactura, 'detaliuFactura'=>$detaliuFactura];
     }

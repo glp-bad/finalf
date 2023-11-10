@@ -240,7 +240,14 @@ class BussinesInvoice extends MyModel {
                             t_avocati.cNumeCabinet,
                             t_avocati.ro_	as ro_av,
                             t_avocati.cui	as cui_av,
-                            t_avocati.cDecizia	 	
+                            t_avocati.cDecizia,
+                            av_judete.cJudet as judet_av,
+                            av_judete.cJudetAbrev as judet_abrev_av,
+                            pa_judete.cJudet as judet_pa,
+                            pa_judete.cJudetAbrev as judet_abrev_pa,
+                            t_avocati.contact_name as contact_name_av,
+                            t_avocati.contact_phone as contact_phone_av,
+                            t_avocati.contact_email as contact_email_av
                             from	
                                 t_factura
                                 inner join t_tip_factura on t_tip_factura.id = t_factura.id_tipfactura
@@ -250,9 +257,11 @@ class BussinesInvoice extends MyModel {
                                 inner join t_avocati on t_avocati.id = t_factura.id_avocat
                                 left join t_avocati_adresa on t_avocati_adresa.id_avocat = t_factura.id_avocat and t_avocati_adresa.activ = 1
                                 left join t_localitati as av_localitati on av_localitati.id = t_avocati_adresa.id_localitate
+                                left join t_judete as av_judete on av_judete.id = av_localitati.id_judet
                                 left join t_avocati_banca on t_avocati_banca.id_avocat = t_factura.id_avocat and t_avocati_banca.activ = 1
                                 left join t_parteneri_adrese on t_parteneri_adrese.id_part = t_parteneri.id and t_parteneri_adrese.activ = 1
                                 left join t_localitati as pa_localitati on pa_localitati.id = t_parteneri_adrese.id_localitate
+                                left join t_judete as pa_judete on pa_judete.id = pa_localitati.id_judet
                                 left join t_parteneri_banca on t_parteneri_banca.id_part = t_parteneri.id and t_parteneri_banca.activ = 1
                     where t_factura.id = :id;"
             , ['id'=>$id]

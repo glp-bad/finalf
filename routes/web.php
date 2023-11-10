@@ -55,7 +55,8 @@ Route::post('app/invoice/saveInvoice'              , [PartenerInvoicesController
 Route::post('app/invoice/invoicesList'             , [PartenerInvoicesController::class,  'invoicesList'])->middleware('auth');
 Route::post('app/invoice/deleteInvoice'            , [PartenerInvoicesController::class,  'deleteInvoice'])->middleware('auth');
 Route::post('app/invoice/invoicePrint'             , [PartenerInvoicesController::class,  'invoicePrint'])->middleware('auth');
-Route::post('app/invoice/reportExcelInvoiceEmitted'             , [PartenerInvoicesController::class,  'reportExcelInvoiceEmitted'])->middleware('auth');
+Route::post('app/invoice/reportExcelInvoiceEmitted', [PartenerInvoicesController::class,  'reportExcelInvoiceEmitted'])->middleware('auth');
+Route::post('app/invoice/downloadeFactura'         , [PartenerInvoicesController::class,  'downloadeFactura'])->middleware('auth');
 
 
 

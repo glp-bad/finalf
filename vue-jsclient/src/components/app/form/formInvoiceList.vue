@@ -99,8 +99,10 @@
                 :ref = this.cfgtime.CFG_INVOICE_LIST.ref
                 :pConfig = this.cfgtime.CFG_INVOICE_LIST
                 @emitFinallyCustomResponse="emitListResumData"
-                @emitStergArticol = "emitStergArticol"
-                @emitPrintArticol = "emitPrintArticol"
+                @emitStergArticol       = "emitStergArticol"
+                @emitPrintArticol       = "emitPrintArticol"
+                @emitDownloadEfactrura  = "emitDownloadEfactrura"
+                
             ></my-list>
 
         </template>
@@ -138,6 +140,7 @@
                 URL_DELETE_INVOICE: this.$url.getUrl('deleteInvoice'),
                 URL_INVOICE_PRINT: this.$url.getUrl('invoicePrint'),
                 URL_REPORT_INVOICE_EMITTED: this.$url.getUrl('reportExcelInvoiceEmitted'),
+                URL_DOWNLOAD_E_FACTURA: this.$url.getUrl('downloadeFactura'),
                 CFG_INVOICE_LIST : {
                     ref: 'refInvoiceList',
                     header: [
@@ -150,11 +153,12 @@
                         this.$constList.getHeader(7, 'Suma factura',      90, 'total_factura'       ,this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT),
                         this.$constList.getHeader(8, 'Suma incasata',     90, 'total_incasat'       ,this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT),
                         this.$constList.getHeader(9, '... de incasat',    90, 'rest_de_incasat'     ,this.$constList.HEADER.CAPTION_TYPE_FIELD, this.$constComponent.ALIGN_TEXT_RIGHT),
-                        this.$constList.getHeader(10, 'Action',          100, 'null'                ,this.$constList.HEADER.CAPTION_TYPE_ACTION)
+                        this.$constList.getHeader(10, 'Action',          120, 'null'                ,this.$constList.HEADER.CAPTION_TYPE_ACTION)
                     ],
                     recordActionButon: [
                         this.$constList.getActionButton(21, 'sterg factura', 'emitStergArticol', this.$constGrid.ICON_DELETE, this.$constList.ACTION_BUTTON.TYPE_BUTTON, null),
-                        this.$constList.getActionButton(20, 'printez factura', 'emitPrintArticol', this.$constGrid.ICON_PRINT, this.$constList.ACTION_BUTTON.TYPE_BUTTON, null)
+                        this.$constList.getActionButton(20, 'printez factura', 'emitPrintArticol', this.$constGrid.ICON_PRINT, this.$constList.ACTION_BUTTON.TYPE_BUTTON, null),
+                        this.$constList.getActionButton(22, 'download eFactura', 'emitDownloadEfactrura', this.$constGrid.ICON_PRINT, this.$constList.ACTION_BUTTON.TYPE_BUTTON, null),
                         // this.$constList.getActionButton(5, 'adresa implicita', 'emitAdresaImplicita', null, this.$constList.ACTION_BUTTON.TYPE_CHECKBOX, this.$app.cfgCheckBox('ro', false)),   // poate fi un singur checkbox pe linie, trebuie setat si filedNameForCheckBox, campul poate fi doar 1 si 0
                         // this.$constList.getActionButton(6, 'adresa implicita', 'emitCheckBox', this.$constGrid.getIcon('fas','skull', '#adad00'))
                     ],
@@ -198,6 +202,25 @@
             },
             clickRefresInvoiceList: function (){
                 this.refreshInvoiceList();
+            },
+            serverDownloadEfactura: function (){
+
+                this.$refs[this.REF_FORM].showModal(true);
+
+                this.axios
+                    .post(this.cfgtime.URL_DOWNLOAD_E_FACTURA, this.runtime.post)
+                    .then(response => {
+                        if (response.data.succes){
+                            // console.log('am raspuns cu succes la dowload factura');
+                        }
+                        else {
+                        }
+                    })
+                    .catch(error => console.log(error))
+                    .finally(() => {
+                        this.$refs[this.REF_FORM].showModal(false);
+                    });
+
             },
             serverDeleteInvoice: function (){
                 this.runtime.yesNoMethod = 'serverDeleteInvoice';
@@ -298,6 +321,13 @@
                     });
                  */
 
+            },
+            emitDownloadEfactrura: function (button){
+                let tr = button.closest('tr');
+                this.runtime.post.idPk = tr.getAttribute('idPk');
+
+                console.log('idfactura', this.runtime.post.idPk);
+                this.serverDownloadEfactura();
             },
             emitStergArticol: function (button){
                 let tr = button.closest('tr');
