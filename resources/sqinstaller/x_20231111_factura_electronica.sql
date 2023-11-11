@@ -1,4 +1,7 @@
-CREATE TABLE `badminto_finalf`.`t_factura_electronica` (
+-- rulat 2023-11-11 1.7.000    - implementare eFactura in mod test, e factura nu se salveaza in baza de date  
+-- pe local, demo si productie
+
+CREATE TABLE `t_factura_electronica` (
   `id` INT UNSIGNED NOT NULL,
   `id_factura` INT UNSIGNED NOT NULL,
   `e_factura` BLOB NOT NULL,
@@ -8,61 +11,61 @@ CREATE TABLE `badminto_finalf`.`t_factura_electronica` (
   PRIMARY KEY (`id`))
 COMMENT = '		';
 
-ALTER TABLE `badminto_finalf`.`t_factura_elctronica` ADD UNIQUE INDEX `uix_id_factura` (`id_factura` ASC) VISIBLE;
+ALTER TABLE `t_factura_electronica` ADD UNIQUE INDEX `uix_id_factura` (`id_factura` ASC) ;
 
-ALTER TABLE `badminto_finalf`.`t_factura_elctronica` 
+ALTER TABLE `t_factura_electronica` 
 ADD CONSTRAINT `uix_id_factura`
   FOREIGN KEY (`id_factura`)
-  REFERENCES `badminto_finalf`.`t_factura` (`id`)
+  REFERENCES `t_factura` (`id`)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
 
- ALTER TABLE `badminto_finalf`.`t_factura_electronica` CHANGE COLUMN `id` `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ; 
+ ALTER TABLE `t_factura_electronica` CHANGE COLUMN `id` `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ; 
 
 
 
-ALTER TABLE `badminto_finalf`.`t_avocati` 
+ALTER TABLE `t_avocati` 
 ADD COLUMN `contact_name` VARCHAR(45) NULL AFTER `platestetva`,
 ADD COLUMN `contact_email` VARCHAR(100) NULL AFTER `contact_name`,
 ADD COLUMN `contact_phone` VARCHAR(15) NULL AFTER `contact_email`;
 
 
-ALTER TABLE `badminto_finalf`.`t_tip_factura` 
+ALTER TABLE `t_tip_factura` 
 ADD COLUMN `e_invoice_type_code` VARCHAR(10) NULL AFTER `cTipfactura`;
 
 update t_tip_factura set e_invoice_type_code = '380';
 
-ALTER TABLE `badminto_finalf`.`t_factura_d` 
+ALTER TABLE `t_factura_d` 
 ADD COLUMN `quantity` DECIMAL(8,2) NOT NULL DEFAULT 1 AFTER `cText`;
 
 
-ALTER TABLE `badminto_finalf`.`t_tip_um` 
+ALTER TABLE `t_tip_um` 
 ADD COLUMN `e_unit_code` VARCHAR(10) NULL AFTER `zecimale`;
 
 update t_tip_um set e_unit_code = 'BB' where cTipabr = 'BUC';
 
-ALTER TABLE `badminto_finalf`.`t_factura_d` 
+ALTER TABLE `t_factura_d` 
 ADD COLUMN `id_um` INT NOT NULL DEFAULT 1 AFTER `cText`;
-ALTER TABLE `badminto_finalf`.`t_factura_d` ADD INDEX `id_um` (`id_um` ASC) VISIBLE;
+ALTER TABLE `t_factura_d` ADD INDEX `id_um` (`id_um` ASC) ;
 
-ALTER TABLE `badminto_finalf`.`t_factura_d` 
+ALTER TABLE `t_factura_d` 
 CHANGE COLUMN `id_um` `id_um` INT UNSIGNED NOT NULL DEFAULT '1' ;
 
-ALTER TABLE `badminto_finalf`.`t_factura_d` 
+ALTER TABLE `t_factura_d` 
 ADD CONSTRAINT `fk_t_factura_d_um`
   FOREIGN KEY (id_um)
-  REFERENCES `badminto_finalf`.`t_tip_um` (id)
+  REFERENCES `t_tip_um` (id)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
 
-  CREATE TABLE `badminto_finalf`.`e_categorie_tva` (
+  CREATE TABLE `e_categorie_tva` (
   `id` INT UNSIGNED NOT NULL,
   `code` VARCHAR(10) NULL,
   `descriere` VARCHAR(150) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `code_UNIQUE` (`code` ASC) VISIBLE)
+  UNIQUE INDEX `code_UNIQUE` (`code` ASC) )
 COMMENT = '			';
 
 insert into e_categorie_tva (id, code, descriere) values (1,'S','Cota normala şi cota redusa a TVA');
@@ -75,24 +78,24 @@ insert into e_categorie_tva (id, code, descriere) values (7,'O','Nu face obiectu
 insert into e_categorie_tva (id, code, descriere) values (8,'L','Taxele din Insulele Canare');
 insert into e_categorie_tva (id, code, descriere) values (9,'M','Taxele din Ceuta şi Melilla');
 
-ALTER TABLE `badminto_finalf`.`t_factura_d` 
+ALTER TABLE `t_factura_d` 
 ADD COLUMN `id_e_categorie_tva` INT UNSIGNED NOT NULL DEFAULT 1 AFTER `id_factura`;
 
-ALTER TABLE `badminto_finalf`.`t_factura_d` 
+ALTER TABLE `t_factura_d` 
 ADD CONSTRAINT `fk_t_factura_d_e_categorie_tva`
   FOREIGN KEY (id_e_categorie_tva)
-  REFERENCES `badminto_finalf`.`e_categorie_tva` (id)
+  REFERENCES `e_categorie_tva` (id)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
 
 
 
-CREATE TABLE `badminto_finalf`.`e_tip_plata` (
+CREATE TABLE `e_tip_plata` (
   `id` INT UNSIGNED NOT NULL,
   `code` VARCHAR(10) NOT NULL,
   `descriere` VARCHAR(150) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `code_UNIQUE` (`code` ASC) VISIBLE);
+  UNIQUE INDEX `code_UNIQUE` (`code` ASC) );
 
 insert into e_tip_plata (id, code, descriere) value(1,'1', 'Instrument nedefinit');
 insert into e_tip_plata (id, code, descriere) value(2,'2', 'Credit prin casa automată de compensare (ACH)');
@@ -180,14 +183,14 @@ insert into e_tip_plata (id, code, descriere) value(84,'ZZZ','Definit de comun a
 
 
 
-ALTER TABLE `badminto_finalf`.`t_factura` 
+ALTER TABLE `t_factura` 
 ADD COLUMN `id_e_tip_plata` INT UNSIGNED NOT NULL DEFAULT 1 AFTER `id_tipfactura`,
 ADD COLUMN `t_facturacol` VARCHAR(45) NULL AFTER `id_avocat`;
 
 
-ALTER TABLE `badminto_finalf`.`t_factura` 
+ALTER TABLE `t_factura` 
 ADD CONSTRAINT `fk_t_factura_e_tip_plata`
   FOREIGN KEY (id_e_tip_plata)
-  REFERENCES `badminto_finalf`.`e_tip_plata` (id)
+  REFERENCES `e_tip_plata` (id)
   ON DELETE NO ACTION
   ON UPDATE NO ACTION;
