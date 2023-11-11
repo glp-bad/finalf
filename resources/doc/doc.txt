@@ -15,6 +15,9 @@ Deploy prod:
 3. ENV VUE_APP_ENV = host
 4. run buildAndCopyFile
 5. commit
+6. se ruleaza sql installer daca este cazul
+7. se intra pe cPanel -> Git Version Control
+8. finalf -> /home2/badminto/repositories/finalf -> Manage -> Pull or Deploy -  Update from Remote
 
 
 
