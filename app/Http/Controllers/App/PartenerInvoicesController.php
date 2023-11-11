@@ -33,6 +33,8 @@ class PartenerInvoicesController extends Controller
 {
     public function __construct(){}
 
+    private $productionEFactura = false;        // factura electronica nu se salveaza in tabela
+
 
     public function reportExcelInvoiceEmitted(Request $request)
     {
@@ -395,7 +397,9 @@ class PartenerInvoicesController extends Controller
             return $msg->toJson();
         }
 
-        $modelEfactura = new ModelnvoiceXml($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        if($this->productionEFactura){
+            $modelEfactura = new ModelnvoiceXml($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        }
 
         try {
 
@@ -405,11 +409,13 @@ class PartenerInvoicesController extends Controller
                     throw new \Exception("Factura este salvata deja in baza de date sau nu are articole!");
                 }
 
-                $eFactura = $this->eInvoiceGenerating($idInvoice);
-                $idLasteFactura = $modelEfactura->insertInvoice(InvoiceElectronic::getParamInsert($idInvoice, $eFactura));
+                if($this->productionEFactura){
+                    $eFactura = $this->eInvoiceGenerating($idInvoice);
+                    $idLasteFactura = $modelEfactura->insertInvoice(InvoiceElectronic::getParamInsert($idInvoice, $eFactura));
 
-                if(empty($idLasteFactura)){
-                    throw new \Exception("Nu a putut fi salvata in baza de date eFactura!");
+                    if(empty($idLasteFactura)){
+                        throw new \Exception("Nu a putut fi salvata in baza de date eFactura!");
+                    }
                 }
 
                 $msg->succes = true;
