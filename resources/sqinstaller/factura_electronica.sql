@@ -18,6 +18,9 @@ ADD CONSTRAINT `uix_id_factura`
   ON UPDATE NO ACTION;
 
 
+ ALTER TABLE `badminto_finalf`.`t_factura_electronica` CHANGE COLUMN `id` `id` INT UNSIGNED NOT NULL AUTO_INCREMENT ; 
+
+
 
 ALTER TABLE `badminto_finalf`.`t_avocati` 
 ADD COLUMN `contact_name` VARCHAR(45) NULL AFTER `platestetva`,

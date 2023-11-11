@@ -56,5 +56,14 @@ class ModelnvoiceXml extends MyModel {
         return $rezult;
     }
 
+    public function deleteByInvoiceId($idInvoice){
+        $rezult = DB::delete(
+            "delete from t_factura_electronica where id_factura = :id;",
+            ['id'=>$idInvoice]
+        );
+
+        return $rezult;
+    }
+
 }
 

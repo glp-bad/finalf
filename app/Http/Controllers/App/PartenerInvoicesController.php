@@ -11,6 +11,7 @@ use App\Models\app\ModelnvoiceDetail;
 use App\Models\app\ModelnvoiceNumber;
 use App\Models\app\ModelLuniInchise;
 use App\allClass\helpers\param\WokingMonth;
+use App\Models\app\ModelnvoiceXml;
 use App\Models\bussines\BussinesInvoice;
 use App\Models\app\ModelParteneri;
 use App\Models\app\Modelnvoice;
@@ -19,10 +20,10 @@ use App\MyAppConstants;
 use \Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\allClass\helpers\param\IncomingList;
-use  App\Models\app\ModelInvoiceIncasari;
-use  App\allClass\PrintApp;
-use  App\allClass\ToXLSX;
-use  App\allClass\XMLElectronicInvoice;
+use App\Models\app\ModelInvoiceIncasari;
+use App\allClass\PrintApp;
+use App\allClass\ToXLSX;
+use App\allClass\XMLElectronicInvoice;
 use App\allClass\helpers\param\InvoiceElectronic;
 use DateTime;
 
@@ -126,7 +127,7 @@ class PartenerInvoicesController extends Controller
 
         $plata = ['suma'=>$suma, 'tva'=>$tva, 'totalPlata'=>$totalPlata];
 
-        $invoicePrintName = $this->getInvoiceFileName($arAntet);
+        $invoicePrintName = $this->getInvoiceFileName($arAntet, '.pdf');
         $htmlView = view('app/invoice')->with(['antet'=> $arAntet, 'servicii'=>$arDetaliu, 'plata'=>$plata]);
         $print = new PrintApp('A4','portrait');
         $pathRezultPrint = $print->print($htmlView);
@@ -295,13 +296,16 @@ class PartenerInvoicesController extends Controller
 
         $idNumber = $entity[0]->id_nr;
 
+
         $modelnvoiceDetail = new ModelnvoiceDetail($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        $modelEfactura     = new ModelnvoiceXml($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
         $modelnvoiceNumber = new ModelnvoiceNumber($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
 
         try {
             DB::beginTransaction();
 
             $modelnvoiceDetail->deleteDetailInvoice($id);
+            $modelEfactura->deleteByInvoiceId($id);
             $deleteAntet = $modelnvoice->deleteAntetSave($id);
             if($deleteAntet != 1){
                 throw new \Exception("Factura nu poate fi stearsa, nu se poate sterge antetul!");
@@ -391,16 +395,27 @@ class PartenerInvoicesController extends Controller
             return $msg->toJson();
         }
 
+        $modelEfactura = new ModelnvoiceXml($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+
         try {
-            $saveAntet = $modelnvoice->saveInvoice($idInvoice);
-            $this->eInvoiceGenerating($idInvoice);
 
-            if($saveAntet != 2){
-                throw new \Exception("Factura este salvata deja in baza de date sau nu are articole!");
-            }
+            DB::beginTransaction();
+                $saveAntet = $modelnvoice->saveInvoice($idInvoice);
+                if($saveAntet != 2){
+                    throw new \Exception("Factura este salvata deja in baza de date sau nu are articole!");
+                }
 
-            $msg->succes = true;
+                $eFactura = $this->eInvoiceGenerating($idInvoice);
+                $idLasteFactura = $modelEfactura->insertInvoice(InvoiceElectronic::getParamInsert($idInvoice, $eFactura));
+
+                if(empty($idLasteFactura)){
+                    throw new \Exception("Nu a putut fi salvata in baza de date eFactura!");
+                }
+
+                $msg->succes = true;
+            DB::commit();
         }catch (\Exception $e){
+            DB::rollBack();
             $msg->messages=  $e->getMessage();
             $msg->errorMsg = $e->getMessage();
             $msg->succes = false;
@@ -528,7 +543,7 @@ class PartenerInvoicesController extends Controller
     }
 
 
-    private function getInvoiceFileName($antet){
+    private function getInvoiceFileName($antet, $extension){
         $dts = new DateTime($antet['data_f']);
 
 	    $client = str_replace(' ', '', $antet['cClient']);
@@ -537,31 +552,60 @@ class PartenerInvoicesController extends Controller
         $dataString  = date_format($dts,"Ymd");
         $invoiceNumber = str_replace(' ', '', $antet['cNr']);
 
-        return $client . '_' . $dataString . '_' . $invoiceNumber . '.pdf';
+        return $client . '_' . $dataString . '_' . $invoiceNumber . $extension;
     }
 
 
+    /**
+        * se genereaza la fiecare download, pentru teste si rectificari, nu se preia fisierul salvat in baza de date
+    */
     public function downloadeFactura(Request $request){
-        $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
         $id = $request->idPk;
 
-        $this->eInvoiceGenerating($id );
+            $xmlFactura = $this->eInvoiceGenerating($id);    
 
-        $msg->messages= 'id_factura=> ' . $id;
-        $msg->succes = true;
+            $invoice = $this->getDateInvoice($id);
+            $jsonAntet = json_decode(json_encode($invoice['antetFactura'][0]), true);       // for back compatibiliti with getInvoiceFileName
+            $filename = $this->getInvoiceFileName($jsonAntet, '.xml');
+            unset($invoice, $jsonAntet);
+        
 
-        return $msg->toJson();
+        return json_encode(['xmlFile' => $xmlFactura, 'fileName' =>  $filename]);
+    }
+
+    public function downloadeFactura_original(Request $request){
+        $id = $request->idPk;
+
+        $modelEfactura = new ModelnvoiceXml($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        $eFactura = $modelEfactura->selectEntityByInvoiceId($id);
+
+        $xmlFactura = '';
+        $filename = 'nu_exista_factura_electronica';
+
+        if(!empty($eFactura)){
+
+            $invoice = $this->getDateInvoice($id);
+            $xmlFactura = $eFactura[0]->e_factura;
+
+            $jsonAntet = json_decode(json_encode($invoice['antetFactura'][0]), true);       // for back compatibiliti with getInvoiceFileName
+
+            $filename = $this->getInvoiceFileName($jsonAntet, '.xml');
+
+            unset($invoice, $jsonAntet);
+        }
+
+        return json_encode(['xmlFile' => $xmlFactura, 'fileName' =>  $filename]);
     }
 
     private function eInvoiceGenerating($idInvoice)
     {
 
-        $idInvoice = 5376; // TEST
+        // $idInvoice = 5376; // TEST
 
         $invoiceDate = $this->getDateInvoice($idInvoice);
         $param = new InvoiceElectronic($invoiceDate['antetFactura'], $invoiceDate['detaliuFactura'] );
 
-         //dd($invoiceDate['antetFactura']);
+         // dd($invoiceDate['antetFactura']);
          //dd($invoiceDate['detaliuFactura']);
 
         $xmlInvoices = new XMLElectronicInvoice();

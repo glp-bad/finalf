@@ -210,7 +210,7 @@ class BussinesInvoice extends MyModel {
                         t_factura_d.id, t_factura_d.id_factura, t_factura_d.cText as cExplicf, 
 		                t_factura_d.nSumaFaraTva as nSuma, t_factura_d.nSumaTva as nTVA, t_factura_d.nTotal as ValoareFactura, t_factura_d.quantity, t_tip_um.e_unit_code,
                         e_categorie_tva.code as e_categ_tva,
-                        t_factura_d.nSumaFaraTva * t_factura_d.quantity as line_extension_amount
+                        ROUND(t_factura_d.nSumaFaraTva * t_factura_d.quantity,2) as line_extension_amount
 	                from
 		                t_factura_d	 
                         inner join t_tip_um on t_tip_um.id = t_factura_d.id_um

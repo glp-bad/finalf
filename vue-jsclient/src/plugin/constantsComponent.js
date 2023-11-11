@@ -104,6 +104,7 @@ const constantsComponent = {
             ICON_ORDER: {fawIcon:'fas', icon: 'sort', color: null},
             ICON_FILTER: {fawIcon:'fas', icon: 'ellipsis-v', color: null},
 	        ICON_POPUP: {fawIcon:'fas', icon: 'window-restore', color: "green"},
+            ICON_EFACTURA_DOWNLOAD:  {fawIcon:'fas', icon: 'share-square', color: "darkblue"},
             ORDER_ASC: 'asc',
             ORDER_DESC: 'desc',
 	        SQL_UPDATE: 'update',

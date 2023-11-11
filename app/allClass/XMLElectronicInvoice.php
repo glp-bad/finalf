@@ -23,6 +23,7 @@ class XMLElectronicInvoice {
 		$this->invoice->setAttribute('xmlns:cbc', "urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2");
 		$this->invoice->setAttribute('xmlns:cac', "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2");
 		$this->invoice->setAttribute('xmlns:ns4', "urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2");
+		$this->invoice->setAttribute('xmlns:xsi', "http://www.w3.org/2001/XMLSchema-instance");
 		$this->invoice->setAttribute('xsi:schemaLocation', "urn:oasis:names:specification:ubl:schema:xsd:Invoice-2 http://docs.oasis-open.org/ubl/os-UBL-2.1/xsd/maindoc/UBL-Invoice-2.1.xsd");
 
 		/*	
@@ -336,7 +337,8 @@ class XMLElectronicInvoice {
 		$party->appendChild($partyLegalEntity);
 
 		// $party->appendChild($this->createPartyContact( $paramSuplier['contactName'], $paramSuplier['contactTelephone'],  $paramSuplier['contactElectronicMail']));
-		// $accountingSupplierParty->appendChild($party);
+		
+		$accountingSupplierParty->appendChild($party);
 
 		$this->invoice->appendChild($accountingSupplierParty);
 	}

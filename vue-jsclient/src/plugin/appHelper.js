@@ -12,6 +12,32 @@ const appHelper = {
 
         app.config.globalProperties.$print = {
 
+            downloadStringFile: function(filename, textString) {
+
+
+                var tempLink = document.createElement("a");
+                var taBlob = new Blob([textString], {type: 'text/plain'});
+                tempLink.setAttribute('href', URL.createObjectURL(taBlob));
+                tempLink.setAttribute('download', `${filename}`);
+                tempLink.click();
+                
+                URL.revokeObjectURL(tempLink.href);    
+
+                /*
+                var element = document.createElement('a');
+                element.setAttribute('href', 'data:application/octet-stream;base64,' + encodeURIComponent(_base64Str));
+                element.setAttribute('download', filename);
+
+                element.style.display = 'none';
+                document.body.appendChild(element);
+
+                // window.open(element, '_blank');
+                element.click();
+
+                document.body.removeChild(element);
+                */
+            },
+
             downloadXLSX: function(filename, _base64Str) {
                 var element = document.createElement('a');
                 element.setAttribute('href', 'data:application/octet-stream;base64,' + encodeURIComponent(_base64Str));

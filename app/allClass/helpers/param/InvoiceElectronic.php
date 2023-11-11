@@ -21,6 +21,11 @@ class InvoiceElectronic
     }
 
 
+    public static function getParamInsert($idInvoice, $strInvoice){
+        return ['id_factura'=>$idInvoice, 'eFactura'=>$strInvoice];
+    }
+
+
     public function getTaxTotalAndTotal(){
 
         $param = array();
@@ -67,13 +72,16 @@ class InvoiceElectronic
         $param = array();
 
         foreach($this->detaliuFactura as $k => $v ){
+
+            $name = trim(substr($v->cExplicf, 0, 100));            // max 100
+
             $param[]=[
                     'id'                        => $v->id,
                     'invoicedQuantity'          => $v->quantity,                       
                     'invoicedQuantityUnitCode'  => $v->e_unit_code,
                     'lineExtensionAmount'       => $v->line_extension_amount,
                     'priceAmount'               => $v->nSuma, 
-                    'name'                      => $v->cExplicf,
+                    'name'                      => $name,
                     'classifiedTaxCategoryID'   => $v->e_categ_tva,
                     'currency'                  => $this->documentCurrencyCode
                 ];
