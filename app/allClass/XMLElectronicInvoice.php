@@ -76,67 +76,12 @@ class XMLElectronicInvoice {
 		foreach ($line as $l) {
 
 			$invoiceLine = $this->createInvoiceLine($l);
-
-			foreach ($l['allowanceCharge'] as $alc){
-				$allowanceCharge = $this->createAllowanceCharge($alc);
-				$invoiceLine->appendChild($allowanceCharge);
-			}
-
-				$item = $this->createItemLine($l['item']);
-			$invoiceLine->appendChild($item);
-
-				$priceLine = $this->createPriceLine($l['price']);
-			$invoiceLine->appendChild($priceLine);
+		
 
 			$this->invoice->appendChild($invoiceLine);
 		}
 	}
-
-	private function createPriceLine($param) {
-		$price = $this->doc->createElement('cac:Price');
-			$priceAmount = $this->doc->createElement("cbc:PriceAmount", $param['priceAmount']);
-			$priceAmount->setAttribute('currencyID', $param['currencyID']);
-
-			$baseQuantity = $this->doc->createElement("cbc:BaseQuantity", $param['baseQuantity']);
-			$baseQuantity->setAttribute('unitCode', $param['unitCode'] );
-
-		$price->appendChild($priceAmount);
-		$price->appendChild($baseQuantity);
-
-		return $price;
-	}
-
-	private function createItemLine($param) {
-		$item = $this->doc->createElement('cac:Item');
-			$name = $this->doc->createElement("cbc:Name", $param['name']);
-
-			$sellersItemIdentification = $this->doc->createElement('cac:SellersItemIdentification');
-				$id = $this->doc->createElement("cbc:ID", $param['idSellersItemIdentification']);
-		    $sellersItemIdentification->appendChild($id);
-
-			$commodityClassification = $this->doc->createElement('cac:CommodityClassification');
-				$itemClassificationCode = $this->doc->createElement("cbc:ItemClassificationCode", $param['itemClassificationCode']);
-				$itemClassificationCode->setAttribute('listID', $param['listID']);
-			$commodityClassification->appendChild($itemClassificationCode);
-
-			$classifiedTaxCategory = $this->doc->createElement('cac:ClassifiedTaxCategory');
-				$id = $this->doc->createElement("cbc:ID", $param['taxId']);
-				$percent = $this->doc->createElement("cbc:Percent", $param['taxPercent']);
-				$taxScheme = $this->createTaxScheme($param['vatId']);
-
-			$classifiedTaxCategory->appendChild($id);
-			$classifiedTaxCategory->appendChild($percent);
-			$classifiedTaxCategory->appendChild($taxScheme);
-
-
-		$item->appendChild($name);
-		$item->appendChild($sellersItemIdentification);
-		$item->appendChild($commodityClassification);
-		$item->appendChild($classifiedTaxCategory);
-
-		return $item;
-	}
-
+	
 	private function createAllowanceCharge($param) {
 		$allowanceCharge = $this->doc->createElement('cac:AllowanceCharge');
 		$chargeIndicator = $this->doc->createElement("cbc:ChargeIndicator", $param['chargeIndicator']);
@@ -160,38 +105,60 @@ class XMLElectronicInvoice {
 	}
 
 	private function createInvoiceLine($param) {
-
-		if (!isset($param['id'])) {
-			debug($param);
-		}
-
 		$invoiceLine = $this->doc->createElement('cac:InvoiceLine');
 
 		$id = $this->doc->createElement("cbc:ID", $param['id']);
+		$invoiceLine->appendChild($id);
+
 		$invoicedQuantity = $this->doc->createElement("cbc:InvoicedQuantity", $param['invoicedQuantity']);
-		$invoicedQuantity->setAttribute('unitCode', $param['unitCode']);
+		$invoicedQuantity->setAttribute('unitCode', $param['invoicedQuantityUnitCode']);
+		$invoiceLine->appendChild($invoicedQuantity);
+		
 		$lineExtensionAmount = $this->doc->createElement("cbc:LineExtensionAmount", $param['lineExtensionAmount']);
 		$lineExtensionAmount->setAttribute('currencyID', $param['currency']);
 
-		$invoiceLine->appendChild($id);
-		$invoiceLine->appendChild($invoicedQuantity);
 		$invoiceLine->appendChild($lineExtensionAmount);
 
+
+		// line
+		$elItem = $this->doc->createElement('cac:Item');
+			$name = $this->doc->createElement("cbc:Name", $param['name']);
+			$elItem->appendChild($name);
+
+			$elClassifiedTaxCategory = $this->doc->createElement('cac:ClassifiedTaxCategory');
+				$elId = $this->doc->createElement("cbc:ID", $param['classifiedTaxCategoryID']);
+				$elClassifiedTaxCategory->appendChild($elId);				
+
+		$elItem->appendChild($elClassifiedTaxCategory);
+
+		$invoiceLine->appendChild($elItem);
+
+
+			// price
+			$elPrice = $this->doc->createElement('cac:Price');
+				$elPriceAmount = $this->doc->createElement("cbc:PriceAmount", $param['priceAmount']);
+			$elPrice->appendChild($elPriceAmount);				
+	
+
+		$invoiceLine->appendChild($elPrice);
+		
 		return $invoiceLine;
 	}
 
-	public function createLegalMonetaryTotal($pLineExtensionAmount, $pTaxExclusiveAmount, $pTaxInclusiveAmount, $pPayableAmount, $currency) {
+	public function createLegalMonetaryTotal($total) {
 		$legalMonetaryTotal = $this->doc->createElement('cac:LegalMonetaryTotal');
 
-		$lineExtensionAmount = $this->doc->createElement("cbc:LineExtensionAmount", $pLineExtensionAmount);
-		$taxExclusiveAmount = $this->doc->createElement("cbc:TaxExclusiveAmount", $pTaxExclusiveAmount);
-		$taxInclusiveAmount = $this->doc->createElement("cbc:TaxInclusiveAmount", $pTaxInclusiveAmount);
-		$payableAmount = $this->doc->createElement("cbc:PayableAmount", $pPayableAmount);
+		$lineExtensionAmount = $this->doc->createElement("cbc:LineExtensionAmount", $total['lineExtensionAmount']);
+		$lineExtensionAmount->setAttribute('currencyID',$total['currency']);
 
-		$lineExtensionAmount->setAttribute('currencyID', $currency);
-		$taxExclusiveAmount->setAttribute('currencyID', $currency);
-		$taxInclusiveAmount->setAttribute('currencyID', $currency);
-		$payableAmount->setAttribute('currencyID', $currency);
+		$taxExclusiveAmount = $this->doc->createElement("cbc:TaxExclusiveAmount", $total['taxExclusiveAmount']);
+		$taxExclusiveAmount->setAttribute('currencyID', $total['currency']);
+
+		$taxInclusiveAmount = $this->doc->createElement("cbc:TaxInclusiveAmount", $total['taxInclusiveAmount']);
+		$taxInclusiveAmount->setAttribute('currencyID', $total['currency']);
+
+		$payableAmount = $this->doc->createElement("cbc:PayableAmount", $total['payableAmount']);
+		$payableAmount->setAttribute('currencyID', 		$total['currency']);
 
 		$legalMonetaryTotal->appendChild($lineExtensionAmount);
 		$legalMonetaryTotal->appendChild($taxExclusiveAmount);
@@ -201,18 +168,20 @@ class XMLElectronicInvoice {
 		$this->invoice->appendChild($legalMonetaryTotal);
 	}
 
-	public function createTaxTotal($taxAmount, $curreency, $taxSubTotal) {
+	public function createTaxTotal($param) {
+
 		$taxTotal = $this->doc->createElement('cac:TaxTotal');
-		$taxAmount = $this->doc->createElement("cbc:TaxAmount", $taxAmount);
-		$taxAmount->setAttribute('currencyID', $curreency);
 
-		$taxTotal->appendChild($taxAmount);
+		$taxAmount = $this->doc->createElement("cbc:TaxAmount", $param['taxAmount']);
+		$taxAmount->setAttribute('currencyID', $param['currency']);
 
-		foreach ($taxSubTotal as $sTax) {
-			$tst = $this->createTaxSubtotal($sTax);
-
-			$taxTotal->appendChild($tst);
+		foreach ($param['subTotal'] as $subtotal) {
+			$taxSubtotal = $this->createTaxSubtotal($subtotal);	
+			$taxTotal->appendChild($taxSubtotal);
 		}
+		
+		$taxTotal->appendChild($taxAmount);
+	
 
 		$this->invoice->appendChild($taxTotal);
 	}
@@ -230,11 +199,11 @@ class XMLElectronicInvoice {
 
 		$taxCategory = $this->doc->createElement('cac:TaxCategory');
 		$id = $this->doc->createElement("cbc:ID", $param['taxCategoryId']);
-		$percent = $this->doc->createElement("cbc:Percent", $param['percent']);
+		$percent = $this->doc->createElement("cbc:Percent", $param['taxCategoryIdPercent']);
 
 		$taxCategory->appendChild($id);
 		$taxCategory->appendChild($percent);
-		$taxScheme = $this->createTaxScheme($param['vatID']);
+		$taxScheme = $this->createTaxScheme($param['taxCategoryId']);
 		$taxCategory->appendChild($taxScheme);
 
 		$taxSubtotal->appendChild($taxCategory);
@@ -243,15 +212,16 @@ class XMLElectronicInvoice {
 
 	public function createPaymentMeans($param) {
 		$paymentMeans = $this->doc->createElement('cac:PaymentMeans');
-		$paymentMeansCode = $this->doc->createElement("cbc:PaymentMeansCode", $param['paymentMeansCode']);
+			$paymentMeansCode = $this->doc->createElement("cbc:PaymentMeansCode", $param['paymentMeansCode']);
 
 		$paymentMeans->appendChild($paymentMeansCode);
 
-		$payeeFinancialAccount = $this->doc->createElement('cac:PayeeFinancialAccount');
-		$id = $this->doc->createElement("cbc:ID", $param['ibanId']);
-		$payeeFinancialAccount->appendChild($id);
-
-		$paymentMeans->appendChild($payeeFinancialAccount);
+		/*
+			$payeeFinancialAccount = $this->doc->createElement('cac:PayeeFinancialAccount');
+				$id = $this->doc->createElement("cbc:ID", $param['ibanId']);
+				$payeeFinancialAccount->appendChild($id);
+			$paymentMeans->appendChild($payeeFinancialAccount);
+		*/
 
 		$this->invoice->appendChild($paymentMeans);
 	}
@@ -260,44 +230,57 @@ class XMLElectronicInvoice {
 		$accountingCustomerParty = $this->doc->createElement('cac:AccountingCustomerParty');
 		$party = $this->doc->createElement('cac:Party');
 
-		$partyIdentification = $this->doc->createElement('cac:PartyIdentification');
-		$id = $this->doc->createElement("cbc:ID", $paramCustomer['partyId']);
-		$partyIdentification->appendChild($id);
+		/*
+				$partyIdentification = $this->doc->createElement('cac:PartyIdentification');
+				$id = $this->doc->createElement("cbc:ID", $paramCustomer['partyId']);
+				$partyIdentification->appendChild($id);
+				$party->appendChild($partyIdentification);
 
-		$party->appendChild($partyIdentification);
+				$partyName = $this->doc->createElement('cac:PartyName');
+				$name = $this->doc->createElement("cbc:Name", $paramCustomer['name']);
+				$partyName->appendChild($name);
+			$party->appendChild($partyName);
+		*/
 
-		$partyName = $this->doc->createElement('cac:PartyName');
-		$name = $this->doc->createElement("cbc:Name", $paramCustomer['name']);
-		$partyName->appendChild($name);
-
-		$party->appendChild($partyName);
+		
 
 		$postalAddress = $this->doc->createElement('cac:PostalAddress');
-		$streetName = $this->doc->createElement("cbc:StreetName", $paramCustomer['streetName']);
-		$cityName = $this->doc->createElement("cbc:CityName", $paramCustomer['cityName']);
-		$postalZone = $this->doc->createElement("cbc:PostalZone", $paramCustomer['postalZone']);
-		$countrySubentity = $this->doc->createElement("cbc:CountrySubentity", $paramCustomer['countrySubentity']);
+			$streetName = $this->doc->createElement("cbc:StreetName", $paramCustomer['streetName']);
+			$postalAddress->appendChild($streetName);
 
-		$country = $this->doc->createElement('cac:Country');
-		$identificationCode = $this->doc->createElement("cbc:IdentificationCode", $paramCustomer['countryCode']);
-		$country->appendChild($identificationCode);
+			$cityName = $this->doc->createElement("cbc:CityName", $paramCustomer['cityName']);
+			$postalAddress->appendChild($cityName);
 
-		$postalAddress->appendChild($streetName);
-		$postalAddress->appendChild($cityName);
-		$postalAddress->appendChild($postalZone);
-		$postalAddress->appendChild($countrySubentity);
-		$postalAddress->appendChild($country);
+			if(!empty($paramSuplier['postalZone'])){
+				$postalZone = $this->doc->createElement("cbc:PostalZone", $paramCustomer['postalZone']);
+				$postalAddress->appendChild($postalZone);
+			}
+
+			$countrySubentity = $this->doc->createElement("cbc:CountrySubentity", $paramCustomer['countrySubentity']);
+			$postalAddress->appendChild($countrySubentity);
+
+			$country = $this->doc->createElement('cac:Country');
+				$postalAddress->appendChild($country);
+				$identificationCode = $this->doc->createElement("cbc:IdentificationCode", $paramCustomer['countryCode']);
+			$country->appendChild($identificationCode);
 
 		$party->appendChild($postalAddress);
+
+
+
 		$party->appendChild($this->createPartyTax($paramTax));
 
 		$partyLegalEntity = $this->doc->createElement('cac:PartyLegalEntity');
 		$registrationName = $this->doc->createElement("cbc:RegistrationName", $paramTax['partyLegalEntity']['registrationName']);
-		$companyID = $this->doc->createElement("cbc:CompanyID", $paramTax['partyLegalEntity']['companyID']);
+		$companyID = $this->doc->createElement("cbc:CompanyID", $paramTax['companyID']);
 		$partyLegalEntity->appendChild($registrationName);
 		$partyLegalEntity->appendChild($companyID);
 
 		$party->appendChild($partyLegalEntity);
+
+
+		$party->appendChild($this->createPartyContact( $paramCustomer['contactName'], $paramCustomer['contactTelephone'],  $paramCustomer['contactElectronicMail'] ));
+
 
 		$accountingCustomerParty->appendChild($party);
 		$this->invoice->appendChild($accountingCustomerParty);
@@ -322,7 +305,7 @@ class XMLElectronicInvoice {
 			$cityName = $this->doc->createElement("cbc:CityName", $paramSuplier['cityName']);
 			$postalAddress->appendChild($cityName);
 
-			if(empty($paramSuplier['postalZone'])){
+			if(!empty($paramSuplier['postalZone'])){
 				$postalZone = $this->doc->createElement("cbc:PostalZone", $paramSuplier['postalZone']);
 				$postalAddress->appendChild($postalZone);
 			}
@@ -333,7 +316,7 @@ class XMLElectronicInvoice {
 			$country = $this->doc->createElement('cac:Country');
 				$identificationCode = $this->doc->createElement("cbc:IdentificationCode", $paramSuplier['countryCode']);
 			$country->appendChild($identificationCode);
-			$postalAddress->appendChild($country);
+		$postalAddress->appendChild($country);
 
 		$party->appendChild($postalAddress);
 
@@ -352,21 +335,29 @@ class XMLElectronicInvoice {
 			
 		$party->appendChild($partyLegalEntity);
 
-		$party->appendChild($this->createPartyContact( $paramSuplier['contactName'], $paramSuplier['contactTelephone'],  $paramSuplier['contactElectronicMail']));
-
-		$accountingSupplierParty->appendChild($party);
+		// $party->appendChild($this->createPartyContact( $paramSuplier['contactName'], $paramSuplier['contactTelephone'],  $paramSuplier['contactElectronicMail']));
+		// $accountingSupplierParty->appendChild($party);
 
 		$this->invoice->appendChild($accountingSupplierParty);
 	}
 
 	private function createPartyContact($name, $tel, $email) {
 		$contact = $this->doc->createElement('cac:Contact');
-			$elName = $this->doc->createElement("cbc:Name", $name);
-		$contact->appendChild($elName);	
-			$elTel = $this->doc->createElement("cbc:Telephone", $tel);
-		$contact->appendChild($elTel);		
-			$electronicMail = $this->doc->createElement("cbc:ElectronicMail", $email);
-		$contact->appendChild($electronicMail);
+
+			if(!empty($name)){
+				$elName = $this->doc->createElement("cbc:Name", $name);
+				$contact->appendChild($elName);	
+			}
+
+			if(!empty($tel)){
+				$elTel = $this->doc->createElement("cbc:Telephone", $tel);
+				$contact->appendChild($elTel);		
+			}
+
+			if(!empty($email)){
+				$electronicMail = $this->doc->createElement("cbc:ElectronicMail", $email);
+				$contact->appendChild($electronicMail);
+			}
 
 		return $contact;
 	}

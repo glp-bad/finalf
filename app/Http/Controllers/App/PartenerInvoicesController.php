@@ -90,9 +90,10 @@ class PartenerInvoicesController extends Controller
     public function invoicePrint(Request $request)
     {
         $id = $request->idPk;
-        $bussinesInvoice = new BussinesInvoice($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
-        $antetFactura = $bussinesInvoice->selectInvoicePrintAntet($id);
-        $detaliuFactura = $bussinesInvoice->selectInvoicePrintDetail($id);
+        $invoiceDate = $this->getDateInvoice($id);
+        
+        $antetFactura = $invoiceDate['antetFactura'];
+        $detaliuFactura = $invoiceDate['detaliuFactura'];
 
         // problema test FAGD 00002252
 
@@ -554,27 +555,37 @@ class PartenerInvoicesController extends Controller
 
     private function eInvoiceGenerating($idInvoice)
     {
+
+        $idInvoice = 5376; // TEST
+
         $invoiceDate = $this->getDateInvoice($idInvoice);
         $param = new InvoiceElectronic($invoiceDate['antetFactura'], $invoiceDate['detaliuFactura'] );
 
-        // dd($invoiceDate['antetFactura']);
+         //dd($invoiceDate['antetFactura']);
+         //dd($invoiceDate['detaliuFactura']);
 
         $xmlInvoices = new XMLElectronicInvoice();
-        $xmlInvoices->createAntet($param->getAntet());
+
+        $antet = $param->getAntet();
+
+        $xmlInvoices->createAntet($antet);
 
         $xmlInvoices->createAccountingSupplierParty($param->getSupplier(), $param->getSupplierTax());
+        $xmlInvoices->createAccountingCustomerParty($param->getCustomer(), $param->getCustomerTax());
+        $xmlInvoices->createPaymentMeans($antet);
+        $xmlInvoices->createInvoiceLines($param->getInvoicesLines());
+
+        $totalInvoice = $param->getTaxTotalAndTotal();
+        $xmlInvoices->createTaxTotal($totalInvoice);
+        $xmlInvoices->createLegalMonetaryTotal($totalInvoice);
 
         $xml = $xmlInvoices->printXml();
 
-        dd($xml);
-
+        return $xml;
 
     }
 
     private functiOn getDateInvoice($idInvoice){
-
-        // $idInvoice = 2128; // test
-
         $bussinesInvoice = new BussinesInvoice($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
         $antetFactura = $bussinesInvoice->selectInvoicePrintAntet($idInvoice);
         $detaliuFactura = $bussinesInvoice->selectInvoicePrintDetail($idInvoice);

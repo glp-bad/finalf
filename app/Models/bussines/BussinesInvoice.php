@@ -207,12 +207,16 @@ class BussinesInvoice extends MyModel {
     public function selectInvoicePrintDetail($id){
         $rezult = DB::select(
             "select 00 as nro,
-		                id, id_factura, cText as cExplicf, 
-		                nSumaFaraTva as nSuma, nSumaTva as nTVA, nTotal as ValoareFactura
+                        t_factura_d.id, t_factura_d.id_factura, t_factura_d.cText as cExplicf, 
+		                t_factura_d.nSumaFaraTva as nSuma, t_factura_d.nSumaTva as nTVA, t_factura_d.nTotal as ValoareFactura, t_factura_d.quantity, t_tip_um.e_unit_code,
+                        e_categorie_tva.code as e_categ_tva,
+                        t_factura_d.nSumaFaraTva * t_factura_d.quantity as line_extension_amount
 	                from
 		                t_factura_d	 
-	                where id_factura = :id
-	                order by id_factura asc"
+                        inner join t_tip_um on t_tip_um.id = t_factura_d.id_um
+                        inner join e_categorie_tva on e_categorie_tva.id = t_factura_d.id_e_categorie_tva
+	                where t_factura_d.id_factura = :id
+	                order by t_factura_d.id_factura asc"
             , ['id'=>$id]
         );
 
@@ -247,7 +251,9 @@ class BussinesInvoice extends MyModel {
                             pa_judete.cJudetAbrev as judet_abrev_pa,
                             t_avocati.contact_name as contact_name_av,
                             t_avocati.contact_phone as contact_phone_av,
-                            t_avocati.contact_email as contact_email_av
+                            t_avocati.contact_email as contact_email_av,
+                            t_tip_factura.e_invoice_type_code,
+                            e_tip_plata.code as payment_means_code
                             from	
                                 t_factura
                                 inner join t_tip_factura on t_tip_factura.id = t_factura.id_tipfactura
@@ -255,6 +261,7 @@ class BussinesInvoice extends MyModel {
                                 inner join t_parteneri on t_parteneri.id = t_factura.id_part
                                 inner join t_tip_organizare_juridica on t_tip_organizare_juridica.id = t_parteneri.id_tip
                                 inner join t_avocati on t_avocati.id = t_factura.id_avocat
+                                inner join e_tip_plata on e_tip_plata.id = t_factura.id_e_tip_plata
                                 left join t_avocati_adresa on t_avocati_adresa.id_avocat = t_factura.id_avocat and t_avocati_adresa.activ = 1
                                 left join t_localitati as av_localitati on av_localitati.id = t_avocati_adresa.id_localitate
                                 left join t_judete as av_judete on av_judete.id = av_localitati.id_judet
