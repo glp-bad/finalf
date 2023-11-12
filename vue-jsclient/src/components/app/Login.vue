@@ -72,8 +72,7 @@
 
         },
         mounted() {
-	        // this.post= {email:  "...email", password: null };
-            this.post= {email:  "gavrilapaul@hotmail.com", password: null };
+	        this.post= {email:  "...email", password: null };
 	        this.$vanilla.dragDiv(this.$refs.windowRef, this.$refs.headerRef);
         },
         methods: {
