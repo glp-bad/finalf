@@ -1,3 +1,6 @@
+-- 2023-11-11 1.7.100    - implementare eFactura, validata de site MF, efactura nu se salveaza in baza de date  
+-- rulate pe prod si test
+
 CREATE TABLE `e_parameter` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `id_avocat` INT UNSIGNED NOT NULL,
