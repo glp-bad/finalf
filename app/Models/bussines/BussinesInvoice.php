@@ -226,7 +226,12 @@ class BussinesInvoice extends MyModel {
 
     public function selectInvoicePrintAntet($id){
         $rezult = DB::select(
-            " select t_factura.id as id_factura, t_factura.id_nr, t_factura.data_f, DATE_FORMAT(t_factura.data_f, '%d/%m/%Y') as dataf, t_factura.id_part, t_factura.nProcTva, t_factura.salvata, t_factura.id_tipFactura,
+            " select t_factura.id as id_factura, t_factura.id_nr, 
+                            t_factura.data_f, 
+                            t_factura.data_f, 
+                            t_factura.e_due_date,
+                            DATE_FORMAT(t_factura.data_f, '%d/%m/%Y') as dataf, 
+                            t_factura.id_part, t_factura.nProcTva, t_factura.salvata, t_factura.id_tipFactura,
                             t_facturi_numar.cNr, t_facturi_numar.folosit,
                             t_parteneri.cNume as cClient, t_parteneri.regcom, t_parteneri.ro_, if(t_parteneri.id_tip = 7, '--', t_parteneri.cui) as cui,
                             t_tip_organizare_juridica.cTipAbrev as cOrgJ,

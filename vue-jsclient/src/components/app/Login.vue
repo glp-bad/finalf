@@ -72,7 +72,8 @@
 
         },
         mounted() {
-	        this.post= {email:  "...email", password: null };
+	        // this.post= {email:  "...email", password: null };
+            this.post= {email:  "gavrilapaul@hotmail.com", password: null };
 	        this.$vanilla.dragDiv(this.$refs.windowRef, this.$refs.headerRef);
         },
         methods: {
@@ -114,7 +115,7 @@
 		        login: false,
                 requestLoginFail: false,
                 messageFail: 'Login fail.',
-                VERSION_APP: '1.7.000'                  // from finalf\app\MyAppConstants.php
+                VERSION_APP: '1.7.100'                  // from finalf\app\MyAppConstants.php
 	        }
         }
     }

@@ -11,6 +11,7 @@ Deploy prod:
 1. Version in
     D:\bin\xampp8\htdocs\finalf\app\MyAppConstants.php
     D:\bin\xampp8\htdocs\finalf\vue-jsclient\src\components\app\Login.vue
+    username js: this.post= {email:
 2. D:\bin\xampp8\htdocs\finalf\app\Http\Middleware\VerifyCsrfToken.php
 3. ENV VUE_APP_ENV = host
 4. run buildAndCopyFile

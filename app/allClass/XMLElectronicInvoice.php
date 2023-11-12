@@ -130,6 +130,12 @@ class XMLElectronicInvoice {
 				$elId = $this->doc->createElement("cbc:ID", $param['classifiedTaxCategoryID']);
 				$elClassifiedTaxCategory->appendChild($elId);				
 
+				$percent = $this->doc->createElement("cbc:Percent", $param['taxCategoryIdPercent']);
+				$elClassifiedTaxCategory->appendChild($percent);		
+				
+				$taxScheme = $this->createTaxScheme($param['taxCategoryId']);
+				$elClassifiedTaxCategory->appendChild($taxScheme);		
+
 		$elItem->appendChild($elClassifiedTaxCategory);
 
 		$invoiceLine->appendChild($elItem);
@@ -138,6 +144,7 @@ class XMLElectronicInvoice {
 			// price
 			$elPrice = $this->doc->createElement('cac:Price');
 				$elPriceAmount = $this->doc->createElement("cbc:PriceAmount", $param['priceAmount']);
+				$elPriceAmount->setAttribute('currencyID', $param['currency']);
 			$elPrice->appendChild($elPriceAmount);				
 	
 
@@ -149,22 +156,23 @@ class XMLElectronicInvoice {
 	public function createLegalMonetaryTotal($total) {
 		$legalMonetaryTotal = $this->doc->createElement('cac:LegalMonetaryTotal');
 
-		$lineExtensionAmount = $this->doc->createElement("cbc:LineExtensionAmount", $total['lineExtensionAmount']);
-		$lineExtensionAmount->setAttribute('currencyID',$total['currency']);
+		if(!empty($total)){
+			$lineExtensionAmount = $this->doc->createElement("cbc:LineExtensionAmount", $total['lineExtensionAmount']);
+			$lineExtensionAmount->setAttribute('currencyID',$total['currency']);
+			$legalMonetaryTotal->appendChild($lineExtensionAmount);
 
-		$taxExclusiveAmount = $this->doc->createElement("cbc:TaxExclusiveAmount", $total['taxExclusiveAmount']);
-		$taxExclusiveAmount->setAttribute('currencyID', $total['currency']);
+			$taxExclusiveAmount = $this->doc->createElement("cbc:TaxExclusiveAmount", $total['taxExclusiveAmount']);
+			$taxExclusiveAmount->setAttribute('currencyID', $total['currency']);
+			$legalMonetaryTotal->appendChild($taxExclusiveAmount);
 
-		$taxInclusiveAmount = $this->doc->createElement("cbc:TaxInclusiveAmount", $total['taxInclusiveAmount']);
-		$taxInclusiveAmount->setAttribute('currencyID', $total['currency']);
+			$taxInclusiveAmount = $this->doc->createElement("cbc:TaxInclusiveAmount", $total['taxInclusiveAmount']);
+			$taxInclusiveAmount->setAttribute('currencyID', $total['currency']);
+			$legalMonetaryTotal->appendChild($taxInclusiveAmount);
 
-		$payableAmount = $this->doc->createElement("cbc:PayableAmount", $total['payableAmount']);
-		$payableAmount->setAttribute('currencyID', 		$total['currency']);
-
-		$legalMonetaryTotal->appendChild($lineExtensionAmount);
-		$legalMonetaryTotal->appendChild($taxExclusiveAmount);
-		$legalMonetaryTotal->appendChild($taxInclusiveAmount);
-		$legalMonetaryTotal->appendChild($payableAmount);
+			$payableAmount = $this->doc->createElement("cbc:PayableAmount", $total['payableAmount']);
+			$payableAmount->setAttribute('currencyID', 		$total['currency']);
+			$legalMonetaryTotal->appendChild($payableAmount);
+		}
 
 		$this->invoice->appendChild($legalMonetaryTotal);
 	}
@@ -175,13 +183,14 @@ class XMLElectronicInvoice {
 
 		$taxAmount = $this->doc->createElement("cbc:TaxAmount", $param['taxAmount']);
 		$taxAmount->setAttribute('currencyID', $param['currency']);
+		$taxTotal->appendChild($taxAmount);
 
 		foreach ($param['subTotal'] as $subtotal) {
 			$taxSubtotal = $this->createTaxSubtotal($subtotal);	
 			$taxTotal->appendChild($taxSubtotal);
 		}
 		
-		$taxTotal->appendChild($taxAmount);
+		
 	
 
 		$this->invoice->appendChild($taxTotal);
@@ -204,7 +213,7 @@ class XMLElectronicInvoice {
 
 		$taxCategory->appendChild($id);
 		$taxCategory->appendChild($percent);
-		$taxScheme = $this->createTaxScheme($param['taxCategoryId']);
+		$taxScheme = $this->createTaxScheme($param['taxSchemeId']);
 		$taxCategory->appendChild($taxScheme);
 
 		$taxSubtotal->appendChild($taxCategory);

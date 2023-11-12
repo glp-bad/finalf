@@ -15,6 +15,7 @@ use App\Models\app\ModelnvoiceXml;
 use App\Models\bussines\BussinesInvoice;
 use App\Models\app\ModelParteneri;
 use App\Models\app\Modelnvoice;
+use App\Models\app\ModelParameter;
 use App\Models\nomenclatoare\ModelNomTipFactura;
 use App\MyAppConstants;
 use \Illuminate\Http\Request;
@@ -214,7 +215,8 @@ class PartenerInvoicesController extends Controller
         $succes = true;
         $lastId = -1;
         $messages = null;
-        $records  = $nom->selectForSimpleDropDown($request->wordSearch);
+        // $records  = $nom->selectForSimpleDropDown($request->wordSearch);
+        $records  = $nom->selectForSimpleDropDown();
 
         return json_encode(new SqlMessageResponse($succes, $lastId, $messages, $records));
     }
@@ -607,11 +609,13 @@ class PartenerInvoicesController extends Controller
     {
 
         // $idInvoice = 5376; // TEST
+        $modelParam = new ModelParameter($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        $facturaParam = $modelParam->getBussinesAllParameter();
 
         $invoiceDate = $this->getDateInvoice($idInvoice);
-        $param = new InvoiceElectronic($invoiceDate['antetFactura'], $invoiceDate['detaliuFactura'] );
+        $param = new InvoiceElectronic($invoiceDate['antetFactura'], $invoiceDate['detaliuFactura'], $facturaParam );
 
-         // dd($invoiceDate['antetFactura']);
+         //dd($invoiceDate['antetFactura']);
          //dd($invoiceDate['detaliuFactura']);
 
         $xmlInvoices = new XMLElectronicInvoice();
@@ -623,11 +627,15 @@ class PartenerInvoicesController extends Controller
         $xmlInvoices->createAccountingSupplierParty($param->getSupplier(), $param->getSupplierTax());
         $xmlInvoices->createAccountingCustomerParty($param->getCustomer(), $param->getCustomerTax());
         $xmlInvoices->createPaymentMeans($antet);
-        $xmlInvoices->createInvoiceLines($param->getInvoicesLines());
 
         $totalInvoice = $param->getTaxTotalAndTotal();
+
         $xmlInvoices->createTaxTotal($totalInvoice);
         $xmlInvoices->createLegalMonetaryTotal($totalInvoice);
+
+        $xmlInvoices->createInvoiceLines($param->getInvoicesLines());
+
+        
 
         $xml = $xmlInvoices->printXml();
 

@@ -9,15 +9,20 @@ class InvoiceElectronic
 
     private $antetFactura;
     private $detaliuFactura;
+    private $eParam = array();
 
     private $documentCurrencyCode = 'RON';
     private $countryCode = 'RO';
     private $taxSchemeId = 'VAT';
 
     
-    public function __construct($antetFActura, $detaliuFactura){
+    public function __construct($antetFActura, $detaliuFactura, $eParam){
         $this->antetFactura = $antetFActura[0];
         $this->detaliuFactura = $detaliuFactura;        
+
+        if(!empty($eParam)){
+            $this->eParam = $eParam;
+        }
     }
 
 
@@ -30,9 +35,9 @@ class InvoiceElectronic
 
         $param = array();
 
-        $taxAmount = 0;
-        $lineExtensionAmount = 0;
-        $taxInclusiveAmount = 0;
+        $taxAmount = 0.00;
+        $lineExtensionAmount = 0.00;
+        $taxInclusiveAmount = 0.00;
 
         $subTotal = array();
 
@@ -56,7 +61,8 @@ class InvoiceElectronic
         $param=[
             'taxAmount'             => $taxAmount,
             'lineExtensionAmount'   => $lineExtensionAmount,
-            'taxExclusiveAmount'    => $taxAmount,
+            // 'taxExclusiveAmount'    => $taxAmount,
+            'taxExclusiveAmount'    => $lineExtensionAmount,
             'taxInclusiveAmount'    => $taxInclusiveAmount,
             'payableAmount'         => $taxInclusiveAmount,
             'currency'              => $this->documentCurrencyCode,
@@ -83,7 +89,9 @@ class InvoiceElectronic
                     'priceAmount'               => $v->nSuma, 
                     'name'                      => $name,
                     'classifiedTaxCategoryID'   => $v->e_categ_tva,
-                    'currency'                  => $this->documentCurrencyCode
+                    'taxCategoryIdPercent'      => $this->antetFactura->nProcTva,
+                    'currency'                  => $this->documentCurrencyCode,
+                    'taxCategoryId'             => $this->eParam['taxSchemeId']
                 ];
         }
 
@@ -93,30 +101,52 @@ class InvoiceElectronic
 
     public function getAntet(){
 
+
+        $dueDate = $this->antetFactura->e_due_date;
+        if(empty($dueDate) && isset($this->eParam['dueDate'])){
+            $invoiceDate = date($this->antetFactura->data_f);
+            $dueDate = date ("Y-m-d", strtotime ($invoiceDate ."+" .$this->eParam['dueDate'] . " days"));   
+        }
+
+
         $param=[
             'id'                    =>$this->antetFactura->cNr, 
             'issueDate'             =>$this->antetFactura->data_f,
-            'dueDate'               =>null,
+            'dueDate'               =>$dueDate,
 		    'invoiceTypeCode'       =>$this->antetFactura->e_invoice_type_code,
 		    'note'                  =>null,
 		    'documentCurrencyCode'  =>$this->documentCurrencyCode,
             'paymentMeansCode'     =>$this->antetFactura->payment_means_code,
             'taxPointDate'          =>null
         ];
-           
+         
         return $param; 
+    }
+
+    private function translateCountrySubentity($adress, $judet, $localitate){
+        $countrySubentity = $countrySubentity = $this->eParam['countryCode'] . '-' . $judet;
+        $translateLocalitate = $localitate;
+
+        $splitAdrees = explode(',', $adress);
+        $sector = strtolower(trim(end($splitAdrees)));
+
+        if(isset($this->eParam[$sector])){
+            // $translateLocalitate = $this->eParam[$sector] . '-' . $this->eParam['countryCode'];
+            $translateLocalitate = $this->eParam[$sector];
+        }
+
+        return ['countrySubentity' => $countrySubentity, 'localitate'=> $translateLocalitate]; 
     }
 
     public function getSupplier(){
 
-
-        $countrySubentity = $this->countryCode . '-' . $this->antetFactura->judet_abrev_av;
+        $citys = $this->translateCountrySubentity($this->antetFactura->cAdresa_av, $this->antetFactura->judet_abrev_av, $this->antetFactura->cOras_av);
 
         $param=[
             'streetName'                =>$this->antetFactura->cAdresa_av, 
-            'cityName'                  =>$this->antetFactura->cOras_av,
+            'cityName'                  =>$citys['localitate'],
             'postalZone'                =>null,
-            'countrySubentity'          =>$countrySubentity, 
+            'countrySubentity'          =>$citys['countrySubentity'], 
             'countryCode'               =>$this->countryCode,
             'contactElectronicMail'     =>$this->antetFactura->contact_email_av,
             'contactName'               =>$this->antetFactura->contact_name_av,
@@ -143,14 +173,13 @@ class InvoiceElectronic
 
     public function getCustomer(){
 
-
-        $countrySubentity = $this->countryCode . '-' . $this->antetFactura->judet_abrev_pa;
+        $citys = $this->translateCountrySubentity($this->antetFactura->cAdresa_pa, $this->antetFactura->judet_abrev_pa, $this->antetFactura->cOras_pa);
 
         $param=[
             'streetName'                =>$this->antetFactura->cAdresa_pa, 
-            'cityName'                  =>$this->antetFactura->cOras_pa,
+            'cityName'                  =>$citys['localitate'],
             'postalZone'                =>null,
-            'countrySubentity'          =>$countrySubentity, 
+            'countrySubentity'          =>$citys['countrySubentity'], 
             'countryCode'               =>$this->countryCode,
             'contactElectronicMail'     =>null,
             'contactName'               =>null,
