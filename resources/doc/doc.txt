@@ -7,18 +7,24 @@ Pentru cPanel:
     cronJob:
     /usr/local/bin/php /home2/badminto/finalf.badmintonclub.ro/artisan schedule:run
 
-Deploy prod:
+Deploy prod (am trecut pe docker):
 1. Version in
-    D:\bin\xampp8\htdocs\finalf\app\MyAppConstants.php
-    D:\bin\xampp8\htdocs\finalf\vue-jsclient\src\components\app\Login.vue
+    finalf\app\MyAppConstants.php
+    finalf\vue-jsclient\src\components\app\Login.vue
     username js: this.post= {email:
-2. D:\bin\xampp8\htdocs\finalf\app\Http\Middleware\VerifyCsrfToken.php
+2. finalf\app\Http\Middleware\VerifyCsrfToken.php
 3. ENV VUE_APP_ENV = host
 4. run buildAndCopyFile
 5. commit
 6. se ruleaza sql installer daca este cazul
 7. se intra pe cPanel -> Git Version Control
 8. finalf -> /home2/badminto/repositories/finalf -> Manage -> Pull or Deploy -  Update from Remote
+
+
+Deploy DEV (am trecut pe docker):
+1. finalf\app\Http\Middleware\VerifyCsrfToken.php
+2. ENV VUE_APP_ENV = local
+3. run buildAndCopyFile
 
 
 
