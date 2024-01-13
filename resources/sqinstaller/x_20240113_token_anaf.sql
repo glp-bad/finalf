@@ -1,3 +1,6 @@
+-- rulat 2024-01-13 1.7.200    token ANAF
+-- pe local, demo si productie
+
 CREATE TABLE `anaf_token` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `id_avocat` int unsigned NOT NULL,

@@ -18,7 +18,7 @@ Deploy prod (am trecut pe docker):
 5. commit
 6. se ruleaza sql installer daca este cazul
 7. se intra pe cPanel -> Git Version Control
-8. finalf -> /home2/badminto/repositories/finalf -> Manage -> Pull or Deploy -  Update from Remote
+8. finalf -> /home2/badminto/repositories/finalf -> Manage -> Pull or Deploy -  Update from Remote  >apoi-> Deploy HEAD Commit
 
 
 Deploy DEV (am trecut pe docker):
