@@ -1,3 +1,4 @@
+2024-01-13 1.7.200    - implementare token ANAF, pentru testare autentificare
 2023-11-11 1.7.100    - implementare eFactura, validata de site MF, efactura nu se salveaza in baza de date  
 2023-11-11 1.7.000    - implementare eFactura in mod test, efactura nu se salveaza in baza de date  
 2022-09-04 1.6.400    - bug fix - update folosit la factura in momentul in care se refoloseste un numar pe incassare cu chitanta fiscala
