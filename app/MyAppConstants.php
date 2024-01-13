@@ -42,4 +42,14 @@ class MyAppConstants {
 	const DATABASE_ANONIMUS = 'mysql_anonimus';
 	const DATABASE_USER_ANONIMUS = 'test@test.com';
 
+
+    // ANAF
+    const EFACTURA_APP  = ['token' => 'token', 'efactura' => 'efactura'];
+    const EFACTURA_MEDIU  = ['test' => 'test', 'prod' => 'prod'];
+    const EFACTURA_RUNTIME_PARAMETER = 'ANAF_EFACTURA_RUNTIME';
+
+    
+        
+
+
 }

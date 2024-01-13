@@ -12,7 +12,8 @@
                     </div>
                     <div class="tab" :id="this.$constTab.getIdTab('2')">
                         <div class="up-line"></div>
-                        sunt in tab 2</div>
+                        <form-anaf :ref="formAvocatANAF"></form-anaf>
+                    </div>    
                     <div class="tab" :id="this.$constTab.getIdTab('3')">
                         <div class="up-line"></div>
                         sunt in tab 3</div>
@@ -30,6 +31,7 @@
     import formAvocat from "@/components/app/formAvocat";
     import Tab from "@/components/base/Tab";
     import formAvocatLuni from "@/components/app/form/formAvocatLuni.vue";
+    import formAvocatANAF from "@/components/app/form/formAvocatANAF.vue";
 
 
 
@@ -37,7 +39,8 @@
 		components: {
             'form-avocat': formAvocat,
             'my-tab': Tab,
-            'form-luni': formAvocatLuni
+            'form-luni': formAvocatLuni,
+            'form-anaf': formAvocatANAF
         },
 		name: "view-avocat",
 		created() {
@@ -46,7 +49,7 @@
 				gridConfig : {
 					header: [
 						this.$constTab.getHeader(1,'Date avocat'),
-						this.$constTab.getHeader(2,'Tab 02'),
+						this.$constTab.getHeader(2,'ANAF'),
 						this.$constTab.getHeader(3,'Tab 03'),
 						this.$constTab.getHeader(4,'Luni in lucru')
 					],

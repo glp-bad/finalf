@@ -76,13 +76,14 @@ export default [
 	{name: "insertNewProduct"           ,url: "public/app/cheltuieli/insertNewProduct"},
 	{name: "updateProductName"           ,url: "public/app/cheltuieli/updateProductName"},
 
-
-
-
-
-
     {name: "monthList"  ,url: "public/app/avocat/monthList"},
     {name: "checkMonth" ,url: "public/app/avocat/checkMonth"},
-    {name: "insertMonth",url: "public/app/avocat/insertMonth"}
+    {name: "insertMonth",url: "public/app/avocat/insertMonth"},
+
+    {name: "testOauth",url: "app/anaf/testOauth"}
+
+
+    
+
 ]
 

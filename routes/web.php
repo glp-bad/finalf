@@ -7,6 +7,9 @@ use App\Http\Controllers\App\PartenerInvoicesController;
 use App\Http\Controllers\App\PartenerInvoicesCashingInController;
 use App\Http\Controllers\App\AvocatController;
 use App\Http\Controllers\App\CheltuieliController;
+use App\Http\Controllers\App\AnafController;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -88,6 +91,10 @@ Route::post('app/cheltuieli/reportExcelExpense'         ,[CheltuieliController::
 Route::post('app/cheltuieli/allProductsList'            ,[CheltuieliController::class,  'allProductsList'])->middleware('auth');
 Route::post('app/cheltuieli/insertNewProduct'            ,[CheltuieliController::class,  'insertNewProduct'])->middleware('auth');
 Route::post('app/cheltuieli/updateProductName'            ,[CheltuieliController::class,  'updateProductName'])->middleware('auth');
+
+
+// ANAF Efactura
+Route::post('app/anaf/testOauth'            ,[AnafController::class,  'testOauth'])->middleware('auth');
 
 
 
