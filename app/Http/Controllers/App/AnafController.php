@@ -16,12 +16,12 @@ class AnafController extends Controller
 
     public function testOauth(Request $request){
 
-                $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
+        $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
 
         $token = $this->getAnafToken($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
 
         if(empty($token)){
-            $msg->messages =  'Nu am tokenul inregisrat in baza de date!';
+            $msg->messages =  'Nu am tokenul inregistrat in baza de date!';
         }else{
 
                        
@@ -55,13 +55,15 @@ class AnafController extends Controller
 
             $error = curl_error($curl);
             if ($error) {
-                dd("error: " . $error);
+                $msg->succes = false;
+                $msg->messages = "error: " . $error;
+                
+            }else{
+                $msg->succes = true;
+                $msg->messages = $response;
             }
 
             curl_close($curl);
-
-            $msg->messages = $response;
-
 
         }
 
