@@ -25,20 +25,10 @@ class AnafController extends Controller
         }else{
 
                        
-            $linkTestOuath = 'https://api.anaf.ro/TestOauth/jaxrs/hello?name="GLP 6000 merge!"';
-
+            $linkTestOuath = 'https://api.anaf.ro/TestOauth/jaxrs/hello?name=GLP';
+            $tokenAcces = $token[0]->acces_token;
             
             $curl = curl_init();
-
-            /*
-            curl_setopt($curl, CURLOPT_URL, 'https://example.com/api/endpoint');
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-            $headers = [
-                "Authorization: Bearer <token>"
-            ];
-            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-            */
-
             curl_setopt($curl, CURLOPT_URL, $linkTestOuath);
             //curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
             //curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
@@ -47,8 +37,7 @@ class AnafController extends Controller
             curl_setopt($curl, CURLOPT_TIMEOUT, 45);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($curl, CURLOPT_HEADER, 1);
-            // curl_setopt($curl, CURLOPT_HTTPHEADER, ['Content-Type: text/plain; charset=UTF-8', "Authorization: Bearer " . trim($token[0]->acces_token)  ]);
-            curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: Bearer '{$token[0]->acces_token}'", 'Cache-Control: no-cache']);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, ["Authorization: Bearer {$tokenAcces}"]);
 
                                 
             $response = curl_exec($curl); 
