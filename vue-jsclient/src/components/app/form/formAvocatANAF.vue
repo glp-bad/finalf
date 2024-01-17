@@ -45,6 +45,16 @@
                         </div>
                     </td>
                 </tr>    
+
+                <tr>
+                    <td class="control">
+                        <div class="buttons">
+                            &nbsp;
+                            <my-button :ref=this.cfgtime.REF_BUTTON_LISTAMESAJEFACTURA @click="this.privateListaMesajeFactura" :heightButton=22 :buttonType=0 title="listaMesajeFactura">ListaMesajeFactura (test)</my-button>
+                        </div>
+                    </td>
+                </tr>    
+
             </table>
 
         </template>
@@ -60,7 +70,7 @@
     import FormTab      from "@/components/base/FormTab.vue";
     import Button       from "@/components/base/Button";
     import InputField   from "@/components/base/InputField.vue";
-import DropDownSearch from "@/components/base/DropDownSearch.vue";
+
 
     export default {
         components: {
@@ -83,7 +93,9 @@ import DropDownSearch from "@/components/base/DropDownSearch.vue";
             };
             this.cfgtime = {
                 REF_BUTTON_TEST_OAUTH: 'refButtonTestOauth',
+                REF_BUTTON_LISTAMESAJEFACTURA: 'refButtonListaMesajeFactura',
                 URL_TEST_OATH: this.$url.getUrl('testOauth'),
+                URL_LISTAMESAJEFACTURA: this.$url.getUrl('listaMesajeFactura')
             };
 
         },
@@ -101,8 +113,20 @@ import DropDownSearch from "@/components/base/DropDownSearch.vue";
                                     this.$refs.validateWindowRef.show();
 
                     }).finally(() => {
-                    this.$refs[this.REF_FORM].showModal(false);
-                });
+                        this.$refs[this.REF_FORM].showModal(false);
+                    });
+            },
+            privateListaMesajeFactura(){
+                this.axios.post(this.cfgtime.URL_LISTAMESAJEFACTURA, this.runtime.post)
+                    .then((response) => {
+                        this.$refs.validateWindowRef.setCaption("Test ListaMesajeFactura");
+                        this.$refs.validateWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+                        this.$refs.validateWindowRef.show();
+
+                    }).finally(() => {
+                        this.$refs[this.REF_FORM].showModal(false);
+                    });
+
             }
         },
         data () {

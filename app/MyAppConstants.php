@@ -47,6 +47,7 @@ class MyAppConstants {
     const EFACTURA_APP  = ['token' => 'token', 'efactura' => 'efactura'];
     const EFACTURA_MEDIU  = ['test' => 'test', 'prod' => 'prod'];
     const EFACTURA_RUNTIME_PARAMETER = 'ANAF_EFACTURA_RUNTIME';
+    const EFACTURA_METHODS = ['descarcare' => 'descarcare', 'listaMesajeFactura' => 'listaMesajeFactura', 'stareMesaj' => 'stareMesaj', 'upload' => 'upload'];
 
     
         

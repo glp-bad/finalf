@@ -30,7 +30,7 @@ class ModelAnafUrl extends MyModel {
         return $rezult;
     }
 
-    public function selectUrl($app, $mediu, $action){
+    public function selectUrl($app, $mediu){
         $rezult = DB::select(
             "
             SELECT  anaf_url.id ,
@@ -41,8 +41,8 @@ class ModelAnafUrl extends MyModel {
                     anaf_url.created ,
                     anaf_url.updated 
                 FROM anaf_url  
-                 where aplicatie = ? AND mediu = ? AND action = ?;",
-            [$app, $mediu, $action]
+                 where aplicatie = ? AND mediu = ?;",
+            [$app, $mediu]
         );
         return $rezult;
     }

@@ -80,7 +80,8 @@ export default [
     {name: "checkMonth" ,url: "public/app/avocat/checkMonth"},
     {name: "insertMonth",url: "public/app/avocat/insertMonth"},
 
-    {name: "testOauth",url: "app/anaf/testOauth"}
+    {name: "testOauth",url: "app/anaf/testOauth"},
+    {name: "listaMesajeFactura",url: "app/anaf/listaMesajeFactura"}
 
 
     
