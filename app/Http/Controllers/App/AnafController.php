@@ -7,6 +7,7 @@ use App\MyAppConstants;
 use \Illuminate\Http\Request;
 use App\Models\app\ModelAnafToken;
 use App\Models\app\ModelAnafUrl;
+use App\Models\app\ModelnvoiceXml;
 
 
 class AnafController extends Controller
@@ -18,6 +19,7 @@ class AnafController extends Controller
     private $mediu = MyAppConstants::EFACTURA_MEDIU['test'];
     //private $mediu = MyAppConstants::EFACTURA_MEDIU['prod'];   // url productie
     private $applicatieAnaf = MyAppConstants::EFACTURA_APP['efactura'];
+    private $paramInvoiceStandard = 'UBL'; // de la ANAF, nu stiu ce inseamna
 
 
     public function __construct(){}
@@ -36,6 +38,40 @@ class AnafController extends Controller
             $msg->messages = 'Raspund din metoda => ' . $this->accesUrl[MyAppConstants::EFACTURA_METHODS['listaMesajeFactura']];    
 
         }
+
+        return $msg->toJson();
+    }
+
+    /**
+     * upload invoices
+     */
+    public function upload(Request $request){
+        $idAvocat = $this->getSession()->get(MyAppConstants::ID_AVOCAT);
+        $idUser = $this->getSession()->get(MyAppConstants::USER_ID_LOGEED);
+
+        $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
+
+        $this->getAccesTokenAndLink($request);
+        if(empty($this->accesToken)){
+            $msg->messages =  'Nu am tokenul inregistrat in baza de date!';
+            return $msg->toJson();
+        }
+
+        // get parameter from request
+        //$invoiceId = $request->field["invoiceId"];
+        $invoiceId = 5380;      // factura de test
+
+        $modelnvoiceXml = new ModelnvoiceXml($idAvocat, $idUser);
+        $invoiceXml = $modelnvoiceXml->selectEntityByInvoiceId($invoiceId);
+
+        // efactura = $invoiceXml[0]->e_factura
+        $paramUpload = '?standard=' . $this->paramInvoiceStandard . '&cif='  . $invoiceXml[0]->cif; 
+        
+
+            $msg->succes = true;
+            $msg->messages = 'Raspund din metoda => ' . $this->accesUrl[MyAppConstants::EFACTURA_METHODS['upload']] . '  <=>    ' . $paramUpload;    
+
+        
 
         return $msg->toJson();
     }

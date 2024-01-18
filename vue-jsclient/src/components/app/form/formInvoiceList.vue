@@ -257,7 +257,16 @@
                     this.axios
                         .post(this.cfgtime.URL_DOWNLOAD_E_FACTURA, this.runtime.post)
                         .then(response => {
+
+                            if (response.data.succes){
                                 this.$print.downloadStringFile(response.data.fileName, response.data.xmlFile);
+                            }
+                            else {
+                                this.$refs.validateWindowRef.setCaption("Fail...");
+                                this.$refs.validateWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+                                this.$refs.validateWindowRef.show();
+                            }    
+
                             }
                         ).catch(error => console.log(error))
                         .finally(() => {

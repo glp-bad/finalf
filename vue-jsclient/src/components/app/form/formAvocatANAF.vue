@@ -53,7 +53,16 @@
                             <my-button :ref=this.cfgtime.REF_BUTTON_LISTAMESAJEFACTURA @click="this.privateListaMesajeFactura" :heightButton=22 :buttonType=0 title="listaMesajeFactura">ListaMesajeFactura (test)</my-button>
                         </div>
                     </td>
-                </tr>    
+                </tr>
+                
+                <tr>
+                    <td class="control">
+                        <div class="buttons">
+                            &nbsp;
+                            <my-button :ref=this.cfgtime.REF_BUTTON_UPLOADEFACTURA @click="this.privateUploadeFactura" :heightButton=22 :buttonType=0 title="listaMesajeFactura">Uploade factura (test)</my-button>
+                        </div>
+                    </td>
+                </tr>
 
             </table>
 
@@ -94,8 +103,10 @@
             this.cfgtime = {
                 REF_BUTTON_TEST_OAUTH: 'refButtonTestOauth',
                 REF_BUTTON_LISTAMESAJEFACTURA: 'refButtonListaMesajeFactura',
+                REF_BUTTON_UPLOADEFACTURA: 'refButtonUploadeFactura',
                 URL_TEST_OATH: this.$url.getUrl('testOauth'),
-                URL_LISTAMESAJEFACTURA: this.$url.getUrl('listaMesajeFactura')
+                URL_LISTAMESAJEFACTURA: this.$url.getUrl('listaMesajeFactura'), 
+                URL_UPLOADEFACTURA: this.$url.getUrl('uploadEfactura')
             };
 
         },
@@ -127,6 +138,17 @@
                         this.$refs[this.REF_FORM].showModal(false);
                     });
 
+            },
+            privateUploadeFactura(){
+                this.axios.post(this.cfgtime.URL_UPLOADEFACTURA, this.runtime.post)
+                    .then((response) => {
+                        this.$refs.validateWindowRef.setCaption("Test upload eFactura !!!");
+                        this.$refs.validateWindowRef.setMessage(this.$appServer.getHtmlSqlFormatMessage(response.data));
+                        this.$refs.validateWindowRef.show();
+
+                    }).finally(() => {
+                        this.$refs[this.REF_FORM].showModal(false);
+                    });
             }
         },
         data () {

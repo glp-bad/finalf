@@ -26,8 +26,8 @@ class InvoiceElectronic
     }
 
 
-    public static function getParamInsert($idInvoice, $strInvoice){
-        return ['id_factura'=>$idInvoice, 'eFactura'=>$strInvoice];
+    public static function getParamInsert($idInvoice, $strInvoice, $cif){
+        return ['id_factura'=>$idInvoice, 'eFactura'=>$strInvoice, 'cif'=>$cif];
     }
 
 

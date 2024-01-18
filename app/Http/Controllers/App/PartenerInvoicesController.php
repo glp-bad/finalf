@@ -17,6 +17,7 @@ use App\Models\app\ModelParteneri;
 use App\Models\app\Modelnvoice;
 use App\Models\app\ModelParameter;
 use App\Models\nomenclatoare\ModelNomTipFactura;
+use App\Models\app\ModelAnafUploadInvoice;
 use App\MyAppConstants;
 use \Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -34,7 +35,7 @@ class PartenerInvoicesController extends Controller
 {
     public function __construct(){}
 
-    private $productionEFactura = false;        // factura electronica nu se salveaza in tabela
+    private $productionEFactura = true;        // factura electronica nu se salveaza in tabela, TREU se salveaza in baza de date
 
 
     public function reportExcelInvoiceEmitted(Request $request)
@@ -271,8 +272,12 @@ class PartenerInvoicesController extends Controller
 
     // sterg factura salvata
     public function deleteInvoice(Request $request) {
+        $paramIdAvocat = $this->getSession()->get(MyAppConstants::ID_AVOCAT);    
+        $paramIdUser   = $this->getSession()->get(MyAppConstants::USER_ID_LOGEED);    
+
+
         $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
-        $modelnvoice = new Modelnvoice($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        $modelnvoice = new Modelnvoice($paramIdAvocat, $paramIdUser);
         $id = $request->idPk;
 
         // --- check mounth
@@ -280,7 +285,7 @@ class PartenerInvoicesController extends Controller
 
         $invoiceDate = MyHelp::getCarbonDate('Y-m-d', $entity[0]->data_f);
         $wokingMonth = new WokingMonth(0,0,0,0);
-        $openMonth = $wokingMonth->checkOpenMonth($invoiceDate->year, $invoiceDate->month, new ModelLuniInchise($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED)));
+        $openMonth = $wokingMonth->checkOpenMonth($invoiceDate->year, $invoiceDate->month, new ModelLuniInchise($paramIdAvocat, $paramIdUser));
         if(!$openMonth['open']){
             $msg->succes = false;
             $msg->lastId = -1;
@@ -288,7 +293,18 @@ class PartenerInvoicesController extends Controller
             return $msg->toJson();
         }
 
-        $modelInvoiceIncasari = new ModelInvoiceIncasari($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        // -- check invoice send to ANAF
+        $modelAnafUploadInvoice = new ModelAnafUploadInvoice($paramIdAvocat, $paramIdUser);
+        $sendInvoiceToAnaf = $modelAnafUploadInvoice->checkSendInvoice($id);
+
+        if($sendInvoiceToAnaf[0]->send > 0){
+            $msg->succes = false;
+            $msg->lastId = -1;
+            $msg->messages= 'Factura este urcata pe SPV si nu mai poate fi modificata\stearsa.';
+            return $msg->toJson();
+        }
+
+        $modelInvoiceIncasari = new ModelInvoiceIncasari($paramIdAvocat, $paramIdUser);
         $countIncoming = $modelInvoiceIncasari->selectCountIncoming($id);
 
         if($countIncoming[0]->incasariCount > 0){
@@ -301,9 +317,9 @@ class PartenerInvoicesController extends Controller
         $idNumber = $entity[0]->id_nr;
 
 
-        $modelnvoiceDetail = new ModelnvoiceDetail($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
-        $modelEfactura     = new ModelnvoiceXml($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
-        $modelnvoiceNumber = new ModelnvoiceNumber($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
+        $modelnvoiceDetail = new ModelnvoiceDetail($paramIdAvocat, $paramIdUser);
+        $modelEfactura     = new ModelnvoiceXml($paramIdAvocat, $paramIdUser);
+        $modelnvoiceNumber = new ModelnvoiceNumber($paramIdAvocat, $paramIdUser);
 
         try {
             DB::beginTransaction();
@@ -413,7 +429,7 @@ class PartenerInvoicesController extends Controller
 
                 if($this->productionEFactura){
                     $eFactura = $this->eInvoiceGenerating($idInvoice);
-                    $idLasteFactura = $modelEfactura->insertInvoice(InvoiceElectronic::getParamInsert($idInvoice, $eFactura));
+                    $idLasteFactura = $modelEfactura->insertInvoice(InvoiceElectronic::getParamInsert($idInvoice, $eFactura['xml'], $eFactura['cif']));
 
                     if(empty($idLasteFactura)){
                         throw new \Exception("Nu a putut fi salvata in baza de date eFactura!");
@@ -567,7 +583,7 @@ class PartenerInvoicesController extends Controller
     /**
         * se genereaza la fiecare download, pentru teste si rectificari, nu se preia fisierul salvat in baza de date
     */
-    public function downloadeFactura(Request $request){
+    public function downloadeFactura_generated(Request $request){
         $id = $request->idPk;
 
             $xmlFactura = $this->eInvoiceGenerating($id);    
@@ -581,7 +597,7 @@ class PartenerInvoicesController extends Controller
         return json_encode(['xmlFile' => $xmlFactura, 'fileName' =>  $filename]);
     }
 
-    public function downloadeFactura_original(Request $request){
+    public function downloadeFactura(Request $request){
         $id = $request->idPk;
 
         $modelEfactura = new ModelnvoiceXml($this->getSession()->get(MyAppConstants::ID_AVOCAT), $this->getSession()->get(MyAppConstants::USER_ID_LOGEED));
@@ -590,7 +606,16 @@ class PartenerInvoicesController extends Controller
         $xmlFactura = '';
         $filename = 'nu_exista_factura_electronica';
 
-        if(!empty($eFactura)){
+        //dd($eFactura);
+
+        if(empty($eFactura)){
+                $msg = $this->getSqlMessageResponse(false, "no msg", -1, null, null, false );
+                $msg->succes = false;
+                $msg->lastId = -1;
+                $msg->messages= 'Pentru aceasta factura nu exista factura electronica generata!';
+
+                return $msg->toJson();
+        }else{
 
             $invoice = $this->getDateInvoice($id);
             $xmlFactura = $eFactura[0]->e_factura;
@@ -600,9 +625,10 @@ class PartenerInvoicesController extends Controller
             $filename = $this->getInvoiceFileName($jsonAntet, '.xml');
 
             unset($invoice, $jsonAntet);
-        }
 
-        return json_encode(['xmlFile' => $xmlFactura, 'fileName' =>  $filename]);
+            return json_encode(['xmlFile' => $xmlFactura, 'fileName' =>  $filename, 'succes' => true]);
+        }
+        
     }
 
     private function eInvoiceGenerating($idInvoice)
@@ -615,7 +641,8 @@ class PartenerInvoicesController extends Controller
         $invoiceDate = $this->getDateInvoice($idInvoice);
         $param = new InvoiceElectronic($invoiceDate['antetFactura'], $invoiceDate['detaliuFactura'], $facturaParam );
 
-         //dd($invoiceDate['antetFactura']);
+         // dd($invoiceDate['antetFactura'][0]->cui);  // cif client, fara RO
+         // dd($invoiceDate['antetFactura'][0]->cui_av);  // cif avocat, fara RO
          //dd($invoiceDate['detaliuFactura']);
 
         $xmlInvoices = new XMLElectronicInvoice();
@@ -635,11 +662,9 @@ class PartenerInvoicesController extends Controller
 
         $xmlInvoices->createInvoiceLines($param->getInvoicesLines());
 
-        
-
         $xml = $xmlInvoices->printXml();
 
-        return $xml;
+        return ['xml'=>$xml, 'cif'=>$invoiceDate['antetFactura'][0]->cui];
 
     }
 

@@ -24,7 +24,7 @@ class Expense
 
         $this->data_document    = $sqlDateFormat['dataFormat'];
         $this->data_year        = intval($sqlDateFormat['year']);
-		$this->data_month       =  intval($sqlDateFormat['month']);
+		$this->data_month       = intval($sqlDateFormat['month']);
 		$this->id_partner       = intval($f["name_nomPartner"]);
 		$this->id_tip_expense   = intval($f["name_nomTypeCheltuieli"]);
 		$this->id_tip_doc       = intval($f["name_nomDocumentType"]);

@@ -81,7 +81,10 @@ export default [
     {name: "insertMonth",url: "public/app/avocat/insertMonth"},
 
     {name: "testOauth",url: "app/anaf/testOauth"},
-    {name: "listaMesajeFactura",url: "app/anaf/listaMesajeFactura"}
+    {name: "listaMesajeFactura",url: "app/anaf/listaMesajeFactura"},
+    {name: "uploadEfactura",url: "app/anaf/upload"}
+
+    
 
 
     

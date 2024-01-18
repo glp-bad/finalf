@@ -16,8 +16,8 @@ class ModelnvoiceXml extends MyModel {
 
     public function insertInvoice(array $inserteInvoice){
         $rezult = DB::insert(
-            "insert into t_factura_electronica (id_factura, e_factura, id_user, created) values (:idFactura, :eFactura, :idUser, :created);",
-            ['idFactura'=>$inserteInvoice['id_factura'], 'eFactura'=>$inserteInvoice['eFactura'], 'idUser'=>$this->idUser, 'created'=>MyHelp::getCarbonDateNow()]
+            "insert into t_factura_electronica (id_factura, e_factura, cif, id_user, created) values (:idFactura, :eFactura, :cif, :idUser, :created);",
+            ['idFactura'=>$inserteInvoice['id_factura'], 'eFactura'=>$inserteInvoice['eFactura'], 'cif'=>$inserteInvoice['cif'], 'idUser'=>$this->idUser, 'created'=>MyHelp::getCarbonDateNow()]
         );
         $returnId = intval( DB::getPdo()->lastInsertId() );
 
@@ -29,6 +29,7 @@ class ModelnvoiceXml extends MyModel {
             " 
             select t_factura_electronica.id, 
                    t_factura_electronica.id_factura, 
+                   t_factura_electronica.cif, 
                    t_factura_electronica.e_factura, 
                    t_factura_electronica.id_user, 
                    t_factura_electronica.created, 
@@ -46,6 +47,7 @@ class ModelnvoiceXml extends MyModel {
             select t_factura_electronica.id, 
                    t_factura_electronica.id_factura, 
                    t_factura_electronica.e_factura, 
+                   t_factura_electronica.cif, 
                    t_factura_electronica.id_user, 
                    t_factura_electronica.created, 
                    t_factura_electronica.updated 

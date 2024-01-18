@@ -94,8 +94,9 @@ Route::post('app/cheltuieli/updateProductName'            ,[CheltuieliController
 
 
 // ANAF Efactura
-Route::post('app/anaf/testOauth'                ,[AnafController::class,  'testOauth'])->middleware('auth');
+Route::post('app/anaf/testOauth'            ,[AnafController::class,  'testOauth'])->middleware('auth');
 Route::post('app/anaf/listaMesajeFactura'   ,[AnafController::class,  'listaMesajeFactura'])->middleware('auth');
+Route::post('app/anaf/upload'   ,[AnafController::class,  'upload'])->middleware('auth');
 
 
 
