@@ -59,7 +59,7 @@
                     <td class="control">
                         <div class="buttons">
                             &nbsp;
-                            <my-button :ref=this.cfgtime.REF_BUTTON_UPLOADEFACTURA @click="this.privateUploadeFactura" :heightButton=22 :buttonType=0 title="listaMesajeFactura">Uploade factura (test)</my-button>
+                            <my-button :ref=this.cfgtime.REF_BUTTON_UPLOADEFACTURA @click="this.privateUploadeFactura" :heightButton=22 :buttonType=0 title="upload factura">Uploade factura (test)</my-button>
                         </div>
                     </td>
                 </tr>
@@ -128,6 +128,10 @@
                     });
             },
             privateListaMesajeFactura(){
+
+                this.$refs[this.REF_FORM].showModal(true);
+
+
                 this.axios.post(this.cfgtime.URL_LISTAMESAJEFACTURA, this.runtime.post)
                     .then((response) => {
                         this.$refs.validateWindowRef.setCaption("Test ListaMesajeFactura");
@@ -140,6 +144,7 @@
 
             },
             privateUploadeFactura(){
+                this.$refs[this.REF_FORM].showModal(true);
                 this.axios.post(this.cfgtime.URL_UPLOADEFACTURA, this.runtime.post)
                     .then((response) => {
                         this.$refs.validateWindowRef.setCaption("Test upload eFactura !!!");

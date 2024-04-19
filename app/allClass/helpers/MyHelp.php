@@ -135,4 +135,22 @@ class MyHelp {
 		return str_replace($search, $replace, $str);
 	}
 
+    public static function anafConvertStringToSqlDate($dataString){
+        // $doarData = substr($dataString,0,8);
+              
+        $dateTime = Carbon::createFromFormat('YmdHi', $dataString);
+        return $dateTime->format('Y-m-d H:i:00');
+    }
+
+    public static function anafGetCifEmitentFromString($string){
+        $mat = preg_match("/cif_emitent=(.+)/", $string, $matches);
+
+        $cif_emitent = null;
+
+        if ($mat) {
+            $cif_emitent = substr($matches[1], 0, strpos($matches[1], ' '));
+         }
+        return $cif_emitent;    
+    }
+
 }
