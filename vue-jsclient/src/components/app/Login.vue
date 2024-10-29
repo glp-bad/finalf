@@ -72,7 +72,7 @@
 
         },
         mounted() {
-	        this.post= {email:  "...email", password: null };
+	        this.post= {email:  "glp@gmail.com", password: "XXXXXX" };
 	        this.$vanilla.dragDiv(this.$refs.windowRef, this.$refs.headerRef);
         },
         methods: {
@@ -82,8 +82,8 @@
                 // momentan nu am gasit alta solutie
             },
 	        logOn: function (){
-		        // this.$emit(this.EMIT);
-                // console.log("this.URI: ", this.URI);
+		        this.$emit(this.EMIT);
+                console.log("this.URI: ", this.URI);
 		        this.axios.post(this.URI, this.post).then((response) => {
 				        if(response.data.succes){
 					        this.login = true;
@@ -114,7 +114,7 @@
 		        login: false,
                 requestLoginFail: false,
                 messageFail: 'Login fail.',
-                VERSION_APP: '1.7.200'                  // from finalf\app\MyAppConstants.php
+                VERSION_APP: '1.7.300'                  // from finalf\app\MyAppConstants.php
 	        }
         }
     }
